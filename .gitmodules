@@ -1,0 +1,9 @@
+[submodule "themes/casper2"]
+	path = themes/casper2
+	url = https://github.com/eueung/hugo-casper-two
+[submodule "themes/cleanwhite"]
+	path = themes/cleanwhite
+	url = https://github.com/zhaohuabing/hugo-theme-cleanwhite
+[submodule "themes/allinone"]
+	path = themes/allinone
+	url = https://github.com/orianna-zzo/AllinOne

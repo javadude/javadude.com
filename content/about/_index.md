@@ -1,6 +1,6 @@
 # Who is Scott Stanchfield?
 
-![The Tick](http://javadude.com/images/tick-ahhhh.png)
+![The Tick](http://javadude.com/img/tick-ahhhh.png)
 
 One part architect; Two parts developer; One part trainer. These were the ingredients chosen to create the ultimate ego. But when the professor accidentally added an extra ingredient to the concoction - Chemical X - a Java Guru was born!
 
@@ -8,7 +8,7 @@ From his beginnings as a developer at IBM slinging air-traffic control system co
 
 Along came MageLang Institute (now [jGuru.com](http://www.jguru.com/)). Scott was dubbed "Software Guru" (ok, so he picked his own title), teaching Java around the world, including Sydney, London, Stuttgart, and Peoria. Excitement abounds at home and abroad!
 
-Soon, Scott became known as a VisualAge for Java guru. (IBM's VP of marketing for VisualAge often joked that Scott was their best marketing weapon...) From teaching VisualAge and maintaining a tips and tricks web site, to writing _[Effective VisualAge for Java](http://javadude.com/evaj/index.html)_, Scott helped everyone understand the power of a great IDE. He even converted some who thought IDE meant "I Don't have Emacs". Little did he know that six months after his book was published, IBM would abandon VisualAge for Java in favor of Eclipse. Excellent move by IBM, but book sales flatlined. Game over, dude.
+Soon, Scott became known as a VisualAge for Java guru. (IBM's VP of marketing for VisualAge often joked that Scott was their best marketing weapon...) From teaching VisualAge and maintaining a tips and tricks web site, to writing _[Effective VisualAge for Java](https://www.amazon.com/Effective-VisualAge-Java-Version-Coverage/dp/0471317306)_, Scott helped everyone understand the power of a great IDE. He even converted some who thought IDE meant "I Don't have Emacs". Little did he know that six months after his book was published, IBM would abandon VisualAge for Java in favor of Eclipse. Excellent move by IBM, but book sales flatlined. Game over, dude.
 
 After nearly five years of Java training, Scott soon knew every question that anyone could possibly ask related to Java, and had seen students make every possible mistake that could be made while working a lab exercise. Weary of the travel required for training, Scott rejoined the development workforce.
 

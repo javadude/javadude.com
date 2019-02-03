@@ -14,6 +14,8 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 
 # Book
 
+<img src="evaj.jpg" alt="Effective VisualAge for Java Book Cover" width="300"/>
+
 (File this in the "never again" category... Well... Probably never again.)
 
 *   Stanchfield, S. and Mauny, I. (2001). _Effective VisualAge for Java, version 3_. 1st ed. New York: John Wiley.
@@ -22,52 +24,49 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 
 # Print Article
 
-(They had a penguin on the cover...)
+<img src="vamag.jpg" alt="VisualAge Magazine Cover" width="300"/>
 
 * 	Stanchfield, Scott A. "A Tune-Up for VisualAge for Java." _The VisualAge Magazine_, Jan. 1998, pp. 6-9
 
 # Online Articles
 
-*   Layering Applications (1996-2008)  
+*   Layering Applications (1996)  
     [http://javadude.com/articles/layering.html](http://javadude.com/articles/layering.html)
     
-*   Import on Demand is Evil! (1996-2008)  
+*   Import on Demand is Evil! (1996)  
     [http://javadude.com/articles/importondemandisevil.html](http://javadude.com/articles/importondemandisevil.html)
     
-*   JavaBean Attributes (1996-2008)  
-    [http://javadude.com/articles/javabeanattributes.html](http://javadude.com/articles/javabeanattributes.html)
-    
-*   Java is Pass-by-Value, Dammit! (1996-2008)  
+*   Java is Pass-by-Value, Dammit! (1996)  
     [http://javadude.com/articles/passbyvalue.htm](http://javadude.com/articles/passbyvalue.htm)
     
-*   Using JavaBean Accessors (1996-2008)  
+*   Using JavaBean Accessors (1996)  
     [http://javadude.com/articles/accessors.html](http://javadude.com/articles/accessors.html)
     
-*   Java Using the Right Comment (1996-2008)  
+*   Java Using the Right Comment (1996)  
     [http://javadude.com/articles/comments.html](http://javadude.com/articles/comments.html)
     
-*   Converting a Grammar from LALR to LL (1996-2008)  
+*   Converting a Grammar from LALR to LL (1996)  
     [http://javadude.com/articles/lalrtoll.html](http://javadude.com/articles/lalrtoll.html)
     
-*   Why VisualAge for Java (1996-2008)  
+*   Why VisualAge for Java (1996)  
     (was hosted at javadude.com - obsolete - removed)
     
-*   ANTLR Tutorial (1996-2008)  
+*   ANTLR Tutorial (1996)  
     [http://javadude.com/articles/antlrtut/index.html](http://javadude.com/articles/antlrtut/index.html)
     
-*   PCCTS Tutorial (1996-2008)  
+*   PCCTS Tutorial (1996)  
     (was hosted at javadude.com - obsolete - removed)
     
-*   JavaBean Property Editors (1996-2008)  
+*   JavaBean Property Editors (1996)  
     [http://javadude.com/articles/propedit/index.html](http://javadude.com/articles/propedit/index.html)
     
-*   VisualAge for Java Tips and Tricks (1996-2008)  
+*   VisualAge for Java Tips and Tricks (1996)  
     (was hosted at javadude.com - obsolete - removed)
     
-*   Eclipse Tips (2000-2008)  
+*   Eclipse Tips (2000)  
     (was hosted at javadude.com - obsolete - removed)
     
-*   ANTLR Documentation (contributor) (1998-2000)  
+*   ANTLR Documentation (contributor) (1998)  
     [http://www.antlr2.org](http://www.antlr2.org)
     
 *   MVC in VisualAge for Java (2000)  
@@ -112,9 +111,9 @@ A list of my published works, a book, articles, presentations, courses, open-sou
     *   Android Mobile Development (2012-present)
     *   Domain-Specific Languages (2018-present)
     *   Design Patterns (2002-2014)
-    *   Web Development (2002-2008)
-    *   Distributed Development on the WWW (2002-2008)
-    *   XML Technologies (2002-2008)
+    *   Web Development (2002)
+    *   Distributed Development on the WWW (2002)
+    *   XML Technologies (2002)
         
 *   Montgomery College, MD ([http://www.montgomerycollege.edu](http://www.montgomerycollege.edu))
     
@@ -210,7 +209,7 @@ A list of my published works, a book, articles, presentations, courses, open-sou
     [http://javadude.com/tools/parseview](http://javadude.com/tools/parseview)
     
 *   SplitterLayout (1998)  
-    [http://javadude.com/tools/tabsplitter/splitterlayout.html](http://javadude.com/tools/tabsplitter/splitterlayout.html)
+    [http://javadude.com/tools/tabsplitter/splitterlayout.html](http://javadude.com/posts/19980228-splitterlayout)
     
 *   Swing BorderEditor (1998)  
     [http://javadude.com/tools/borderedit](http://javadude.com/tools/borderedit)
@@ -219,7 +218,7 @@ A list of my published works, a book, articles, presentations, courses, open-sou
     [http://javadude.com/tools/boxbeans](http://javadude.com/tools/boxbeans)
     
 *   SWT Layouts (1998)  
-    [http://javadude.com/tools/swtawtlayouts](http://javadude.com/tools/swtawtlayouts)
+    (No longer supported)
     
 *   TabSplitter Bean (1998)  
     [http://javadude.com/tools/tabsplitter](http://javadude.com/tools/tabsplitter)

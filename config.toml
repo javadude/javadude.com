@@ -1,4 +1,4 @@
-baseURL                   = "https://javadude.com"
+baseURL                   = "http://javadude.com"
 builddrafts                = false
 languageCode               = "en-US"
 canonifyurls               = true

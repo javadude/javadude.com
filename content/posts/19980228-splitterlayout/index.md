@@ -2,7 +2,7 @@
 title: SplitterLayout
 aliases:
 - /tools/tabsplitter/splittelayout.html
-- /tools/autogut
+- /tools/tabsplitter
 
 categories:
 - Tools

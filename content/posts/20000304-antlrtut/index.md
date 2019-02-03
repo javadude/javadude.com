@@ -24,7 +24,7 @@ A tutorial on ANTLR 2.x
 <!--more-->
 
 
-### _Note: This is the ANTLR 2.x Tutorial. If you're looking for an ANTLR 3.x Tutorial, please see my new [ANTLR 3.x Video Tutorial](../antlr3xtut)_
+### _Note: This is the ANTLR 2.x Tutorial. If you're looking for an ANTLR 3.x Tutorial, please see my new [ANTLR 3.x Video Tutorial](../20091221-antlr3tut)_
 
 Introduction
 ------------
@@ -1920,6 +1920,4 @@ If you run ant without any options, it will perform a full build on the new xl2.
 ### Wrapup
 
 This wraps up the recognizer section of this tutorial. I hope it's been helpful at some level for you. As always, please let me know your comments (good or bad -- helps the ego ya know) at [scott@javadude.com](mailto:scott@javadude.com).
-
-Unfortunately, I'm pretty busy right now.  I'd like to add more to this tutorial, but I'm not sure how much time I'll be able to spend on it.  Stay tuned to ANTLR-interest ([http://www.antlr.org:8080/mailman/listinfo/antlr-interest](http://www.antlr.org:8080/mailman/listinfo/antlr-interest)) for information!
 

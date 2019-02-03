@@ -55,7 +55,7 @@ WARNING 2: I haven't added any real exception handling in yet -- BE CAREFUL WHEN
 
 WARNING 3: If you use "Custom" borders, you're completely on your own for the code you write.  Be careful.  And make sure you either add import statements for any class refs, or fully-qualify them.
 
-![bordered1.gif (8132 bytes)](images/bordered1.gif)
+![bordered1.gif (8132 bytes)](bordered1.gif)
 
 Hopefully the interface is fairly obvious.
 

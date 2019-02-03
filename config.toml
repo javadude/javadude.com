@@ -26,19 +26,19 @@ title                      = "JavaDude.com"
 [menu]
   [[menu.main]]
     name                   = "Articles"
-    weight                 = -120
+    weight                 = -180
     identifier             = "posts"
     url                    = "categories/articles/"  
 
   [[menu.main]]
     name                   = "Videos"
-    weight                 = -120
+    weight                 = -200
     identifier             = "videos"
     url                    = "categories/videos/"  
 
   [[menu.main]]
     name                   = "Tools"
-    weight                 = -120
+    weight                 = -160
     identifier             = "tools"
     url                    = "categories/tools/"  
 
@@ -85,7 +85,6 @@ title                      = "JavaDude.com"
   email                    = "scott@javadude.com"
   github                   = "//github.com/javadude"
   facebook                 = "//facebook.com/scott.stanchfield"
-  googleplus               = "//plus.google.com/u/0/+ScottStanchfield"
   include_rss              = true                          # include RSS <link> tag in <head> and show RSS icon
   
   # analytics

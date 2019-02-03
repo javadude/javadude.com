@@ -1,8 +1,8 @@
 ---
 title: JavaOne 2000/2001/2002
 aliases:
-- /javaone/index.html
-- /javaone
+- /articles/javaone/index.html
+- /articles/javaone
 
 categories:
 - Articles
@@ -35,7 +35,7 @@ I've posted a non-JavaOne copy of the slides as well as code samples that can be
 
 ### Trying the samples on your machine
 
-The sample code has been tested under Tomcat 4.0.3. (You can obtain tomcat from [http://jakarta.apache.org](http://jakarta.apache.org/)).
+The sample code has been tested under Tomcat 4.0.3. (You can obtain tomcat from [http://tomcat.apache.org](http://tomcat.apache.org/)).
 
 To install the sample code:
 
@@ -105,10 +105,10 @@ If you have any questions on anything I talked about, please don't hesitate to e
 As promised, you can download the slides for this talk here, as well as find some other interesting resources on MVC. Enjoy!
 
 *   [MVC for You and Me.zip](MVC%20for%20You%20and%20Me.zip) -- PowerPoint slides for my MVC talk. If you don't have PowerPoint, you can download a free viewer from Microsoft.com. 
-*   [Applying the Model-View-Controller Paradigm in VisualAge for Java](../vaddmvc1/mvc1.htm)  
+*   Applying the Model-View-Controller Paradigm in VisualAge for Java (No longer online)
     Introduction to the Model-View-Controller Paradigm and details on applying it visually in VisualAge for Java. _Note: This article has many specifics to VisualAge for Java, but the general concepts and the walkthrough demonstration can be useful to help you see how to apply MVC in other environments as well.  
     _ 
-*   [Advanced Model-View-Controller Techniques](../vaddmvc2/mvc2.html)  
+*   Advanced Model-View-Controller Techniques (No longer online)  
     A more general, conceptual article on some more advanced MVC topics. Much mess emphasis on VisualAge for Java, and includes examples of sorting, merging, and filtering Swing tables.  
      
 
@@ -120,7 +120,7 @@ In case you're interested in the Swing Action slides, you can access there here:
 
 ## Fun with Layout Managers
 
-I've put the MaxMinLayout manager file here for you to look at. Note that it has some rough edges, and is only meant to represent a simple example of a custom layout manager. It's actually an example from my book, _[Effective VisualAge for Java](../../evaj/index.html)_, where I discuss how to integrate custom layout managers with VisualAge for Java.
+I've put the MaxMinLayout manager file here for you to look at. Note that it has some rough edges, and is only meant to represent a simple example of a custom layout manager. It's actually an example from my book, _Effective VisualAge for Java_, where I discuss how to integrate custom layout managers with VisualAge for Java.
 
 *   [MaxMinLayout.zip](MaxMinLayout.zip)
 

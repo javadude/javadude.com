@@ -25,43 +25,6 @@ Let's get familiar with Java Layout Managers!
 
 This module will explore in great detail how the standard Abstract Window Toolkit (AWT) layout managers perform their jobs and how they can be effectively nested to create useful graphical user interfaces (GUIs).
 
-**Course Outline**
-
-*   [Why do you need Layout Managers?](#whyNeed)
-    *   [Window Expanded, Components Stay Put](#sin1)
-    *   [Components Designed for a Specific Look-And-Feel or Font Size](#sin2)
-    *   [Components Designed for a Specific Language](#sin3)
-*   [What are Layout Managers?](#whatAreLMs)
-    *   [Component Size Methods](#componentMethods)
-    *   [Layout Managers and Containers](#containers)
-        *   [The`add(...)`Methods](#addMethods)
-        *   [Container Insets](#insets)
-*   [The Standard AWT Layout Managers](#standardLMs)
-    *   `[Flowlayout](#flowlayout)`
-        *   [`FlowLayout`Variations](#flVariations)
-        *   [Preferred Size of a`FlowLayout`Container](#flPrefSize)
-        *   [`FlowLayout`Strategies and Potential Pitfalls](#flStrategy)
-    *   `[BorderLayout](#borderLayout)`
-        *   [How Is`BorderLayout`Laid Out?](#blHow)
-        *   [`BorderLayout`Variations](#blVariations)
-        *   [Preferred Size of a`BorderLayout`Container](#blPrefSize)
-    *   `[GridLayout](#gridLayout)`
-        *   [Preferred Size of a`GridLayout`Container](#glPrefSize)
-        *   ["Ok" and "Cancel" Revisited](#okCancelAgain)
-    *   `[CardLayout](#cardLayout)`
-        *   [Preferred Size of a`CardLayout`Container](#clPrefSize)
-    *   `[GridBagLayout](#gridBagLayout)`
-*   [Setting the Initial Frame Size](#pack)
-*   [Nesting Layout Managers to Achieve Nirvana](#nesting)
-    *   [The GUI to Create](#gui)
-    *   [How to Design this GUI](#guiDesign)
-    *   [A Helper Class:`FileDisplay`](#fileDisplay)
-    *   [Back to the Main FTP GUI...](#mainGui)
-    *   [Looking at Some Code for this GUI](#ftpCode)
-*   [A Very Common Layout Need](#commonNeed)
-*   [For More Information...](#moreInfo)
-
-  
 **Why do you need Layout Managers?**
 
 To describe why layout managers are necessary, all you need to do is examine a few of the problems they solve. Look at the following screen shots. These describe several_GUI sins_that are all too common:
@@ -114,7 +77,7 @@ A simple button to end an application. The programmer didn't give much thought t
 This is unfortunate for two reasons:
 
 *   The user doesn't see the entire phrase, but even worse...
-*   ..."wieder" means _again_.
+*   ..."wieder" means _again_. (I had a student from Germany who started laughing when I showed that button and told me what it meant...)
 
   
 **What are Layout Managers?**

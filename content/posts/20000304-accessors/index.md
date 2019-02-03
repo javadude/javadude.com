@@ -39,7 +39,7 @@ The most-common objection to use of accessors is "but that's another method call
 
 Not any more!
 
-The new HotSpot VM provides excellent run-time optimization.  Part of this optimization is automatic inlining of simple methods.  If you write accessors that just set and return a value, these will be inlined to simple assignment statements.   Accessors that do more may still be inlined, depending on their complexity.   (HotSpot will be available soon -- surf to [http://java.sun.com](http://java.sun.com) for information.)
+The new HotSpot VM provides excellent run-time optimization.  Part of this optimization is automatic inlining of simple methods.  If you write accessors that just set and return a value, these will be inlined to simple assignment statements.   Accessors that do more may still be inlined, depending on their complexity.
 
 Bottom line: set aside any worries about accessors causing a performance hit.
 
@@ -101,9 +101,4 @@ Use Accessors in the Class that Defines the Data!
 A final note: _All_ references to class/instance data should be through accessors, _even_ if the reference is in the class that defines that data!   This centralizes access to the data, allows all changes to be known (including notification for bound and constrained properties.)
 
 This may seem like a bit of overkill, but if you ever need to change how a property is implemented, you'll be glad you used accessors consistently.
-
-For More Information...
------------------------
-
-...you may want to read [Scott's Rules of Reuse](reuse.html). It explores this point as well as several others that will help you create robust, reusable code.
 

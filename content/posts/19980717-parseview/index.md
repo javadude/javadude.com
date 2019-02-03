@@ -33,7 +33,7 @@ Visual Debugging for ANTLR 2.x
     *   JDK 1.1.x _or_ Java 2
     *   Swing with package names starting with `javax.swing`
         *   Included in Java2, or
-        *   Swing 1.1 or later from [http://java.sun.com/products/jfc](http://java.sun.com/products/jfc)
+        *   Swing 1.1 or later
 
     *   You need to compile the distributed files in [parseview1.2.zip](parseview1.2.zip) and place them in your CLASSPATH. Then follow the operating instructions at the end of this page.
 
@@ -49,8 +49,6 @@ Visual Debugging for ANTLR 2.x
     *   Developed a good debugging model for ANTLR that will make it easy to add any sort of debugger you want (especially ParseView).  The API for this will eventually be documented so people can add their own debuggers, simple (like just "println"s) or complex, like ParseView.
     *   ParseView will be a _free_ part of the real ANTLR distribution.  Terence and I realized it would just be too much work to try to really have this be supported the way a "pay" tool should be.  We just don't have that much time.  Instead, we're releasing it _with source_ so others can add to it.
     *   The source will be included with the distribution.  Please _**refrain**_ from making changes just yet -- I'd like to add a few more things, like breakpoints and some AST stuff before people start sending in changes to integrate.
-
-Stay tuned to [comp.compilers.tools.pccts](news:comp.compilers.tools.pccts) for more release information!
 
 Send mail to [Scott Stanchfield](mailto:scott@javadude.com) with any comments, suggestions, ideas or recipes!
 
@@ -194,7 +192,7 @@ java antlr.Tool -debug java.g
 ## What you'll need to run ParseView
 
 *   You need the ANTLR distribution that contains ParseView
-*   You need Swing 1.0.2 (see [http://java.sun.com/products/jfc](http://java.sun.com/products/jfc))
+*   You need Swing 1.0.2
 *   Your code needs to have a System.exit(0) call at its end.  Simply returning from main will not stop the program,  as ParseView starts an AWT thread which must be killed...
 *   ParseView only works with programs that use **_both_** ANTLR-generated scanners _and_ parsers.  If you use a custom parser or scanner, ParseView probably won't work.  I'll be writing some adapters to make this easy to do, using the debugger interface.
 

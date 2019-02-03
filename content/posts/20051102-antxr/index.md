@@ -42,7 +42,7 @@ I haven't built this tool in _quite_ a while, so I'm not sure how likely it is t
 
 # License
 
-ANTXR is distributed under the [Eclipse Public License (EPL)](http://eclipse.org/legal/epl-v10.html). You can read about the concepts in plain English at [Eclipse Public License (EPL) Frequently Asked Questions](http://eclipse.org/legal/eplfaq.html). This is the same license that Eclipse is currently distributed under, and you can basically use the tool for whatever purpose you would like, commercial or non-commercial, without license fee.
+ANTXR is distributed under the [Eclipse Public License (EPL)](http://eclipse.org/legal/epl-v10.html). You can read about the concepts in plain English at [Eclipse Public License (EPL) Frequently Asked Questions](http://www.eclipse.org/legal/eplfaq.php). This is the same license that Eclipse is currently distributed under, and you can basically use the tool for whatever purpose you would like, commercial or non-commercial, without license fee.
 
 # Download
 
@@ -73,7 +73,7 @@ The ANTXR Eclipse plugin is based on the ANTLR-Eclipse plugin at [http://antlrec
         *   [Digester](#Digester)
         *   [Keeping in synch with the XML schema](#Keeping_in_synch_with_the_XML_schema)
     *   [Enter ANTLR-Based XML Parsing](#Enter_ANTLR_XML_Parsing)
-    *   [Poof! We Have ANTLR Native XML Support!](#Poof!_We_Have_ANTLR_Native_XML_Support!)
+    *   [Poof! We Have ANTLR Native XML Support!](#We_Have_ANTLR_Native_XML_Support)
     *   [Hacking ANTLR into submission](#Hacking_ANTLR_into_submission)
     *   [Forking from ANTLR](#Forking_from_ANTLR)
 *   [Writing Your XML Parser](#Writing_Your_XML_Parser)
@@ -82,11 +82,11 @@ The ANTXR Eclipse plugin is based on the ANTLR-Eclipse plugin at [http://antlrec
     *   [The Ground Rules](#The_Ground_Rules)
     *   [A Simple XML Parser](#A_Simple_XML_Parser)
     *   [A More Complex Parser](#A_More_Complex_Parser)
-    *   [AnyTags](#AnyTags)
+    *   [Any Tags](#AnyTags)
 *   [Performance](#Performance)
 *   [Future](#Future)
 
-# History
+# History {#History}
 
 XML Parsing can be quite a pain the butt.
 
@@ -94,13 +94,13 @@ Current XML parsing mechanisms have several problems, from lack of context infor
 
 Representing your XML parsing rules as an ANTXR grammar can solve many of these problems, producing an effective, maintainable XML parser.
 
-# Introduction and motivation
+# Introduction and motivation {#Introduction_and_motivation}
 
 _Note: What follows is a bunch of history, motivation, and implementation strategies. If you simply want to jump in and write an XML parser of your own, jump down to [Writing Your XML Parser](#Writing_Your_XML_Parser)._
 
 There are several common mechanisms for XML parsing. Let's concentrate on the "big two": SAX and DOM. And let's not treat them too nicely. They're nasty to use...
 
-## DOM
+## DOM {#DOM}
 
 A DOM parser rips through an XML instance document and creates a lovely little tree of evil DOM nodes. The larger your instance document, the more memory this takes, so it doesn't scale well at all. (Damn... I used a buzzword... sorry!)
 
@@ -108,7 +108,7 @@ Anyway, _**memory is a huge issue here**_, and is the main reason that people re
 
 And don't get me started on the DOM API. Blech! Unfortunately, the DOM API that we all use has been handed down from generation to generation from someone (Al Gore claims it was he), who was either intoxicated or stoned while working on browser HTML parsing.
 
-## SAX
+## SAX {#SAX}
 
 A nice little event-based mechanism that tells you when it sees tags and content. It does the dirty work of validation and scanning for you, but you're left to pick up the pieces as it throws you notifications. You write a handler with a single method that receives notification for any start tag. **_If you want to know the context in which a tag appears, it's up to you to track it_**. While it's pretty memory-efficient by itself, you still need to track extra information to know to which object `<name>` belongs.
 
@@ -129,7 +129,7 @@ Jinkies! This is an accident just waiting to happen. It's nearly impossible to "
 
 A variation on this handler can use reflection to call other methods or plug-in tag handlers. I'll give this an "A" for effort, but after maintaining a few parsers like these, my head explodes at the thought.
 
-## Digester
+## Digester {#Digester}
 
 When I first saw Jakarta Digester, I was pretty impressed. Very cool little XML handler. It solves a lot of problems, including context. I was in love. But I like to think in terms of a stack when it's appropriate...
 
@@ -141,11 +141,11 @@ I quickly saw confusion on the faces on others when faced with a digester rule-s
 
 But I think its implementation causes more confusion to new users than it's worth, and it can require a bit of work to add in those "special cases" that we all find lurking in our wonderful XML documents.
 
-## Keeping in synch with the XML schema
+## Keeping in synch with the XML schema {#Keeping_in_synch_with_the_XML_schema}
 
 And here's the biggest problem, and it applies to every XML parsing technique that's commonly used. It's often very difficult to update your parser when the XML schema changes. Think about what the code looks like in a SAX, DOM, or Digester based parser. It looks **_nothing_** like the XML schema. If we could represent our parser in a form that's parallel to our schema, life would be much simpler when it comes to updating a parser to match a schema change.
 
-# Enter ANTLR-Based XML Parsing
+# Enter ANTLR-Based XML Parsing {#Enter_ANTLR_XML_Parsing}
 
 I've been thinking about parsing XML with ANTLR for quite some time, and when some folks at my then employer, FGM, Inc, were planning an XML import refactoring, I suggested that we take a look at ANTLR.
 
@@ -192,7 +192,7 @@ The above parser requires explicit specification of the start and end tags, and 
 
 I wanted to make things easier for my coworkers, so I downloaded the latest ANTLR source and started hacking...
 
-# Poof! We Have ANTLR Native XML Support!
+# Poof! We Have ANTLR Native XML Support! {#We_Have_ANTLR_Native_XML_Support}
 
 The first thing I wanted was easy optional validation. It must be fast, and robust. It seemed to me that using an existing SAX parser was the best solution for this, as they're being pounded on by thousands of developers, so they'd be pretty robust, and they're pretty quick (some more so than others).
 
@@ -226,7 +226,7 @@ XMLToken is an extension of ANTLR's CommonToken, providing access to a tag's att
 _**Call me a dunce...**  
 At this point I should note that silly me didn't look at the source for XPA... I wanted to do a "clean room" implementation. After looking at the XPA code while writing this document, It turns out that XPA handles its processing **in almost exactly the same manner as I did**. It's **really** spooky how similar the code I wrote for the XMLTokenStream and the blocking queue is to the XPA source code. However, looking back on this, though I effectively wasted a day working on it, it helps validate that this approach is good, as two separate (and brilliant, mind you ;) ) developers came up with the same approach for parsing. My XMLTokenStream is a bit more flexible, in that you can pass your own SAX handler instance to it, allowing you to configure it for whatever validation you would like._
 
-## Hacking ANTLR into submission
+## Hacking ANTLR into submission {#Hacking_ANTLR_into_submission}
 
 Next I started modifying ANTLR. I wanted to make XML processing easier. To me, this meant two things:
 
@@ -293,7 +293,7 @@ looked more like an error than an intentional default namespace specification. I
 
 With these few constructs added to ANTLR, my fellow FGMers started to write a parser. I gave them very little overview. Instead, I gave them a simple sample parser and my ANTLR tutorial (they were both new to ANTLR). They asked a few questions, but after a few days they were very comfortable with writing XML grammars in ANTLR. This gave me the warm fuzzies that I achieved my goals...
 
-# Forking from ANTLR
+# Forking from ANTLR {#Forking_from_ANTLR}
 
 While the above parsers worked well, I still didn't like the syntax. I _really_ wanted something that felt more like XML, so I decided to fork from ANTLR to create ANTXR (pronounced "ant-zer"). ANTXR has most of the syntax I really want. (I removed the above support from ANTLR itself.)
 
@@ -366,11 +366,11 @@ Let's walk through some of this example. Most of it is normal ANTLR syntax, with
 *   **lines 23, 30, 41, 45**: Attributes are referenced using @attributeName syntax. Attributes are retrieved from the start tag corresponding to the rule in which they appear. For example, the @name referred to in the <from> rule will retrieve the name attribute of the <from> tag that was matched in the XML input.
 *   **lines 49, 53**: PCDATA is a pre-defined token that represents parsed character data inside a tag. Its position corresponds to which PCDATA chunk you want to read from the tag. (Other tags can appear between PCDATA tags.)
 
-# Writing Your XML Parser
+# Writing Your XML Parser {#Writing_Your_XML_Parser}
 
 So now we come to the "how to I write an XML parser using ANTLR" stuff; the stuff that you actually care about and are now wondering why you just read all of the above stuff that doesn't get you any closer to having a working XML parser...
 
-# Scanning XML
+# Scanning XML {#Scanning_XML}
 
 The first thing you need to know about writing an ANTXR parser is how the XML file is read and tokenized. There are two basic approaches here:
 
@@ -392,7 +392,7 @@ The most obvious difference is _**performance**_. The XMLPULL-based parser gener
 
  I strongly recommend that you do any desired validation with the SAX or XMLPULL validator, and keep your ANTXR parser simple, just recognizing and performing actions on the XML file.
 
-# A skeletal XML grammar
+# A skeletal XML grammar {#A_skeletal_XML_grammar}
 
 Here's a simple skeleton for an XML parser written in ANTXR.
 
@@ -427,7 +427,7 @@ Here's a simple skeleton for an XML parser written in ANTXR.
 
 This skeleton shows all you need to know to write a simple XML parser in ANTLR.
 
-## The Ground Rules
+## The Ground Rules {#The_Ground_Rules}
 
 First, we should establish some ground rules:
 
@@ -437,7 +437,7 @@ First, we should establish some ground rules:
 
 Ok, fair enough. Let's create a real XML parser in ANTXR.
 
-## A Simple XML Parser
+## A Simple XML Parser {#A_Simple_XML_Parser}
 
 First, let's look at a chunk of XML that we can parse:
 
@@ -639,7 +639,7 @@ Now we can change our calling code to include
 
 And poof! We have XML data converted to Person objects quite easily!
 
-### A More Complex Parser
+### A More Complex Parser {#A_More_Complex_Parser}
 
 Here's an example I presented at the Northern Virginia Java Users Group. It's a little more interesting, as it demonstrates a mix of returning values to callers and passing values into called rules. There's no "right way" to do this, but try to think about who needs to know what.
 
@@ -897,7 +897,7 @@ Note that this grammar demonstrates several things:
 *   **Converting some attribute values to numbers**  
     This is something I'd like to make easier, but for now, you'll have to live with it. Attributes are strings, and if you want them in another form such as ints, you'll need to do the conversion.
 
-# "Any" Tags
+# "Any" Tags {#AnyTags}
 
 ANTXR allows use of the "any" tag in XML schema. This feature allows your XML to be extensible, but can make parsing a bit trickier. To use the "any" feature, simply use OTHER\_TAG as a token in your grammar and match it with an XML\_END\_TAG token. For example:
 
@@ -924,11 +924,11 @@ The main differences between the ANTXR plugin and the ANTLR plugin are names:
 *   You use the "Toggle ANTXR nature" option instead of "Toggle ANTLR nature".
 *   You must name your grammars foo.antxr instead of foo.g.
 
-# Performance
+# Performance {#Performance}
 
 I'm working with some testers to try and get a few good performance tests set up. Initial tests have shown the ANTXR approach to be comparable to an equivalent SAX-based implementation (sometimes slightly faster, sometimes slightly slower, but so close we cannot be decisive.) When a full comparison has been completed, I'll post the results.
 
-# Future
+# Future {#Future}
 
 The next big thing I want to add to this is the ability to generate an ANTXR grammar from an XML Schema or DTD.
 

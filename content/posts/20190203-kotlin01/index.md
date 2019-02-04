@@ -14,9 +14,12 @@ tags:
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector="pre"></script>
 
-[![Kotlin Logo](../../img/kotlin-logo-text.png)](https://www.jetbrains.com)
-
-Let's learn Kotlin from a Java point of view. We'll start by looking at some basics of Variables, Values, Classes, Properties and Constructors.
+<table>
+	<tr>
+		<td style="border:none;background: unset;"><a href="https://www.jetbrains.com"><img src="../../img/kotlin-logo.png" alt="Kotlin Logo" style="width:300px;"/></a></td>
+		<td style="border:none;background: unset;"><font size="+2"><p>Let's learn Kotlin from a Java point of view.<p>We'll start by looking at some basics of Variables, Values, Classes, Properties and Constructors.</p></font></td>
+	</tr>
+</table>
 
 <!--more-->
 
@@ -862,3 +865,4 @@ fun main() {
 A little ugly, but poof! Private primary constructor. I haven't had to do this _too_ often, but I have had to do it...
 
 Lots more to cover in later articles, but it's after midnight and I need some sleep... More soon!
+

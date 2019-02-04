@@ -45,6 +45,8 @@ Some of the longer examples might initially hide code that you've already seen. 
 
 For more details on Kotlin Playground, see https://github.com/JetBrains/kotlin-playground
 
+Note that if you do not have JavaScript enabled, the code examples will appear as normal text blocks.
+
 Main Functions
 --------------------------------
 Kotlin has "main" functions just like Java. We'll use this to run examples in most of these articles. You'll most likely use Kotlin in environments like servers or Android applications that don't need a main, but they're useful for examples.

@@ -89,3 +89,6 @@ title                      = "JavaDude.com"
   
   # analytics
   #googleAnalytics          = "your-google-analytic-id"
+
+[blackfriday]
+  smartypants = false

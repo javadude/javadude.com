@@ -14,6 +14,8 @@ tags:
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector="pre"></script>
 
+[![Kotlin Logo](../../img/kotlin-logo-text.png)](https://www.jetbrains.com)
+
 Let's learn Kotlin from a Java point of view. We'll start by looking at some basics of Variables, Values, Classes, Properties and Constructors.
 
 <!--more-->

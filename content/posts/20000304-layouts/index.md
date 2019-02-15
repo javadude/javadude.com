@@ -111,19 +111,22 @@ Controlling the sizes returned for your own components can be accomplished in tw
 
 If your component is a JFC Project Swing component, you inherit three methods,`setPreferredSize(Dimension)`, `setMinimumSize(Dimension)` and `setMaximumSize(Dimension)`. You can call these methods directly to explicitly set the size information for a component. For example:
 
-	JButton okButton = new JButton("Ok");
-	okButton.setPreferredSize(new Dimension(100,10));
+```java
+JButton okButton = new JButton("Ok");
+okButton.setPreferredSize(new Dimension(100,10));
+```
 
 You should only adjust the sizes if you're really sure what you're doing. (The above example is probably_not_a good idea...)
 
 If your component is not a JFC Project Swing component, you will need to subclass it to adjust the sizes. For example:
 
-	public class MyButton extends Button {
-		public Dimension getPreferredSize() {
-			return new Dimension(100,10);
-		}	
-	}
-  
+```java
+public class MyButton extends Button {
+	public Dimension getPreferredSize() {
+		return new Dimension(100,10);
+	}	
+}
+```  
  
 **Layout Managers and Containers**
 
@@ -133,23 +136,28 @@ If a container has an associated layout manager, the container asks that layout 
 
 A `LayoutManager` is associated with a `Container` by calling the `setLayout(LayoutManager)` method of `Container`. For example:
 
-	Panel p = new Panel();
-	p.setLayout(new BorderLayout());
+```java
+Panel p = new Panel();
+p.setLayout(new BorderLayout());
+```
 
 Some containers, such as `Panel`, provide a constructor that takes a layout manager as an argument as well:
 
-	Panel p = new Panel(new BorderLayout());
-  
+```java
+Panel p = new Panel(new BorderLayout());
+```
+
 **The `add(...)` Methods**
 
 Containers have several methods that can be used to add components to them. They are:
 
-	public Component add(Component comp)
-	public Component add(String name, Component comp)
-	public Component add(Component comp, int index)
-	public void add(Component comp, Object constraints)
-	public void add(Component comp, Object constraints, int index)
- 
+```java
+public Component add(Component comp)
+public Component add(String name, Component comp)
+public Component add(Component comp, int index)
+public void add(Component comp, Object constraints)
+public void add(Component comp, Object constraints, int index)
+``` 
 
 Each of these methods adds a component to the container and passes information to the layout manager of the container. All of the methods take a`Component`parameter, specifying which component to add. Some take an index. This is used to specify an order in the container; some layout managers (such as`CardLayout`) respect the ordering of added components.
 
@@ -157,7 +165,9 @@ The other parameters, `name` and `constraints` are information that can be used 
 
 Each of the above`add()`methods delegates its work to a single`addImpl()`method:
   
-	protected void addImpl(Component comp, Object constraints, int index)
+```java  
+protected void addImpl(Component comp, Object constraints, int index)
+```
 
 Note: _addImpl_ stands for "implementation of the add method."
 
@@ -173,30 +183,33 @@ These insets define the area a container is reserving for its own use (such as d
 
 To demonstrate, create a simple `Panel` subclass that provides a raised, 3D border around whatever is contained within it. You'll define this border as being 5 pixels away from each edge of the container border, and reserving some extra room between it and the laid out components. The class will look something like this:
 
-	public class BorderPanel extends Panel {
-		private static final Insets insets = new Insets(10,10,10,10);
-		public Insets getInsets() {return insets;}
-		public void paint(Graphics g) {
-			Dimension size = getSize();
-			g.setColor(getBackground());
-			g.draw3DRect(5,5,size.width-11, size.height-11, true);
-		}
+```java
+public class BorderPanel extends Panel {
+	private static final Insets insets = new Insets(10,10,10,10);
+	public Insets getInsets() {return insets;}
+	public void paint(Graphics g) {
+		Dimension size = getSize();
+		g.setColor(getBackground());
+		g.draw3DRect(5,5,size.width-11, size.height-11, true);
 	}
+}
+```
 
 To create the panel, you defined a static `Insets` object that represents the space to reserve. Because that space won't change, you used a single static final instance of it. You'll return this instance anytime a layout manager (or anyone else) calls `getInsets()`.
 
 You then define a `paint()` method that gets the size of the container into which it is painting, then draws a raised border within that space. If you use the above class as follows:
 
-	Frame f = new Frame("Test");
-	f.setLayout(new GridLayout(1,0));
-	f.setBackground(Color.lightGray);
-	BorderPanel p = new BorderPanel();
-	p.setLayout(new GridLayout(1,0));
-	p.add(new Button("Hello"));
-	f.add(p);
-	f.setVisible(true);
-	f.pack();
-  
+```java
+Frame f = new Frame("Test");
+f.setLayout(new GridLayout(1,0));
+f.setBackground(Color.lightGray);
+BorderPanel p = new BorderPanel();
+p.setLayout(new GridLayout(1,0));
+p.add(new Button("Hello"));
+f.add(p);
+f.setVisible(true);
+f.pack();
+```  
 
 you'll get the following GUI:
 
@@ -206,7 +219,9 @@ If you are not familiar with `GridLayout`, it will be discussed[later](#gridLayo
 
 You can get another interesting effect by adding the following to the `paint()` method:
 
-	g.draw3DRect(6,6,size.width-13,size.height-13,false);
+```java
+g.draw3DRect(6,6,size.width-13,size.height-13,false);
+```
 
 after the first `draw3DRect()`:
 
@@ -246,18 +261,20 @@ You do not specify any constraints for the components, as `FlowLayout` _only_ de
 
 Examine a simple `FlowLayout` in action. Suppose you had the following class definition:
 
-	public class FlowTest {
-		public static void main(String[] args) {
-			Frame f = new Frame("FlowTest");
-			f.setLayout(new FlowLayout());
-			f.add(new Button("A"));
-			f.add(new Button("B"));
-			f.add(new Button("C"));
-			f.add(new Button("D"));
-			f.add(new Button("E"));
-			f.setVisible(true);
-		}
+```java
+public class FlowTest {
+	public static void main(String[] args) {
+		Frame f = new Frame("FlowTest");
+		f.setLayout(new FlowLayout());
+		f.add(new Button("A"));
+		f.add(new Button("B"));
+		f.add(new Button("C"));
+		f.add(new Button("D"));
+		f.add(new Button("E"));
+		f.setVisible(true);
 	}
+}
+```
 
 This class creates a `Frame` and adds five buttons to it. It lays the buttons out as many can fit per row, then moves to the next row to display more of them. The following pictures show the frame being expanded horizontally:
 
@@ -297,14 +314,16 @@ Unfortunately, there is no way for a container to know anything about the size o
 
 Think about the consequences of this. What would happen if a `FlowLayout`\-managed container was nested within another `FlowLayout`\-managed container? For example:
 
-	Panel p1 = new Panel(new FlowLayout());
-	Panel p2 = new Panel(new FlowLayout());
-	p2.add(new Button("A"));
-	p2.add(new Button("B"));
-	p2.add(new Button("C"));
-	p2.add(new Button("D"));
-	p2.add(new Button("E"));
-	p1.add(p2);
+```java
+Panel p1 = new Panel(new FlowLayout());
+Panel p2 = new Panel(new FlowLayout());
+p2.add(new Button("A"));
+p2.add(new Button("B"));
+p2.add(new Button("C"));
+p2.add(new Button("D"));
+p2.add(new Button("E"));
+p1.add(p2);
+```
 
 Think this through a bit and the answer is very disconcerting. The following walks you through the layout process:
 
@@ -353,13 +372,15 @@ The first thing going through your mind should be "but I will_never_have a GUI t
 
 First, look at the sample code for the above GUI:
 
-	Frame f = new Frame("orderTest");
-	f.setLayout(new BorderLayout());
-	f.add(new Button("North"),  BorderLayout.NORTH);
-	f.add(new Button("South"),  BorderLayout.SOUTH);
-	f.add(new Button("East"),   BorderLayout.EAST);
-	f.add(new Button("West"),   BorderLayout.WEST);
-	f.add(new Button("Center"), BorderLayout.CENTER);
+```java
+Frame f = new Frame("orderTest");
+f.setLayout(new BorderLayout());
+f.add(new Button("North"),  BorderLayout.NORTH);
+f.add(new Button("South"),  BorderLayout.SOUTH);
+f.add(new Button("East"),   BorderLayout.EAST);
+f.add(new Button("West"),   BorderLayout.WEST);
+f.add(new Button("Center"), BorderLayout.CENTER);
+```
 
 The `BorderLayout` manager requires a constraint when adding a component. The constraint can be one of the following:
 
@@ -381,14 +402,15 @@ You'll see a few more variations of the`add()`method when you examine`CardLayout
 
 For`BorderLayout`, the constraint argument describes which position the component will occupy. Note that the earlier`BorderLayout`example source code could have been written as follows:
 
-	Frame f = new Frame("BorderTest");
-	f.setLayout(new BorderLayout());
-	f.add("North",  new Button("North"));
-	f.add("South",  new Button("South"));
-	f.add("East",   new Button("East"));
-	f.add("West",   new Button("West"));
-	f.add("Center", new Button("Center"));
- 
+```java
+Frame f = new Frame("BorderTest");
+f.setLayout(new BorderLayout());
+f.add("North",  new Button("North"));
+f.add("South",  new Button("South"));
+f.add("East",   new Button("East"));
+f.add("West",   new Button("West"));
+f.add("Center", new Button("Center"));
+``` 
 
 The big difference is that the newer form (using the`BorderLayout.NORTH`type constraints) can be compile-time checked; if you type`BorderLayout.NORFH`the compiler will catch it. If you just type "Norfh", it will not be caught until runtime, causing an`IllegalArgumentException`to be thrown.
 
@@ -414,15 +436,16 @@ The Java 2 platform (previously known as the JDK 1.2) adds additional constants 
 
 Now consider nesting a`FlowLayout`\-managed container inside a`BorderLayout`\-managed container. First, what would happen if you added the`FlowLayout`\-managed container as the`NORTH`or`SOUTH`component of the`BorderLayout`?
 
-	Panel flow   = new Panel(new FlowLayout());
-	Panel border = new Panel(new BorderLayout());
-	flow.add(new Button("A"));
-	flow.add(new Button("B"));
-	flow.add(new Button("C"));
-	flow.add(new Button("D"));
-	flow.add(new Button("E"));
-	border.add(flow, BorderLayout.NORTH);
-  
+```java
+Panel flow   = new Panel(new FlowLayout());
+Panel border = new Panel(new BorderLayout());
+flow.add(new Button("A"));
+flow.add(new Button("B"));
+flow.add(new Button("C"));
+flow.add(new Button("D"));
+flow.add(new Button("E"));
+border.add(flow, BorderLayout.NORTH);
+```  
 
 Remember what happens when a`FlowLayout`\-managed container is added to a layout that respects preferred height?_The_`FlowLayout`_container will only ever have a single row_! It will never flow its components to more than that one row.
 
@@ -466,12 +489,13 @@ Take a very simple example. Suppose you wanted to create a simple labeled text f
 
 You could start with the following code:
 
-	Panel p = new Panel(new BorderLayout());
-	Label nameLabel = new Label("Name:");
-	TextField entry = new TextField();
-	p.add(nameLabel, BorderLayout.WEST);
-	p.add(entry, BorderLayout.CENTER);
- 
+```java
+Panel p = new Panel(new BorderLayout());
+Label nameLabel = new Label("Name:");
+TextField entry = new TextField();
+p.add(nameLabel, BorderLayout.WEST);
+p.add(entry, BorderLayout.CENTER);
+``` 
 
 Here you are binding the width of the label to its preferred width. It will take up that much space and not expand. The entry field is not bound and can expand. So, you achieve the desired result:
 
@@ -487,14 +511,15 @@ At least it_seems_you achieved the desired result. Look what happens when you ex
 
 The`TextField`is stretched. So, you need to bind the height of the two components to their preferred height. This can be accomplished by placing the`Label`/`TextField`combination inside_another_`BorderLayout`\-managed container, as the`NORTH`or`SOUTH`component. Assuming that you want the fields to stay at the top of the GUI, you can place it to the`NORTH`:
 
-	Panel p = new Panel(new BorderLayout());
-	Label nameLabel = new Label("Name:");
-	TextField entry = new TextField();
-	p.add(nameLabel, BorderLayout.WEST);
-	p.add(entry, BorderLayout.CENTER);
-	Panel p2 = new Panel(new BorderLayout());
-	p2.add(p, BorderLayout.NORTH);
-
+```java
+Panel p = new Panel(new BorderLayout());
+Label nameLabel = new Label("Name:");
+TextField entry = new TextField();
+p.add(nameLabel, BorderLayout.WEST);
+p.add(entry, BorderLayout.CENTER);
+Panel p2 = new Panel(new BorderLayout());
+p2.add(p, BorderLayout.NORTH);
+```
 
 Now, when you expand vertically, you get the following effect:
 
@@ -519,15 +544,19 @@ Looking at the above picture, there are three rows of components:
 
 The preferred width of the layout needs to take into account the widest of these rows. Using pw as the abbreviation for "preferred width", you can write a simple equation for the preferred width of a`BorderLayout`:
 
-	pw = max(north.pw, south.pw,
-			(west.pw + center.pw + east.pw + hgaps))
+```java
+pw = max(north.pw, south.pw,
+		(west.pw + center.pw + east.pw + hgaps))
+```
 
 The_hgaps_amount to include depends on which components are present in the center row.
 
 The preferred height (_ph_ in the following equation) depends on the sizes of the`NORTH`and`SOUTH`components plus the_tallest_of the middle-row components:
 
-	ph = vgaps + north.ph + south.ph +
-			max(west.ph, center.ph, east.ph)
+```java
+ph = vgaps + north.ph + south.ph +
+		max(west.ph, center.ph, east.ph)
+```
 
 The _vgaps_ amount depends on which rows are present in the `BorderLayout`.
 
@@ -541,15 +570,16 @@ And when you expand it vertically, you_do not_want the components to stretch ver
 
 First, recall that you can_bind_the height of a component to its preferred height by placing it in the`NORTH`or`SOUTH`part of a`BorderLayout`. If that bound component happens to be another`BorderLayout`, (with`NORTH`,`CENTER`, and`SOUTH`components) each component within that layout would get its preferred height. This results in the above figure, with code to produce it:
 
-	Frame f = new Frame("BorderTest");
-	Panel p = new Panel(new BorderLayout());
-	f.setLayout(new BorderLayout());
-	p.add(new Label("Hello", Label.CENTER), 
-				BorderLayout.NORTH);
-	p.add(new TextArea(), BorderLayout.CENTER);
-	p.add(new TextField(), BorderLayout.SOUTH);
-	f.add(p, BorderLayout.NORTH);
-
+```java
+Frame f = new Frame("BorderTest");
+Panel p = new Panel(new BorderLayout());
+f.setLayout(new BorderLayout());
+p.add(new Label("Hello", Label.CENTER), 
+			BorderLayout.NORTH);
+p.add(new TextArea(), BorderLayout.CENTER);
+p.add(new TextField(), BorderLayout.SOUTH);
+f.add(p, BorderLayout.NORTH);
+```
 
 An effective combination of a`FlowLayout`and a`BorderLayout`is for the common "Ok" and "Cancel" buttons on a dialog. For example:
 
@@ -557,12 +587,14 @@ An effective combination of a`FlowLayout`and a`BorderLayout`is for the common "O
 
 The above is accomplished with the following code:
  
-	Frame f = new Frame("BorderTest");
-	Panel p = new Panel(new FlowLayout(FlowLayout.RIGHT));
-	f.setLayout(new BorderLayout());
-	p.add(new Button("Ok"));
-	p.add(new Button("Cancel"));
-	f.add(p, BorderLayout.SOUTH);
+ ```java
+Frame f = new Frame("BorderTest");
+Panel p = new Panel(new FlowLayout(FlowLayout.RIGHT));
+f.setLayout(new BorderLayout());
+p.add(new Button("Ok"));
+p.add(new Button("Cancel"));
+f.add(p, BorderLayout.SOUTH);
+```
 
 There is one problem with this approach: the widths of the two buttons are different. You'll see a better way to create this type of GUI in a moment.
 
@@ -575,23 +607,29 @@ There is one problem with this approach: the widths of the two buttons are diffe
 
 The code that produced the above GUI looks like:
 
-	Frame f = new Frame("Grid Test");
-	f.setLayout(new GridLayout(3,4));
-	for (int x = 1; x < 13; x++)
-		f.add(new Button("""+x));
+```java
+Frame f = new Frame("Grid Test");
+f.setLayout(new GridLayout(3,4));
+for (int x = 1; x < 13; x++)
+	f.add(new Button("""+x));
+```
 
 When specifying a`GridLayout`, there are two main parameters:_rows_and_columns_. You can specify both of these parameters, _but only one will ever be used._ Take a look at the following code snippet from`GridLayout.java`:
 
-	if (nrows > 0) {
-		ncols = (ncomponents + nrows - 1) / nrows;
-	else
-		nrows = (ncomponents + ncols - 1) / ncols;
+```java
+if (nrows > 0) {
+	ncols = (ncomponents + nrows - 1) / nrows;
+else
+	nrows = (ncomponents + ncols - 1) / ncols;
+```
 
 Notice that if_rows_is non-zero, it_calculates_the number of columns; if_rows_is zero, it calculates the number of rows based on the specified number of columns.
 
 To the casual observer, a statement like
 
-	f.setLayout(new GridLayout(3,4));
+```java
+f.setLayout(new GridLayout(3,4));
+```
 
 looks like it will_always_divide the screen into twelve sections, but that's not the case. In the above statement, you could substitute_any_value for the number of columns, and the effect would be exactly the same.
 
@@ -601,12 +639,15 @@ Note: A word of caution: you cannot specify zero for_both_; an`IllegalArgumentEx
 
 Specifying zero for one value makes the_design intent_obvious. If you always_want_four rows, say so; if you always_want_three columns, say so. The above example_should_be written as either
 
-	f.setLayout(new GridLayout(3,0));
+```java
+f.setLayout(new GridLayout(3,0));
+```
 
 or
- 
-	f.setLayout(new GridLayout(0,4));
 
+```java 
+f.setLayout(new GridLayout(0,4));
+```
   
 **_Preferred Size of a`GridLayout`Container_**
 
@@ -614,40 +655,44 @@ How do you determine the preferred size of a`GridLayout`?`GridLayout`wants to ac
 
 The`GridLayout`would like to set the size of_each_component to that maximum preferred width and maximum preferred height. (Remember—all components in a`GridLayout`will be the same size!) This makes the preferred size of a`GridLayout`
 
-	pw = (maxPrefWidth \* cols) + (hgap \* (cols+1))
-	ph = (maxPrefHeight \* rows) + (vgap \* (rows+1))
-  
+```java
+pw = (maxPrefWidth \* cols) + (hgap \* (cols+1))
+ph = (maxPrefHeight \* rows) + (vgap \* (rows+1))
+```
+
 **_"Ok" and "Cancel" Revisited_**
 
 One of the goals of the earlier "Ok" and "Cancel" dialog was to make the buttons the same size. This can be accomplished by putting the buttons in a single-row`GridLayout`. You can then add that`GridLayout`container to the`FlowLayout`, or use a nested`BorderLayout`in place of the`FlowLayout`. Here are both approaches:
 
 ![gridb1.gif (2035 bytes)](images/gridb1.gif)
 
-	Frame f = new Frame("Ok/Cancel");
-	f.setLayout(new BorderLayout());
-	Panel p = new Panel();
-	p.setLayout(new FlowLayout(FlowLayout.RIGHT));
-	Panel p2 = new Panel()
-	p2.setLayout(new GridLayout(1,0,5,5));
-	p2.add(new Button("Ok"));
-	p2.add(new Button("Cancel"));
-	p.add(p2, BorderLayout.EAST);
-	f.add(p, BorderLayout.SOUTH);
-  
+```java
+Frame f = new Frame("Ok/Cancel");
+f.setLayout(new BorderLayout());
+Panel p = new Panel();
+p.setLayout(new FlowLayout(FlowLayout.RIGHT));
+Panel p2 = new Panel()
+p2.setLayout(new GridLayout(1,0,5,5));
+p2.add(new Button("Ok"));
+p2.add(new Button("Cancel"));
+p.add(p2, BorderLayout.EAST);
+f.add(p, BorderLayout.SOUTH);
+```  
 
 ![gridb2.gif (2014 bytes)](images/gridb2.gif)
 
-	Frame f = new Frame("Ok/Cancel");
-	f.setLayout(new BorderLayout());
-	Panel p = new Panel();
-	p.setLayout(new BorderLayout());
-	Panel p2 = new Panel()
-	p2.setLayout(new GridLayout(1,0,5,5));
-	p2.add(new Button("Ok"));
-	p2.add(new Button("Cancel"));
-	p.add(p2, BorderLayout.EAST);
-	f.add(p, BorderLayout.SOUTH);
-  
+```java
+Frame f = new Frame("Ok/Cancel");
+f.setLayout(new BorderLayout());
+Panel p = new Panel();
+p.setLayout(new BorderLayout());
+Panel p2 = new Panel()
+p2.setLayout(new GridLayout(1,0,5,5));
+p2.add(new Button("Ok"));
+p2.add(new Button("Cancel"));
+p.add(p2, BorderLayout.EAST);
+f.add(p, BorderLayout.SOUTH);
+```  
 
 Notice the difference in appearance. The`FlowLayout`pads_around_the components with the hgap and vgap, while`BorderLayout`only pads_between_components (so the components butt right against the edges of the container.)
 
@@ -662,26 +707,32 @@ And similarly for the second version of the layout, using the nested`BorderLayou
 
 `CardLayout`uses a different strategy than the other layout managers. Instead of assigning locations in the container for all nested components, it only displays one component at a time. Components can be added to a`CardLayout`using the following`add`methods:
 
-	public void add(Component component, String key);
-	public void add(String key, Component component);
-	public void add(String key, Component component, int index);
+```java
+public void add(Component component, String key);
+public void add(String key, Component component);
+public void add(String key, Component component, int index);
+```
 
 The first two forms of the`add()`method will add the component at the end of the list of components for the container. The last form of the`add()`method will add the component at the specified position in the container. The position of the component within the container determines the order in which the components will be displayed via the manipulation methods of`CardLayout`.
 
 A unique`String`key must be assigned for each component that is added to the container. For example:
 
-	Panel p = new Panel(new CardLayout());
-	p.add("one",   new Button ("the first component"));
-	p.add(new Button ("the second component"), "two");
-	p.add("three", new Button ("the third component"));
-	p.add("between two and three", new Button ("the fourth component"), 2);
+```java
+Panel p = new Panel(new CardLayout());
+p.add("one",   new Button ("the first component"));
+p.add(new Button ("the second component"), "two");
+p.add("three", new Button ("the third component"));
+p.add("between two and three", new Button ("the fourth component"), 2);
+```
 
 When components are added to container that is controlled by a`CardLayout`, a`String`key is associated with each component. Different components can be displayed by using the`next()`,`previous`, and`show`methods of`CardLayout`. The order in which components are added to the container determines their display order when using the`next()`and`previous`methods. For example:
 
-	CardLayout l = (CardLayout)p.getLayout();
-	l.previous(p);
-	l.next(p);
-	l.show(p, "two");
+```java
+CardLayout l = (CardLayout)p.getLayout();
+l.previous(p);
+l.next(p);
+l.show(p, "two");
+```
 
 Notice that the`previous()`,`next()`, and`show()`methods require a reference to the container be passed into them has an argument. Layout managers do not keep a reference to the container that uses them. When performing actions such as calling`previous()`,`next()`, and`show()`, and, as you will see later, the laying out of the actual components, the layout manager needs to be informed of the container on which it is operating so it can have access to the components it is laying out.
 
@@ -978,9 +1029,11 @@ Next, you need to divide the GUI into two evenly spaced parts: the left half the
 
 Now what do you do about the pairs of text fields and labels? Your initial answer might involve placing each pair of text fields and labels into their own`BorderLayout`. For example:
 
-	Panel panel1 = new Panel(new BorderLayout());
-	panel1.add(new Label("First name:"), BorderLayout.WEST);
-	panel1.add(new TextField(), BorderLayout.CENTER);
+```java
+Panel panel1 = new Panel(new BorderLayout());
+panel1.add(new Label("First name:"), BorderLayout.WEST);
+panel1.add(new TextField(), BorderLayout.CENTER);
+```
 
 Using this strategy for each pair of labels and text fields, and adding each of those into their proper place in the GUI, you get a slightly undesirable affect:
 

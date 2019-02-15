@@ -75,19 +75,21 @@ In the same manner, interfaces are the key to separation in your application. If
 
 Think about this for a moment. Suppose we define:
 
-	public interface Customer {
-		public String getName();
-		public void setName(String name);
-		...
-	}
+```java
+public interface Customer {
+	public String getName();
+	public void setName(String name);
+	...
+}
 
-	public interface CustomerManager {
-		public Customer   load(int id);
-		public Customer   store(Customer customer);
-		public Customer[] findByName(String namePattern);
-		public Customer   createCustomer(String name, float creditLimit);
-		public void       deleteCustomer(Customer customer);
-	}
+public interface CustomerManager {
+	public Customer   load(int id);
+	public Customer   store(Customer customer);
+	public Customer[] findByName(String namePattern);
+	public Customer   createCustomer(String name, float creditLimit);
+	public void       deleteCustomer(Customer customer);
+}
+```
 
 Notice how this _does not_ say anything about _how_ or _where_ the customer is stored. All we're doing here is specifying the basic CRUD (Create, Read, Update, Delete) operations that you need for a piece of data.
 
@@ -159,13 +161,15 @@ The hardest part of making your application nice and generic is dealing with exc
 
 Let's just think about our CustomerManager:
 
-	public interface CustomerManager {
-		public Customer   load(int id);
-		public Customer   store(Customer customer);
-		public Customer[] findByName(String namePattern);
-		public Customer   createCustomer(String name, float creditLimit);
-		public void       deleteCustomer(Customer customer);
-	}
+```java
+public interface CustomerManager {
+	public Customer   load(int id);
+	public Customer   store(Customer customer);
+	public Customer[] findByName(String namePattern);
+	public Customer   createCustomer(String name, float creditLimit);
+	public void       deleteCustomer(Customer customer);
+}
+```
 
 This definition has some serious problems. If anything goes wrong, the caller needs to know about it. So we'll need to declare some thrown exceptions for error cases.
 
@@ -175,16 +179,18 @@ Let's start by thinking about and implementation using JDBC. JDBC throws SQLExce
 
 So we could write a class that looks like:
 
-	public class CustomerManagerUsingJDBC implements CustomerManager {
-		public Customer   load(int id) throws SQLException {
-			...
-		}
-
-		public Customer   store(Customer customer) throws SQLException {
-			...
-		}
+```java
+public class CustomerManagerUsingJDBC implements CustomerManager {
+	public Customer   load(int id) throws SQLException {
 		...
 	}
+
+	public Customer   store(Customer customer) throws SQLException {
+		...
+	}
+	...
+}
+```
 
 and then modify the interface to also throw those exceptions. Ok so far, and we set up the business logic to catch SQLExceptions as necessary.
 
@@ -192,17 +198,19 @@ and then modify the interface to also throw those exceptions. Ok so far, and we 
 
 But things get nasty if we try to change the implementation to use Enterprise JavaBeans:
 
-	public class CustomerManagerUsingEJB implements CustomerManager {
+```java
+public class CustomerManagerUsingEJB implements CustomerManager {
 
-		public Customer load(int id) throws EJBException, RemoteException {
-			...
-		}
-
-		public Customer store(Customer customer) throws EJBException, RemoteException {
-			...
-		}
+	public Customer load(int id) throws EJBException, RemoteException {
 		...
 	}
+
+	public Customer store(Customer customer) throws EJBException, RemoteException {
+		...
+	}
+	...
+}
+```
 
 Accessing EJBs could throw EJBException or RemoteException. Ok, so we'll modify the interface to use EJB, then change the code in the business logic.
 
@@ -224,60 +232,66 @@ What is the actual problem _from the point of view of the business logic_?
 
 Those are a few simple cases. Ok, let's define custom exceptions to deal with this.
 
-	public class MyApplicationException extends Exception {
-		private Throwable nestedException;
-		public MyApplicationException (String message, Throwable nestedException) {
-			super(message);
-			this.nestedException = nestedException;
-		}
-		public Throwable getNestedException() {
-			return nestedException;
-		}
+```java
+public class MyApplicationException extends Exception {
+	private Throwable nestedException;
+	public MyApplicationException (String message, Throwable nestedException) {
+		super(message);
+		this.nestedException = nestedException;
 	}
+	public Throwable getNestedException() {
+		return nestedException;
+	}
+}
 
-	public class CustomerException extends MyApplicationException {
-		public CustomerException(String message, Throwable nestedException) {
-			super(message, nestedException);
-		}
+public class CustomerException extends MyApplicationException {
+	public CustomerException(String message, Throwable nestedException) {
+		super(message, nestedException);
 	}
+}
 
-	public class NotFoundException extends MyApplicationException {
-		public NotFoundException(String message, Throwable nestedException) {
-			super(message, nestedException);
-		}
+public class NotFoundException extends MyApplicationException {
+	public NotFoundException(String message, Throwable nestedException) {
+		super(message, nestedException);
 	}
+}
+```
 
 Now we define the interface as follows. Note that this is how we _should_ have defined it in the first place, so it won't require changes.
 
-	public interface CustomerManager {
-		public Customer load(int id) throws CustomerException, NotFoundException {
-			...
-		}
-
-		public Customer store(Customer customer) throws CustomerException {
-			...
-		}
+```java
+public interface CustomerManager {
+	public Customer load(int id) throws CustomerException, NotFoundException {
 		...
 	}
+
+	public Customer store(Customer customer) throws CustomerException {
+		...
+	}
+	...
+}
+```
 
 Now the interface is _totally generic_, with respect to how we store the data! A sample JDBC implementation might look like:
 
-	public class CustomerManagerUsingJDBC implements CustomerManager {
-		public Customer load(int id) throws CustomerException, NotFoundException {
-			try {
-				// JDBC to try to fetch data
-				if (resultSetIsEmpty)
-					throw new NotFoundException("Customer " + id + " not found", null);
-				
-			} catch(NotFoundException e) {
-				throw e;
-			} catch(SQLException e) {
-				throw new CustomerException("oops!", e);
-			}
-			...
+```java
+public class CustomerManagerUsingJDBC implements CustomerManager {
+	public Customer load(int id) throws CustomerException, NotFoundException {
+		try {
+			// JDBC to try to fetch data
+			if (resultSetIsEmpty)
+				throw new NotFoundException("Customer " + id + " not found", null);
+			
+		} catch(NotFoundException e) {
+			throw e;
+		} catch(SQLException e) {
+			throw new CustomerException("oops!", e);
 		}
 		...
 	}
+	...
+}
+```
 
 The idea is to catch the specific exception and wrap it in an application exception. This allows the business logic to worry about the _concept_ of the problem, without knowing anything about the details of _how_ the data manager was implemented.
 
@@ -300,41 +314,45 @@ Entity beans are really just another way to store data.
 
 Start with our interfaces again:
 
-	public interface Customer {
-		public String getName()          throws CustomerException;
-		public void setName(String name) throws CustomerException;
-		...
-	}
+```java
+public interface Customer {
+	public String getName()          throws CustomerException;
+	public void setName(String name) throws CustomerException;
+	...
+}
 
-	public interface CustomerManager {
-		public Customer   load(int id)
-			throws CustomerException, NotFoundException;
-		public Customer   store(Customer customer) 
-			throws CustomerException;
-		public Customer[] findByName(String namePattern) 
-			throws CustomerException, NotFoundException;
-		public Customer   createCustomer(String name, float creditLimit) 
-			throws CustomerException;
-		public void       deleteCustomer(Customer customer) 
-			throws CustomerException;
-	}
+public interface CustomerManager {
+	public Customer   load(int id)
+		throws CustomerException, NotFoundException;
+	public Customer   store(Customer customer) 
+		throws CustomerException;
+	public Customer[] findByName(String namePattern) 
+		throws CustomerException, NotFoundException;
+	public Customer   createCustomer(String name, float creditLimit) 
+		throws CustomerException;
+	public void       deleteCustomer(Customer customer) 
+		throws CustomerException;
+}
+```
 
 The key here is the cooperation between the implementations of Customer and CustomerManager. First, our Customer implementation might look like:
 
-	public class CustomerAsEntityBean implements Customer {
-		private EntityCustomer entityCustomer;
-		public CustomerAsEntityBean(EntityCustomer entityCustomer) {
-			this.entityCustomer = entityCustomer;
-		}
-		public String getName() throws CustomerException {
-			try {
-				return entityCustomer.getName();
-			} catch(Exception e) { // EJBException, RemoteException
-				throw new CustomerException(e);
-			}
-		}
-		...
+```java
+public class CustomerAsEntityBean implements Customer {
+	private EntityCustomer entityCustomer;
+	public CustomerAsEntityBean(EntityCustomer entityCustomer) {
+		this.entityCustomer = entityCustomer;
 	}
+	public String getName() throws CustomerException {
+		try {
+			return entityCustomer.getName();
+		} catch(Exception e) { // EJBException, RemoteException
+			throw new CustomerException(e);
+		}
+	}
+	...
+}
+```
 
 This customer is a _proxy_ for our Entity Bean. Note that all requests are merely passed through to the entity bean.
 
@@ -350,22 +368,24 @@ Whatever implementation you choose _makes no difference to the rest of your appl
 
 The final piece necessary to make this work is a data manager:
 
-	public class CustomerManagerUsingEJB interface CustomerManager {
-		public Customer   load(int id)
-				throws CustomerException, NotFoundException {
-    
-			try {
-				// set up naming context
-				// grab home interface for entity
-				// find entity (store as entityCustomer)
-				return new CustomerAsEntityBean(entityCustomer);
-			} catch(FinderException e) { 
-				throw new NotFoundException("Customer " + id + " not found", e);
-			} catch(Exception e) { //EJBException, RemoteException
-			}
+```java
+public class CustomerManagerUsingEJB interface CustomerManager {
+	public Customer   load(int id)
+			throws CustomerException, NotFoundException {
+
+		try {
+			// set up naming context
+			// grab home interface for entity
+			// find entity (store as entityCustomer)
+			return new CustomerAsEntityBean(entityCustomer);
+		} catch(FinderException e) { 
+			throw new NotFoundException("Customer " + id + " not found", e);
+		} catch(Exception e) { //EJBException, RemoteException
 		}
-		...
 	}
+	...
+}
+```
 
 Now all your business logic cares about is that it can ask _some_ CustomerManager for _some_ Customer. It doesn't need to even know that EJB was involved!
 
@@ -379,52 +399,55 @@ We need _something_ to tie all of the pieces together. That something is a Facto
 
 A simple factory might look as follows:
 
-	public class MyApplicationFactory {
-		private static CustomerManager customerManager =
-			new CustomerManagerUsingEJB();
-		private static ApplicationLogic applicationLogic =
-			new ApplicationLogicAsSessionBean();
-		public static CustomerManager getCustomerManager() {
-			return customerManager;
-		}
-
-		public static ApplicationLogic getLogic() {
-			return applicationLogic;
-		}
+```java
+public class MyApplicationFactory {
+	private static CustomerManager customerManager =
+		new CustomerManagerUsingEJB();
+	private static ApplicationLogic applicationLogic =
+		new ApplicationLogicAsSessionBean();
+	public static CustomerManager getCustomerManager() {
+		return customerManager;
 	}
+
+	public static ApplicationLogic getLogic() {
+		return applicationLogic;
+	}
+}
+```
 
 (Note that this type of object is also called a _Service Locator_, giving centralized access to common resources. The same function can be accomplished using _Dependency Injection_, but I generally find it much simpler to debug a Service Locator)
 
 You could even make things more flexible, keeping the names of the actual classes to use in a property file:
 
-	public class MyApplicationFactory {
-		private static CustomerManager customerManager;
-		private static ApplicationLogic applicationLogic;
-		// note: needs **much** better error handling...
-		//       this is just to give the idea... 
-		static {
-			try {
-				InputStream in = 
-					MyApplicationFactory.getResourceAsStream(
-						"application.properties");
-				Properties p = new Properties();
-				p.load(in);
-				in.close();
-				customerManager = 
-					Class.forName(p.getProperty("manager.customer")).newInstance();
-				applicationLogic = 
-					Class.forName(p.getProperty("logic.application")).newInstance();
-			} catch(Exception e) {
-				// report error
-			}
-		}
-
-		public static CustomerManager getCustomerManager() {
-			return customerManager;
-		}
-  
-		public static ApplicationLogic getLogic() {
-			return applicationLogic;
+```java
+public class MyApplicationFactory {
+	private static CustomerManager customerManager;
+	private static ApplicationLogic applicationLogic;
+	// note: needs **much** better error handling...
+	//       this is just to give the idea... 
+	static {
+		try {
+			InputStream in = 
+				MyApplicationFactory.getResourceAsStream(
+					"application.properties");
+			Properties p = new Properties();
+			p.load(in);
+			in.close();
+			customerManager = 
+				Class.forName(p.getProperty("manager.customer")).newInstance();
+			applicationLogic = 
+				Class.forName(p.getProperty("logic.application")).newInstance();
+		} catch(Exception e) {
+			// report error
 		}
 	}
 
+	public static CustomerManager getCustomerManager() {
+		return customerManager;
+	}
+
+	public static ApplicationLogic getLogic() {
+		return applicationLogic;
+	}
+}
+```

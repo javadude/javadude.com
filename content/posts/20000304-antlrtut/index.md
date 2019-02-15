@@ -348,23 +348,24 @@ In ANTLR 2.x, you specify the scanner grammar in the same manner in which you sp
 
 For our whitespace rule, we specify the following:
 
-	WS
-		:	(	' '
-			|	'\t'
-			|	'\f'
+```antlr
+WS
+	:	(	' '
+		|	'\t'
+		|	'\f'
 
-			// handle newlines
-			|	(	"\r\n"  // DOS/Windows
-				|	'\r'    // Macintosh
-				|	'\n'    // Unix
-				)
-
-				// increment the line count in the scanner
-				{ newline(); }
+		// handle newlines
+		|	(	"\r\n"  // DOS/Windows
+			|	'\r'    // Macintosh
+			|	'\n'    // Unix
 			)
-			{ $setType(Token.SKIP); }
-	;
 
+			// increment the line count in the scanner
+			{ newline(); }
+		)
+		{ $setType(Token.SKIP); }
+;
+```
 
 The `WS` rule defines what will happen when the scanner sees space (`' '`), tab (`'\t'`), formfeed (`'\f'`) or one of the platform-specific manners of indicating "end of line."  First, we match the character(s) that we see.  If those characters represent "end of line", we call the built-in `newline()` method, which tells the parser to increase its current line number.  (The line number will be used in error messages, so it's very important that you call the `newline()` method.)
 
@@ -376,14 +377,16 @@ Any scanner rules that are _not_ prefixed with the `protected` keyword will be c
 
 Note that ANTLR's syntax allows you to specify _subrules_. You can nest decisions within other decisions by enclosing the lower-level decision in another set of parenthesis.  Think of it as follows:
 
-	someRuleName
-		:	'A' 'B' 'C'		// a top-level alternative
-		|	'D' 'E' 'F'		// a top-level alternative
-		|	'Q' (			// starting a subrule!
-					'R' 'S' // a subrule alternative
-				|	'W' 'X'	// a subrule alternative
-				)			// end the subrule
-		;					// end the rule   
+```antlr
+someRuleName
+	:	'A' 'B' 'C'		// a top-level alternative
+	|	'D' 'E' 'F'		// a top-level alternative
+	|	'Q' (			// starting a subrule!
+				'R' 'S' // a subrule alternative
+			|	'W' 'X'	// a subrule alternative
+			)			// end the subrule
+	;					// end the rule   
+```
 
 The above rule could match the following "words"
 
@@ -400,10 +403,12 @@ We got lucky in XL (it uses C++-style comments), but I'll bore you with C-style 
 
 XL defines comments as "all text from // to the end of the current line." So, we get a rule like
 
-	COMMENT
-		:	"//" (~('\n'|'\r'))*
-			{ $setType(Token.SKIP); }
-		;
+```antlr
+COMMENT
+	:	"//" (~('\n'|'\r'))*
+		{ $setType(Token.SKIP); }
+	;
+```
 
 A few things to notice about this rule:
 
@@ -416,31 +421,32 @@ Let's assume we are using a C compiler that does not keep track of nested commen
 
 One of the advantages to the new scanner definition in ANTLR 2.x is that a full EBNF grammar is much stronger at representing a language description than regular expressions.   If you take a look at the old PCCTS tutorial, you can see what a mess defining C-style comments can be.  In contrast, a C-style comment in ANTLR 2.0 is a bit simpler:
 
-	// multiple-line comments
-	ML_COMMENT
-		:	"/*"
-			(	/*	'\r' '\n' can be matched in one alternative or by matching
-					'\r' in one iteration and '\n' in another. I am trying to
-					handle any flavor of newline that comes in, but the language
-					that allows both "\r\n" and "\r" and "\n" to all be valid
-					newline is ambiguous. Consequently, the resulting grammar
-					must be ambiguous. I am shutting this warning off.
-				*/
-    
-				options {
-					generateAmbigWarnings=false;
-				}
-				:	{ LA(2)!='/' }? '*'
-				|	'\r' '\n' {newline();}
-				|	'\r' {newline();}
-				|	'\n' {newline();}
-				|	~('*'|'\n'|'\r')
-			)*
-			"*/"
+```antlr
+// multiple-line comments
+ML_COMMENT
+	:	"/*"
+		(	/*	'\r' '\n' can be matched in one alternative or by matching
+				'\r' in one iteration and '\n' in another. I am trying to
+				handle any flavor of newline that comes in, but the language
+				that allows both "\r\n" and "\r" and "\n" to all be valid
+				newline is ambiguous. Consequently, the resulting grammar
+				must be ambiguous. I am shutting this warning off.
+			*/
 
-			{$setType(Token.SKIP);}
-		;
+			options {
+				generateAmbigWarnings=false;
+			}
+			:	{ LA(2)!='/' }? '*'
+			|	'\r' '\n' {newline();}
+			|	'\r' {newline();}
+			|	'\n' {newline();}
+			|	~('*'|'\n'|'\r')
+		)*
+		"*/"
 
+		{$setType(Token.SKIP);}
+	;
+```
    
 
 This rule says the following:
@@ -465,33 +471,41 @@ In XL, there are three types of literals: `Integer`, `Character` and `String`.
 
 **Integer literals** are simple -- they are just a series of digits.  Just so we can demonstrate a `protected` scanner rule, we'll start out by defining what a `DIGIT` is:
 
-	protected DIGIT
-		:	'0'..'9'
-		;
+```antlr
+protected DIGIT
+	:	'0'..'9'
+	;
+```
 
 Because this rule is marked `protected`, we will not get a `DIGIT` token returned to the parser;  `DIGIT` is never directly called from the `nextToken()` method.
 
 Now that we have a helper method that defines what an integer digit is, we'll define an `INTLIT` (integer literal):
 
-	INTLIT 
-		:	(DIGIT)+
-		;
+```antlr
+INTLIT 
+	:	(DIGIT)+
+	;
+```
 
 This rule means "an `INTLIT` is composed of one or more `DIGIT`s".   Note that we do not set the token type to `Token.SKIP` this time. This means that is an `INTLIT` scanner rule is matched while looking at the characters in the input, an `INTLIT` token will be returned to the parser, via the `nextToken()` method.
 
 Note that this will result in the generated INTLIT scanner rule _calling_ the generated DIGIT scanner rule.  A slightly more efficient approach would be to define the INTLIT rule as follows:
 
-	INTLIT
-		:	0'..'9')+
-		;   
+```antlr
+INTLIT
+	:	0'..'9')+
+	;   
+```
 
 Our final code will use the first, less-efficient method, just to show use of the `protected` keyword.
 
 **Character literals** as fairly simple as well:
 
-	CHARLIT
-		:	'\''! . '\''!
-		;
+```antlr
+CHARLIT
+	:	'\''! . '\''!
+	;
+```
 
 Basically, an apostrophe followed by any character, followed by another apostrophe. In the grammar, we will use `CHARLIT` to refer to a character literal.  The "any character" is represented by an unquoted period/dot in the rule.
 
@@ -499,16 +513,18 @@ But notice the exclamation marks (`!`) after the single quotes?  This means, to
 
 **String literals** are very similar.  The trick is to decide what ends a string literal.  We defined string literals as being all text within double-quotes, _but_ the entire literal must be on one line in the source file.  This results in the following scanner rule:
 
-	STRING_LITERAL
-		:	'"'!
-			(	'"' '"'!
-			|	~('"'|'\n'|'\r')
-			)*
+```antlr
+STRING_LITERAL
+	:	'"'!
+		(	'"' '"'!
+		|	~('"'|'\n'|'\r')
+		)*
 
-			(	'"'!
-			|	// nothing -- write error message
-			)
-		;
+		(	'"'!
+		|	// nothing -- write error message
+		)
+	;
+```
 
 First, we enter a string when we see a double quote.
 
@@ -536,26 +552,28 @@ Any literals you specify in the parser will be inserted into a nifty little hash
 
 XL defines several operators, and we'll define them as well... These definitions are _very_ straightforward.  Just assign a scanner rule name to match the text.
 
-	DOT        : '.'   ;
-	BECOMES    : ":="  ;
-	COLON      : ':'   ;
-	SEMI       : ';'   ;
-	COMMA      : ','   ;
-	EQUALS     : '='   ;
-	LBRACKET   : '['   ;
-	RBRACKET   : ']'   ;
-	DOTDOT     : ".."  ;
-	LPAREN     : '('   ;
-	RPAREN     : ')'   ;
-	NOT\_EQUALS : "/=" ;
-	LT         : '<'   ;
-	LTE        : "<="  ;
-	GT         : '>'   ;
-	GTE        : ">="  ;
-	PLUS       : '+'   ;
-	MINUS      : '-'   ;
-	TIMES      : '*'   ;
-	DIV        : '/'   ;
+```antlr
+DOT        : '.'   ;
+BECOMES    : ":="  ;
+COLON      : ':'   ;
+SEMI       : ';'   ;
+COMMA      : ','   ;
+EQUALS     : '='   ;
+LBRACKET   : '['   ;
+RBRACKET   : ']'   ;
+DOTDOT     : ".."  ;
+LPAREN     : '('   ;
+RPAREN     : ')'   ;
+NOT\_EQUALS : "/=" ;
+LT         : '<'   ;
+LTE        : "<="  ;
+GT         : '>'   ;
+GTE        : ">="  ;
+PLUS       : '+'   ;
+MINUS      : '-'   ;
+TIMES      : '*'   ;
+DIV        : '/'   ;
+```
 
 Note that some of these tokens have common prefixes.  For example, `GT` and `GTE` both start with character `'>'`.  In a Deterministic Finite Automata (DFA)-based scanner, this would not be an issue, as it would try to match the longest possible token.
 
@@ -566,17 +584,21 @@ In a recursive-descent scanner, this is a big issue.  There are two ways to han
 
 Taking the first approach, left factoring, would require that we define a rule to deal with `GT` and `GTE` as follows:
 
-	GT
-		:	'>'  ('=' {$setType(GTE);})?
-		;   
+```antlr
+GT
+	:	'>'  ('=' {$setType(GTE);})?
+	;   
+```
 
 This rule says "match the `'>'` character.  Then, if I see `'='` as the next character. match it."  The "trick" here is that the "normal" completion of the rule defines the resulting token as the _name of the rule_, which is `GT` in this case.  If we match the _optional subrule_ `('=')?`, where the `( )?` defines its contents as optional, we execute the `$setType(GTE);` statement, which _changes_ the type of the token to `GTE`.
 
 Taking the second approach only involves setting the lookahead amount to a higher number.  This means that we can have the scanner check the next two characters to make a decision, instead of just the first character.  Checking the next two characters in the input stream allows the scanner to correct decide if it should choose to match the `GT` rule or the `GTE` rule.  You can specify a higher lookahead value in the scanner as follows:
 
-	options {
-		k=2; // two characters of lookahead
-	}   
+```antlr
+options {
+	k=2; // two characters of lookahead
+}   
+```
 
 immediately after defining the scanner.  We'll see how the scanner is defined in a moment.  It is important to think carefully whether you want to increase the lookahead amount.  While it may make the grammar simpler, it could also slow it down.   In addition, if you do not carefully study the conflicts and understand them, and simply raise the lookahead amount, you may be masking a real problem.  Try to keep lookahead as low as possible, and _always_ try generating your compiler with `k=1` first.  Make sure you understand what is causing the conflicts, and if you feel certain, and the conflicts are all similar to the `GT`/`GTE` conflict above, raise the lookahead value.
 
@@ -586,9 +608,11 @@ immediately after defining the scanner.  We'll see how the scanner is defined i
 
 Finally, we talk about identifiers. Basically, they are any sequence of letters and digits that's left. So we get a regular expression like:
 
-	IDENT
-		:	('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9')*
-		;   
+```antlr
+IDENT
+	:	('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9')*
+	;   
+```
 
 Very simple. Note that there is no action code here, especially not any that would perform symbol table lookup. I'm very adamant in pushing my view that scanner to parser communication should be a one-way street. This is especially important in multiple-lookahead parsers. If your parser decides when to push and pop scope (a likely scenario), and your scanner is reading two or more tokens ahead, you may be looking at a token in the scanner before its proper scope was pushed or popped. In addition, things like semantic predicates let you make more pointed decisions about how to parse identifiers in the grammar, rather than changing the token type in the scanner.
 
@@ -596,10 +620,12 @@ Think about the set of tokens that can be returned by the scanner we've defined.
 
 We will be defining keywords within our parser, which will end up generating tokens called `LITERAL_begin` and `LITERAL_end`, for example.  Recall that these literals will be inserted in a special hash table.  To utililize this hash table, modify the IDENT rule as follows:
 
-	IDENT
-		options {testLiterals=true;}
-		:	('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9')*
-		;
+```antlr
+IDENT
+	options {testLiterals=true;}
+	:	('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9')*
+	;
+```
 
 Note the `testLiterals=true` option.  This generates code that will lookup a name in the literals hash table _if_ the IDENT rule matches a word.   This implies that every literal you specify in the parser grammar _must_ be matchable by the IDENT rule.
 
@@ -613,17 +639,19 @@ What do we have so far? Let's look at it in one lump, shall we?
 
 But first, we need to tell ANTLR that we're creating a scanner and specify a new options (such as lookahead):
 
-	//---------------
-	// The XL scanner
-	//---------------
+```antlr
+//---------------
+// The XL scanner
+//---------------
 
-	class XLLexer extends Lexer;
+class XLLexer extends Lexer;
 
-	options {
-		charVocabulary = '\0'..'\377';
-		testLiterals=false;    // don't automatically test for literals
-		k=2;                   // two characters of lookahead
-	}   
+options {
+	charVocabulary = '\0'..'\377';
+	testLiterals=false;    // don't automatically test for literals
+	k=2;                   // two characters of lookahead
+}   
+```
 
 First, we specify that we are creating a scanner called `XLLexer`, subclassing the `Lexer` class.  `Lexer` is an abstract class that defines the basis for an ANTLR-generated scanner.  (You can define scanners that subclass other scanners that you have defined, but that is outside the scope of this tutorial.  Please see the ANTLR documentation at [http://www.antlr.org/](http://www.antlr.org/) for details.)
 
@@ -640,99 +668,100 @@ Next we specify four options.  These are:
 
 After specifying the name and options for the scanner, we specify the rules.  The following is our entire scanner:
 
-	//----------------------------------------------------------------------------
-	// The XL scanner
-	//----------------------------------------------------------------------------
+```antlr
+//----------------------------------------------------------------------------
+// The XL scanner
+//----------------------------------------------------------------------------
 
-	class XLLexer extends Lexer;
+class XLLexer extends Lexer;
 
-	options {
-		charVocabulary = '\0'..'\377';
-		testLiterals=false;    // don't automatically test for literals
-		k=2;                   // two characters of lookahead
-	}
+options {
+	charVocabulary = '\0'..'\377';
+	testLiterals=false;    // don't automatically test for literals
+	k=2;                   // two characters of lookahead
+}
 
-	// Single-line comments
-	COMMENT
-		:	"//" (~('\n'|'\r'))*
-			{ $setType(Token.SKIP); }
-		;
+// Single-line comments
+COMMENT
+	:	"//" (~('\n'|'\r'))*
+		{ $setType(Token.SKIP); }
+	;
 
-	// Literals
-	protected DIGIT
-		:	'0'..'9'
-		;
+// Literals
+protected DIGIT
+	:	'0'..'9'
+	;
 
-	INTLIT 
-		:	(DIGIT)+
-		;
+INTLIT 
+	:	(DIGIT)+
+	;
 
-	CHARLIT
-		:	'\''! . '\''!
-		;
+CHARLIT
+	:	'\''! . '\''!
+	;
 
-	// string literals
-	STRING_LITERAL
-		:	'"'!
-			(	'"' '"'!
-			|	~('"'|'\n'|'\r')
-			)*
+// string literals
+STRING_LITERAL
+	:	'"'!
+		(	'"' '"'!
+		|	~('"'|'\n'|'\r')
+		)*
 
-			(	'"'!
-			|	// nothing -- write error message
-			)
-		;
+		(	'"'!
+		|	// nothing -- write error message
+		)
+	;
 
-	// Whitespace -- ignored
-	WS
-		:	(	' '
-			|	'\t'
-			|	'\f'
+// Whitespace -- ignored
+WS
+	:	(	' '
+		|	'\t'
+		|	'\f'
 
-			// handle newlines
-			|	(	"\r\n"  // DOS/Windows
-				|	'\r'    // Macintosh
-				|	'\n'    // Unix
-				)
-
-				// increment the line count in the scanner
-				{ newline(); }
+		// handle newlines
+		|	(	"\r\n"  // DOS/Windows
+			|	'\r'    // Macintosh
+			|	'\n'    // Unix
 			)
 
-			{ $setType(Token.SKIP); }
-		;
+			// increment the line count in the scanner
+			{ newline(); }
+		)
 
-	// an identifier.  Note that testLiterals is set to true!  This means
-	// that after we match the rule, we look in the literals table to see
-	// if it's a literal or really an identifer
+		{ $setType(Token.SKIP); }
+	;
 
-	IDENT
-		options {testLiterals=true;}
-		:	('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9')*
-		;
+// an identifier.  Note that testLiterals is set to true!  This means
+// that after we match the rule, we look in the literals table to see
+// if it's a literal or really an identifer
 
-	// Operators
-	DOT        : '.'   ;
-	BECOMES    : ":="  ;
-	COLON      : ':'   ;
-	SEMI       : ';'   ;
-	COMMA      : ','   ;
-	EQUALS     : '='   ;
-	LBRACKET   : '['   ;
-	RBRACKET   : ']'   ;
-	DOTDOT     : ".."  ;
-	LPAREN     : '('   ;
-	RPAREN     : ')'   ;
-	NOT_EQUALS : "/="  ;
-	LT         : '<'   ;
-	LTE        : "<="  ;
-	GT         : '>'   ;
-	GTE        : ">="  ;
-	PLUS       : '+'   ;
-	MINUS      : '-'   ;
-	TIMES      : '*'   ;
-	DIV        : '/'   ;
+IDENT
+	options {testLiterals=true;}
+	:	('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9')*
+	;
 
+// Operators
+DOT        : '.'   ;
+BECOMES    : ":="  ;
+COLON      : ':'   ;
+SEMI       : ';'   ;
+COMMA      : ','   ;
+EQUALS     : '='   ;
+LBRACKET   : '['   ;
+RBRACKET   : ']'   ;
+DOTDOT     : ".."  ;
+LPAREN     : '('   ;
+RPAREN     : ')'   ;
+NOT_EQUALS : "/="  ;
+LT         : '<'   ;
+LTE        : "<="  ;
+GT         : '>'   ;
+GTE        : ">="  ;
+PLUS       : '+'   ;
+MINUS      : '-'   ;
+TIMES      : '*'   ;
+DIV        : '/'   ;
+```
 
 Let's move on to the parser grammar.  
 
@@ -747,12 +776,14 @@ Let's start at the top, shall we?
 
 XL has one program per file, so this is really our starting rule.
 
-	program
-		:	"program" IDENT EQUALS 
-				subprogramBody 
-			DOT
-			// end-of-file
-		;
+```antlr
+program
+	:	"program" IDENT EQUALS 
+			subprogramBody 
+		DOT
+		// end-of-file
+	;
+```
 
 Pretty straightforward. Note that so far, we don't care that we are **definitely** declaring that `IDENT` here. We will later, though...
 
@@ -780,44 +811,54 @@ Note that the XL spec said nothing about "procedures must be declared after vars
 
 XL has three main declarations: variables, constants, and types:
 
-	basicDecl
-		:	varDecl
-		|	constDecl
-		|	typeDecl
-		;
+```antlr
+basicDecl
+	:	varDecl
+	|	constDecl
+	|	typeDecl
+	;
+```
 
 Just so this section isn't so short, I'll define `varDecl` and `constDecl` here.
 
 A variable declaration looks like:
 
-	varDecl
-		:	"var" identList COLON typeName
-			(BECOMES constantValue)?
-			SEMI
-		;
+```antlr
+varDecl
+	:	"var" identList COLON typeName
+		(BECOMES constantValue)?
+		SEMI
+	;
+```
 
 Unlike Pascal, each declaration must start with "var"; there is no "VAR section" that starts with the keyword VAR. The `varDecl` states that you can defined any number of idents at once, and you can optionally initialize the variable(s).
 
 A constant declaration is similar to a variable declaration, except that you use the keyword "constant" and must assign a value:
 
-	constDecl
-		:	"constant" identList COLON typeName
-			BECOMES constantValue SEMI
-		;
+```antlr
+constDecl
+	:	"constant" identList COLON typeName
+		BECOMES constantValue SEMI
+	;
+```
 
 In the above rules, subrules `identList` and `constantValue` are mentioned. These are:
 
-	identList
-		:	IDENT (COMMA IDENT)*
-		;
+```antlr
+identList
+	:	IDENT (COMMA IDENT)*
+	;
+```
 
 which says "one or more `IDENT`s separated by `COMMA`s", and
 
-	constantValue
-  		:	INTLIT
-  		|	STRING_LITERAL
-  		|	IDENT
-  		;
+```antlr
+constantValue
+	:	INTLIT
+	|	STRING_LITERAL
+	|	IDENT
+	;
+```
 
 which is pretty self-explanatory. One thing to note, though, there there is nothing right now that prevents us from using a variable `IDENT` instead of a constant `IDENT`. That's handled later...
 
@@ -829,41 +870,49 @@ XL defines three user-defined types: arrays, records and enumeration types. In m
 
 A type declaration is either an array declaration or a record declaration:
 
-	typeDecl
-		:	"type" IDENT EQUALS
-			(	arrayDecl
-			|	recordDecl
-			)
-			SEMI
-		;
+```antlr
+typeDecl
+	:	"type" IDENT EQUALS
+		(	arrayDecl
+		|	recordDecl
+		)
+		SEMI
+	;
+```
 
 I got a bit fancier here by using a subrule to say "array or record" instead of defining a new rule for it. This is also a bit more efficient than the extra function call created by another rule there. Basic rule of thumb -- if a subrule is clear, and not deeply nested, feel free to use it. However, watch out for using several nested subrules, as the meaning can get hidden quickly.
 
 Arrays are defined as `ARRAY [x..y] OF type`. Only one-dimensional, pretty simple:
 
-	arrayDecl
-		:	"array" LBRACKET integerConstant DOTDOT integerConstant RBRACKET
-			"of" typeName
-		;
+```antlr
+arrayDecl
+	:	"array" LBRACKET integerConstant DOTDOT integerConstant RBRACKET
+		"of" typeName
+	;
 
-	integerConstant
-		:	INTLIT
-		|	IDENT // again, a constant...
-		;
+integerConstant
+	:	INTLIT
+	|	IDENT // again, a constant...
+	;
+```
 
 Records are defined as `RECORD x,y,z:typename; END RECORD.` Again, simple until we have to know what it means:
 
-	recordDecl
-		:	"record" (identList COLON typeName SEMI)+ "end" "record"
-		;
+```antlr
+recordDecl
+	:	"record" (identList COLON typeName SEMI)+ "end" "record"
+	;
+```
 
 So what is this `typeName` I keep bringing up? Well, it's either one of the predefined types, `Integer` or `Boolean`, or it's a user-defined type (which means its an `IDENT`), so:
 
-	typeName
-		:	IDENT
-		|	"Integer"
-		|	"Boolean"
-		;
+```antlr
+typeName
+	:	IDENT
+	|	"Integer"
+	|	"Boolean"
+	;
+```
 
 Enough about types, now, on to
 
@@ -873,25 +922,31 @@ Enough about types, now, on to
 
 A procedure in XL is similar to a program, so basically, it's a small heading followed by a `subprogramBody`:
 
-	procedureDecl
-		:	"procedure" IDENT (formalParameters)? EQUALS
-			subprogramBody
-			SEMI
-		;
+```antlr
+procedureDecl
+	:	"procedure" IDENT (formalParameters)? EQUALS
+		subprogramBody
+		SEMI
+	;
+```
 
 At the time I originally did this project, I only did procedures, not functions. Perhaps I'll add them later... (You may think "boy he left a lot out," but Dr. Moore made a large subset of the project required, and I did a few extra point things, but not the whole thing. I _was_ working full-time you know...)
 
 Notice that the `formalParameters` are optional... Let's define what they look like:
 
-	formalParameters
-		:	LPAREN parameterSpec (SEMI parameterSpec)* RPAREN
-		;
+```antlr
+formalParameters
+	:	LPAREN parameterSpec (SEMI parameterSpec)* RPAREN
+	;
+```
 
 Again we see the familiar `x (COMMA x)` notation -- the ()\* closure is very handy and efficient for matching lists of things...
 
-	parameterSpec
-		:	("var")? identList COLON typeName
-		;
+```antlr
+parameterSpec
+	:	("var")? identList COLON typeName
+	;
+```
 
 You'll notice that this is quite a bit like a variable declaration, except that `VAR` is optional, and there's no semicolon after it. We'll handle it a bit differently as well, once we add action code.
 
@@ -902,24 +957,28 @@ Statements
 
 There are seven statements in XL (I told you it was a small language): assignment, exit, procedure call, return, if-then, loop and I/O.
 
-	statement
-		:	exitStatement
-		|	returnStatement
-		|	ifStatement
-		|	loopStatement
-		|	ioStatement
-		|	procedureCallStatement
-		|	assignmentStatement
-		|	endStatement
-		;
+```antlr
+statement
+	:	exitStatement
+	|	returnStatement
+	|	ifStatement
+	|	loopStatement
+	|	ioStatement
+	|	procedureCallStatement
+	|	assignmentStatement
+	|	endStatement
+	;
+```
 
 ### Assignment Statement
 
 The assignment statement is pretty much like Pascal's assignment statement, except that there are no type conversions allowed.
 
-	assignmentStatement
-		:	variableReference BECOMES expression SEMI
-		;
+```antlr
+assignmentStatement
+	:	variableReference BECOMES expression SEMI
+	;
+```
 
 Very simple, but the pieces (variable and expression) are somewhat complex -- we'll look at them after all the statements are done. We'll look at `variableReference` later...
 
@@ -929,27 +988,33 @@ Very simple, but the pieces (variable and expression) are somewhat complex -- we
 
 The exit statement tells a loop it's done. It looks like
 
-	exitStatement
-		:	"exit" "when" expression
-		;
+```antlr
+exitStatement
+	:	"exit" "when" expression
+	;
+```
 
 ### Procedure Call Statement
 
 A procedure call takes the form
 
-	procedureCallStatement
-		:	IDENT (actualParameters)? SEMI
-		;
+```antlr
+procedureCallStatement
+	:	IDENT (actualParameters)? SEMI
+	;
 
-	actualParameters
-		:	LPAREN (expression (COMMA expression)*)? RPAREN
-		;
+actualParameters
+	:	LPAREN (expression (COMMA expression)*)? RPAREN
+	;
+```
 
 I extended XL just a bit for this. The original XL compiler I wrote had
 
-	actualParameters
-		:	LPAREN expression (COMMA expression)* RPAREN
-		;
+```antlr
+actualParameters
+	:	LPAREN expression (COMMA expression)* RPAREN
+	;
+```
 
 which basically means that if you have parens, you **must** have at least one expression in them. I thought it would be nice to allow `myfunc()` as a valid procedure call.
 
@@ -959,9 +1024,11 @@ which basically means that if you have parens, you **must** have at least one ex
 
 The XL return statement tells a procedure or function to return immediately. Keeping in mind that I did not implement functions (yet, at least), `return` cannot take an expression argument. Therefore, it's just
 
-	returnStatement
-		:	"return" SEMI
-		;
+```antlr
+returnStatement
+	:	"return" SEMI
+	;
+```
 
 ### If Statement
 
@@ -969,29 +1036,33 @@ The XL "if-then-elsif-else-end if" statement is a fairly simple `if` type statem
 
 XL's `if` statement looks like:
 
-	ifStatement
-		:	"if" expression "then"
+```antlr
+ifStatement
+	:	"if" expression "then"
+		( statement )*
+		(	"elsif" expression "then"
 			( statement )*
-			(	"elsif" expression "then"
-				( statement )*
-			)*
-			( "else" ( statement )* )?
-			"end" "if" SEMI
-		;
+		)*
+		( "else" ( statement )* )?
+		"end" "if" SEMI
+	;
+```
 
 Which is the most straightforward way to write the rule. However, you may notice some redundancy in the rule -- there are two separate places where we'll need to deal with `expression` evaluation. Not a big deal now, but we'd need to duplicate code later. After staring at the rule for a bit, we might try splitting out the "`expression` THEN possible ELSE" stuff into a separate rule, and call it recursively if we get an ELSIF. In other words:
 
-	ifStatement
-		:	"if" ifPart "end" "if" SEMI
-		;
+```antlr
+ifStatement
+	:	"if" ifPart "end" "if" SEMI
+	;
 
-	ifPart
-		:	expression "then"
-			(statement)*
-			(	"elsif" ifPart
-			|	"else" (statement)*
-			)?
-		;
+ifPart
+	:	expression "then"
+		(statement)*
+		(	"elsif" ifPart
+		|	"else" (statement)*
+		)?
+	;
+```
 
 Which is much less redundant.
 
@@ -1010,11 +1081,13 @@ On the other hand, the language designers decided that the else will be owned by
 
 In a yacc grammar, an if-statement for C might be written
 
-	ifStatement
-		:	IF LPAREN expression RPAREN statementList
-		|	IF LPAREN expression RPAREN statementList
-			ELSE statementList
-		;
+```
+ifStatement
+	:	IF LPAREN expression RPAREN statementList
+	|	IF LPAREN expression RPAREN statementList
+		ELSE statementList
+	;
+```
 
 which causes yacc to report a "shift/reduce" conflict -- yacc can't tell if you intended to have an "if-without-else" (the first alternative) be nested inside an "if-with-else" (the second alternative.) It doesn't know if it should reduce the first alternative when it sees the ELSE, or whether it should keep looking (shift the ELSE.) Fortunately, yacc's default is to shift the else, basically grouping the ELSE with its closest IF, which is exactly what we want.
 
@@ -1022,28 +1095,34 @@ To get yacc to stop reporting this (and explicitly specify which alternative we 
 
 In ANTLR, the C if statement would look like
 
-	ifStatement
-		:	"if" LPAREN expression RPAREN (statement)*
-			( "else" (statement)* )?
-		;
+```antlr
+ifStatement
+	:	"if" LPAREN expression RPAREN (statement)*
+		( "else" (statement)* )?
+	;
+```
 
 which, of course, causes ANTLR to report a conflict. To get rid of this conflict, we can use a syntactic predicate (aka "guess" mode) which basically says "try this -- if it works, use it. Otherwise, try the next alt."
 
 Applying a nice syntactic predicate to the `ifStatement` rule above yields
 
-	ifStatement
-		:	"if" LPAREN expression RPAREN (statement)*
-			(	("else")=> "else" (statement)* )?
-		;
+```antlr
+ifStatement
+	:	"if" LPAREN expression RPAREN (statement)*
+		(	("else")=> "else" (statement)* )?
+	;
+```
 
 which can a bit easier to read if you break the `( )?` subrule into a "this-or-nothing" subrule.
 
-	ifStatement
-  		:	"if" LPAREN expression RPAREN (statement)*
-    		(	("else")=> "else" (statement)*
-    		|	( ) // nothing
-    		)
-  		;
+```antlr
+ifStatement
+	:	"if" LPAREN expression RPAREN (statement)*
+		(	("else")=> "else" (statement)*
+		|	( ) // nothing
+		)
+	;
+```
 
 The predicate says "try matching an ELSE. If you can, then use the first alt. Otherwise, use the second alt (the "nothing" alternative.) Note that we will be using the more compact ``( )?`` form for our compiler.
 
@@ -1053,17 +1132,21 @@ The predicate says "try matching an ELSE. If you can, then use the first alt. Ot
 
 The loop statement in XL is pretty simple. (Anyone sick of the word "simple" yet? But it's true, really it is.) It's a set of statements enclosed by `loop` and `end loop`, with an optional `while` clause in front of it. It looks like
 
-	loopStatement
-		:	("while" expression)? "loop"
-			( statement )*
-			"end" "loop" SEMI
-		;
+```antlr
+loopStatement
+	:	("while" expression)? "loop"
+		( statement )*
+		"end" "loop" SEMI
+	;
+```
 
 Not too bad, eh? Well, just to confuse matters a bit, what would happen if XL allowed an `END` statement, like in BASIC? (BASIC's `END` statement exits the program immediately.) Come to think of it, what the heck, let's add one!
 
-	endStatement
-		:	"end" SEMI
-		;
+```antlr
+endStatement
+	:	"end" SEMI
+	;
+```
 
 Now why would I be mentioning this here? Let's look at some XL sample code:
 
@@ -1080,11 +1163,13 @@ Kind of contrived (and useless, I know), and simple, until you look closer...
 
 What happens when the parser sees the `end` inside the loop? Let's look at the `loopStatement` rule again (repeated here 'cause you're a programmer which means you're too lazy to turn back a page):
 
-	loopStatement
-		:	("while" expression)? "loop"
-			( statement )*
-			"end" "loop" SEMI
-		;
+```antlr
+loopStatement
+	:	("while" expression)? "loop"
+		( statement )*
+		"end" "loop" SEMI
+	;
+```
 
 Assuming k=1 lookahead, we have a problem: how does the parser determine that the `end` in loop is an `endStatement` and not the `end` that is the first part of `end loop`? The answer is simple: with k=1 lookahead, it can't. It will always try to make it an `endStatement`, and will get a syntax error on `loop`. (Try this in the final recognizer, just for kicks.) You'll also get a conflict warning in ANTLR. (Note that you'll have the same conflict with `end if` in `ifStatement` -- our solution should, and will, handle both situations.)
 
@@ -1096,70 +1181,84 @@ In our grammar, we only have one place (this one) that causes a conflict. (Remem
 
 We can tell ANTLR exactly how to distinguish an `endStatement` from the end of a loop. How? Simple (for me at least, 'cause I already know...):
 
-	statement
-		:	("end" SEMI)=> endStatement
- 			assignmentStatement
-			. . .
-		;
+```antlr
+statement
+	:	("end" SEMI)=> endStatement
+		assignmentStatement
+		. . .
+	;
+```
 
 Now what the heck does that mean? Basically, it says "try to match `END`, then `SEMI`." If it works, then we really want the `endStatement`. If we didn't get a match, try the next alternative, and so on...
 
 There's one problem that I have with the above statement. I don't like spelling out `END SEMI` in a rule other than `endStatement`. It just seems like bad isolation of rules. I'm a bit picky at times, though. What I'd rather do is say to myself, hmmm, `END SEMI` is an `endStatement`, so why not put that inside the `( )=>` -- like this:
 
-	statement
-		:	(endStatement)=> endStatement
-		| assignmentStatement
-		. . .
-		;
+```antlr
+statement
+	:	(endStatement)=> endStatement
+	| assignmentStatement
+	. . .
+	;
+```
 
 (Note: This will be a bit less efficient than spelling it out -- the "guess" that ANTLR will make will need to make a function call to `endStatement` to check for `END SEMI` rather than just directly check for `END SEMI` in the statement rule. However, as long as you don't do this too much, the penalty for a function call is minimal on most machines nowadays. Just keep it to a minimum!)
 
 What if `endStatement` were a bit more involved, such as
 
-	endStatement
-		:	"end" SEMI expression SEMI
-		;
+```antlr
+endStatement
+	:	"end" SEMI expression SEMI
+	;
+```
 
 (Kinda useless, but so are most examples.) All we need to predict it are the `END` and `SEMI`. If we keep the predicate as it is, `(endStatement)?`, the "guess" would keep going through expression (which could be pretty long) and the next SEMI. That would be mighty wasteful. So, in a case where we want to limit the lookahead, it's probably better to sacrifice readability a bit and limit the lookahead to just END SEMI:
 
-	statement
-		:	("end" SEMI)=> endStatement
-		|	assignmentStatement
-		. . .
-		;
+```antlr
+statement
+	:	("end" SEMI)=> endStatement
+	|	assignmentStatement
+	. . .
+	;
+```
 
 (Look familiar?) You may ask "why not just put the `(END SEMI)?` in the `endStatement` rule itself?" Unfortunately, ANTLR complains about a rule like
 
-	endStatement
-		:	("end" SEMI)=> "end" SEMI expression SEMI
-		;
+```antlr
+endStatement
+	:	("end" SEMI)=> "end" SEMI expression SEMI
+	;
+```
 
 basically telling you "why bother with a predicate -- there's only one alternative!" I think I'd prefer to be able to specify it like this, and have ANTLR hoist the predicate up into the statement rule (and possibly optimize it out of the `endStatement` rule altogether.) But let's work with the great tool we currently have, shall we?
 
 So, we end up with two new rules:
 
-	loopStatement
-		:	("while" expression)? "loop"
-			(statement)*
-			"end" "loop" SEMI
-		;
+```antlr
+loopStatement
+	:	("while" expression)? "loop"
+		(statement)*
+		"end" "loop" SEMI
+	;
 
-	endStatement
-		:	"end" SEMI
-		;	
+endStatement
+	:	"end" SEMI
+	;	
+```
 
 and we modify the `statement` rule to look like
 
-	statement
-		:	(endStatement)=> endStatement
-		|	assignmentStatement
-		|	exitStatement
-		|	procedureCallStatement
-		|	returnStatement
-		|	ifStatement
-		|	loopStatement
-		|	ioStatement 
-		;
+```antlr
+statement
+	:	(endStatement)=> endStatement
+	|	assignmentStatement
+	|	exitStatement
+	|	procedureCallStatement
+	|	returnStatement
+	|	ifStatement
+	|	loopStatement
+	|	ioStatement 
+	;
+```
 
 But is the order important in the `statement` rule? Of course, but it's not so obvious until you look at what the generated code will say. The following isn't actual generated code, but pseudocode that will show what happens in the statement rule:
 
@@ -1200,22 +1299,26 @@ If possible, determine which statements are more likely to be used. Do some stat
 
 We also need to disambiguate `assigmentStatement` and `procedureCallStatement`. Recall that they look like:
 
-	assignmentStatement
-		:	variableReference BECOMES expression SEMI
-		;
+```antlr
+assignmentStatement
+	:	variableReference BECOMES expression SEMI
+	;
 
-	procedureCallStatement
-		:	IDENT (actualParameters)? SEMI
-		;
+procedureCallStatement
+	:	IDENT (actualParameters)? SEMI
+	;
+```
 
 So, how do we tell them apart? First, let's look at the FIRST sets of each (the sets that contain all tokens that can be the first terminal in a rule.) Impossible until we define `variableReference`, so let's do that now (sorry about the jumping around here..)
 
-	variableReference
-		:	IDENT
-			(	LBRACKET expression RBRACKET
-			|	DOT IDENT
-			)*
-		;
+```antlr
+variableReference
+	:	IDENT
+		(	LBRACKET expression RBRACKET
+		|	DOT IDENT
+		)*
+	;
+```
 
 which says a variable reference is an IDENT followed by any number of array or field dereferences.
 
@@ -1234,25 +1337,29 @@ Obviously, they are unique with two tokens of lookahead. So, we're back to the d
 
 The predicates would look like:
 
-	statement
-		:	. . .
-		|	(IDENT (BECOMES|LBRACKET|DOT))=> assignmentStatement
-		|	(IDENT (SEMI|LPAREN))=> procedureCallStatement
+```antlr
+statement
+	:	. . .
+	|	(IDENT (BECOMES|LBRACKET|DOT))=> assignmentStatement
+	|	(IDENT (SEMI|LPAREN))=> procedureCallStatement
+```
 
 Well, the predicate for `procedureCallStatement` is actually a bit simpler. We probably should use it and put its alternative ahead of the one for `assignmentStatement`.\\ If your research proves that `assignmentStatements` are found in code more often than `procedureCallStatements`, you may want to reconsider, though.
 
 So what do we end up with? Using our basic rule of "keep the simple stuff near the top" and adding syntactic predicates for `endStatement` and `procedureCallStatement`, we get (without taking into account statistical frequency of each statement):
 
-	statement
-		:	exitStatement
-		|	returnStatement
-		|	ifStatement
-		|	loopStatement
-		|	ioStatement
-		|	(IDENT (LPAREN|SEMI))=> procedureCallStatement
-		|	assignmentStatement
-		|	(endStatement)=> endStatement
-		;
+```antlr
+statement
+	:	exitStatement
+	|	returnStatement
+	|	ifStatement
+	|	loopStatement
+	|	ioStatement
+	|	(IDENT (LPAREN|SEMI))=> procedureCallStatement
+	|	assignmentStatement
+	|	(endStatement)=> endStatement
+	;
+```
 
 Now, on to our final statement...
 
@@ -1262,12 +1369,14 @@ Now, on to our final statement...
 
 The I/O statement is really a procedure call to four predefined functions, `get`, `put`, `skipLine` and `newLine`. These really should be handled just like any other procedure call, but I'm putting them here just because that's how I did it the first time around, and because I don't want to mess with special pre-defined identifiers in the symbol table later...
 
-	ioStatement
-		:	"put" LPAREN expression RPAREN SEMI
-		|	"get" LPAREN variableReference RPAREN SEMI
-		|	"newLine" (LPAREN RPAREN)? SEMI
-		|	"skipLine" (LPAREN RPAREN)? SEMI
-		;
+```antlr
+ioStatement
+	:	"put" LPAREN expression RPAREN SEMI
+	|	"get" LPAREN variableReference RPAREN SEMI
+	|	"newLine" (LPAREN RPAREN)? SEMI
+	|	"skipLine" (LPAREN RPAREN)? SEMI
+	;
+```
 
 Note that I was nice and allow the user to put "()" after `skipLine` and `newLine`, just like we did for procedure calls in general.
 
@@ -1280,7 +1389,9 @@ XL expressions are pretty similar to any old expressions you'd find in any old l
 
 There are a few things to notice about using ANTLR when you write expressions. The big one is that ANTLR is an LL(k) parser-generator. That means several things, but the biggest (with regard to expressions) is that left recursion is **not** allowed. See some compiler books for the details; in a nutshell
 
-	a : a PLUS a ; 
+```antlr
+a : a PLUS a ; 
+```
 
 would generate code like
 
@@ -1292,23 +1403,27 @@ would generate code like
 
 which would obviously recursively call itself until you run out of stack space. There are several ways around this. You have probably seen the following type of code used to describe parts of expressions:
 
-	a
-		:	a PLUS a
-		|	t
-		; 
+```antlr
+a
+	:	a PLUS a
+	|	t
+	; 
+```
 
 To get rid of the left-recursion that renders LL(k) grammars helpless, you can use some wonderfully-mechanical algorithms to turn it into
 
-	a
-		:	a1 a_tail
-		;
-	a1
-		:	t
-		;
-	a_tail
-		:	PLUS t a\_tail
-		|	// nothing
-		; 
+```antlr
+a
+	:	a1 a_tail
+	;
+a1
+	:	t
+	;
+a_tail
+	:	PLUS t a\_tail
+	|	// nothing
+	; 
+```
 
 Yuck! It works, but how long did you have to think about it to understand what it means?
 
@@ -1316,49 +1431,61 @@ Notice that the mechanically-generated code utilizes tail-recursion (recursion a
 
 Thinking about right-recursion, recall that right recursion can always be replaced very easily by a loop. (From where do you recall this? I dunno. Some programming class.) In ANTLR, we have the advantage of being able to use ()\* and ()+ closures using EBNF notation. In other words, we can easily represent loops. So, a rule like
 
-	a_tail
-		:	PLUS t a_tail
-		|	// nothing
-		; 
+```antlr
+a_tail
+	:	PLUS t a_tail
+	|	// nothing
+	; 
+```
 
 can be re-written as
 
-	a_tail
-		: (PLUS t)*
-		; 
+```antlr
+a_tail
+	: (PLUS t)*
+	; 
+```
 
 which is much better so far. Now look what we have:
 
-	a
-		:	a1 a_tail
-		;
-	a1
-		:	t
-		;
-	a_tail
-		:	(PLUS t)*
-		; 
+```antlr
+a
+	:	a1 a_tail
+	;
+a1
+	:	t
+	;
+a_tail
+	:	(PLUS t)*
+	; 
+```
 
 Notice something about `a_tail` now? Without the tail recursion, it's only used in one place, so we can substitute it. And while we're at it, let's substitute `a1` in place as well, yielding
 
-	a
-		:	t (PLUS t)*
-		; 
+```antlr
+a
+	:	t (PLUS t)*
+	; 
+```
 
 When we look at that, we see that that's exactly what we wanted. Basically, PLUS is associative, so the order in which you add things really doesn't matter. You can keep saying "PLUS something else" at the end of our PLUS expression. The above notation is actually very good, because it matches what your brain does as it adds new parts to the expression as it reads left-to-right.
 
 The moral of the above nonsense is that an expression-like rule such as
 
-	a 
-		:	a OPERATOR a
-		|	t
-		; 
+```antlr
+a 
+	:	a OPERATOR a
+	|	t
+	; 
+```
 
 can be re-written
 
-	a
-		:	t (OPERATOR t)*
-		; 
+```antlr
+a
+	:	t (OPERATOR t)*
+	; 
+```
 
 Now that we're armed, lets start organizing for our attack on XL's expression rules!
 
@@ -1423,51 +1550,65 @@ So lets start at the top of the precedence chart. I'm going to go out on a limb 
 
 We need to start with our primitive expression elements. In XL, these are constant values, variable references, and parenthesized expressions. Remember, parenthesizing an expression basically makes it the most important thing that is currently being evaluated.
 
-	primitiveElement
-		:	constantValue
-		|	variableReference
-		|	LPAREN expression RPAREN
-		;
+```antlr
+primitiveElement
+	:	constantValue
+	|	variableReference
+	|	LPAREN expression RPAREN
+	;
+```
 
 So far so good. Now, let's just walk down the precedence chart. First, boolean negation:
 
-	booleanNegationExpression
-		:	("not")* primitiveElement
-		;
+```antlr
+booleanNegationExpression
+	:	("not")* primitiveElement
+	;
+```
 
 Notice that the `NOT` is optional here, and you can have as many of them as you like. That is because we want to be able to just pass any expression element through a rule without modifying it, enabling us to have an expression just be a `primitiveElement` if that's what the user wants. Next, we have unary PLUS and MINUS:
 
-	signExpression
-		:	(PLUS|MINUS)* booleanNegationExpression
-		;
+```antlr
+signExpression
+	:	(PLUS|MINUS)* booleanNegationExpression
+	;
+```
 
 Notice that the `( )*` can evaluate to "no operators," meaning that `booleanNegationExpression` can be passed straight through this precedence level without any modification.
 
 Let us have as many plusses or minuses in front of our expression so far. Next, we have our multiplying operators, \*, / and `mod`:
 
-	multiplyingExpression
-		:	signExpression ((TIMES|DIV|"mod") signExpression)*
-		;
+```antlr
+multiplyingExpression
+	:	signExpression ((TIMES|DIV|"mod") signExpression)*
+	;
+```
 
 Which lets us keep tacking on multiplying operators ad nauseum.
 
 Notice that this precedence rule imbedded the previous rule, and again, can let it just pass `signExpression` right on through without modifying it. By now, things should be seeming a bit more clear. Next, we move onto the binary adding operations:
 
-	addingExpression
-		:	multiplyingExpression ((PLUS|MINUS) multiplyingExpression)*
-		;
+```antlr
+addingExpression
+	:	multiplyingExpression ((PLUS|MINUS) multiplyingExpression)*
+	;
+```
 
 Will we have a conflict between an (PLUS|MINUS) acting as a binary add operator and one acting as a unary operator? No. The reason is that if we see one in between two partial expressions, it must be a binary operator. If we see another right after it (and any number of them after that) they must be working (covertly) as unary operators. Next we have the relational operators:
 
-	relationalExpression
-		:	addingExpression ((EQUALS|NOT_EQUALS|GT|GTE|LT|LTE) addingExpression)*
-		;
+```antlr
+relationalExpression
+	:	addingExpression ((EQUALS|NOT_EQUALS|GT|GTE|LT|LTE) addingExpression)*
+	;
+```
 
 Finally, we get to the operators with the lowest precedence. At this level, we can call the result a full expression. This level encompasses `and` and `or` operators:
 
-	expression
-		:	relationalExpression (("and"|"or") relationalExpression)*
-		;
+```antlr
+expression
+	:	relationalExpression (("and"|"or") relationalExpression)*
+	;
+```
 
 Tack on as many and/or partial expressions as you like...
 
@@ -1475,261 +1616,263 @@ Now that we've gotten through expressions, it really doesn't seem so bad. The pr
 
 At this point, we have specified the entire grammar for an XL parser. You've already seen the entire scanner. The following is our parser:
 
-	//-----------------------------------------------------------------------------
-	// Define a Parser, calling it XLRecognizer
-	//-----------------------------------------------------------------------------
-	class XLRecognizer extends Parser;
+```antlr
+//-----------------------------------------------------------------------------
+// Define a Parser, calling it XLRecognizer
+//-----------------------------------------------------------------------------
+class XLRecognizer extends Parser;
 
-	options {
-		defaultErrorHandler = true;      // Don't generate parser error handlers
-	}
+options {
+	defaultErrorHandler = true;      // Don't generate parser error handlers
+}
 
-	// Define some methods and variables to use in the generated parser.
-	{
-		// Define a main
-		public static void main(String[] args) {
-			// Use a try/catch block for parser exceptions
-			try {
-				// if we have at least one command-line argument
-				if (args.length > 0 ) {
-					System.err.println("Parsing...");
+// Define some methods and variables to use in the generated parser.
+{
+	// Define a main
+	public static void main(String[] args) {
+		// Use a try/catch block for parser exceptions
+		try {
+			// if we have at least one command-line argument
+			if (args.length > 0 ) {
+				System.err.println("Parsing...");
 
-					// for each directory/file specified on the command line
-					for(int i=0; i< args.length;i++)
-						doFile(new File(args[i])); // parse it
+				// for each directory/file specified on the command line
+				for(int i=0; i< args.length;i++)
+					doFile(new File(args[i])); // parse it
 
-				} else {
-					System.err.println("Usage: java XLRecogizer <directory name>");
-				}
-
-			} catch(Exception e) {
-				System.err.println("exception: "+e);
-				e.printStackTrace(System.err);   // so we can get stack trace
+			} else {
+				System.err.println("Usage: java XLRecogizer <directory name>");
 			}
-		}
 
-		// This method decides what action to take based on the type of
-		//   file we are looking at
-
-		public static void doFile(File f) throws Exception {
-			// If this is a directory, walk each file/dir in that directory
-			if (f.isDirectory()) {
-				String files[] = f.list();
-				for(int i=0; i < files.length; i++) {
-					doFile(new File(f, files[i]));
-				}
-
-			// otherwise, if this is a java file, parse it!
-			} else if ((f.getName().length()>5) &&
-				f.getName().substring(f.getName().length()-3).equals(".xl")) {
-					System.err.println("-------------------------------------------");
-					System.err.println(f.getAbsolutePath());
-					parseFile(new FileInputStream(f));
-			}
-		}
-
-		// Here's where we do the real work...
-		public static void parseFile(InputStream s) throws Exception {
-			try {
-				// Create a scanner that reads from the input stream passed to us
-				XLLexer lexer = new XLLexer(s);
-
-				// Create a parser that reads from the scanner
-				XLRecognizer parser = new XLRecognizer(lexer);
-
-				// start parsing at the compilationUnit rule
-				parser.program();
-
-			} catch (Exception e) {
-				System.err.println("parser exception: "+e);
-				e.printStackTrace();   // so we can get stack trace 
-			}
+		} catch(Exception e) {
+			System.err.println("exception: "+e);
+			e.printStackTrace(System.err);   // so we can get stack trace
 		}
 	}
 
-	// the following tag is used to find the start of the rules section for
-	//   automated chunk-grabbing when displaying the page
+	// This method decides what action to take based on the type of
+	//   file we are looking at
 
-	program
-		:	"program" IDENT EQUALS 
-			subprogramBody 
-			DOT
-			// end-of-file
-		;
+	public static void doFile(File f) throws Exception {
+		// If this is a directory, walk each file/dir in that directory
+		if (f.isDirectory()) {
+			String files[] = f.list();
+			for(int i=0; i < files.length; i++) {
+				doFile(new File(f, files[i]));
+			}
 
-	subprogramBody
-		:	(basicDecl)*
-			(procedureDecl)*
-			"begin"
-			(statement)*
-			"end" IDENT
-		;
+		// otherwise, if this is a java file, parse it!
+		} else if ((f.getName().length()>5) &&
+			f.getName().substring(f.getName().length()-3).equals(".xl")) {
+				System.err.println("-------------------------------------------");
+				System.err.println(f.getAbsolutePath());
+				parseFile(new FileInputStream(f));
+		}
+	}
 
-	basicDecl
-		:	varDecl
-		|	constDecl
-		|	typeDecl
-		;
+	// Here's where we do the real work...
+	public static void parseFile(InputStream s) throws Exception {
+		try {
+			// Create a scanner that reads from the input stream passed to us
+			XLLexer lexer = new XLLexer(s);
 
-	varDecl
-		:	"var" identList COLON typeName
-			(BECOMES constantValue)?
-			SEMI
-		;
+			// Create a parser that reads from the scanner
+			XLRecognizer parser = new XLRecognizer(lexer);
 
-	constDecl
-		:"constant" identList COLON typeName
-			BECOMES constantValue SEMI
-		;
+			// start parsing at the compilationUnit rule
+			parser.program();
 
-	identList
-		:	IDENT (COMMA IDENT)*
-		;
+		} catch (Exception e) {
+			System.err.println("parser exception: "+e);
+			e.printStackTrace();   // so we can get stack trace 
+		}
+	}
+}
 
-	constantValue
-		:	INTLIT
-		|	STRING_LITERAL
-		|	IDENT
-		;
+// the following tag is used to find the start of the rules section for
+//   automated chunk-grabbing when displaying the page
 
-	typeDecl
-		:	"type" IDENT EQUALS
-			(	arrayDecl
-			|	recordDecl
-			)
-			SEMI
-		;
-
-	arrayDecl
-		:	"array" LBRACKET integerConstant DOTDOT integerConstant RBRACKET
-			"of" typeName
-		;
-
-	integerConstant
-		:	INTLIT
-		|	IDENT // again, a constant...
-		;
-
-	recordDecl
-		:	"record" (identList COLON typeName SEMI)+ "end" "record"
-		;
-
-	typeName
-		:	IDENT
-		|	"Integer"
-		|	"Boolean"
-		;
-
-	procedureDecl
-		:	"procedure" IDENT (formalParameters)? EQUALS
-			subprogramBody
-			SEMI
-		;
-
-	formalParameters
-		:	LPAREN parameterSpec (SEMI parameterSpec)* RPAREN
-		;
-
-	parameterSpec
-		:	("var")? identList COLON typeName
+program
+	:	"program" IDENT EQUALS 
+		subprogramBody 
+		DOT
+		// end-of-file
 	;
 
-	statement
-		:	exitStatement
-		|	returnStatement
-		|	ifStatement
-		|	loopStatement
-		|	ioStatement
-		|	(IDENT (LPAREN|SEMI))=> procedureCallStatement
-		|	assignmentStatement
-		|	(endStatement)=> endStatement
-		;
+subprogramBody
+	:	(basicDecl)*
+		(procedureDecl)*
+		"begin"
+		(statement)*
+		"end" IDENT
+	;
 
-	assignmentStatement
-		:	variableReference BECOMES expression SEMI
-		;
+basicDecl
+	:	varDecl
+	|	constDecl
+	|	typeDecl
+	;
 
-	exitStatement
-		:	"exit" "when" expression
-		;
+varDecl
+	:	"var" identList COLON typeName
+		(BECOMES constantValue)?
+		SEMI
+	;
 
-	procedureCallStatement
-		:	IDENT (actualParameters)? SEMI
-		;
+constDecl
+	:"constant" identList COLON typeName
+		BECOMES constantValue SEMI
+	;
 
-	actualParameters
-		:	LPAREN (expression (COMMA expression)*)? RPAREN
-		;
+identList
+	:	IDENT (COMMA IDENT)*
+	;
 
-	returnStatement
-		:	"return" SEMI
-		;
+constantValue
+	:	INTLIT
+	|	STRING_LITERAL
+	|	IDENT
+	;
 
-	ifStatement
-		:	"if" ifPart "end" "if" SEMI
-		;
+typeDecl
+	:	"type" IDENT EQUALS
+		(	arrayDecl
+		|	recordDecl
+		)
+		SEMI
+	;
 
-	ifPart
-		:	expression "then"
-			(statement)*
-			(	"elsif" ifPart
-			|	"else" (statement)*
-			)?
-		;
+arrayDecl
+	:	"array" LBRACKET integerConstant DOTDOT integerConstant RBRACKET
+		"of" typeName
+	;
 
-	loopStatement
-		:	("while" expression)? "loop"
-			(statement)*
-			"end" "loop" SEMI
-		;
+integerConstant
+	:	INTLIT
+	|	IDENT // again, a constant...
+	;
 
-	endStatement
-		:	"end" SEMI
-		;
+recordDecl
+	:	"record" (identList COLON typeName SEMI)+ "end" "record"
+	;
 
-	variableReference
-		:	IDENT
-			(	LBRACKET expression RBRACKET
-			|	DOT IDENT
-			)*
-		;
+typeName
+	:	IDENT
+	|	"Integer"
+	|	"Boolean"
+	;
 
-	ioStatement
-		:	"put" LPAREN expression RPAREN SEMI
-		|	"get" LPAREN variableReference RPAREN SEMI
-		|	"newLine" (LPAREN RPAREN)? SEMI
-		|	"skipLine" (LPAREN RPAREN)? SEMI
-		;
+procedureDecl
+	:	"procedure" IDENT (formalParameters)? EQUALS
+		subprogramBody
+		SEMI
+	;
 
-	primitiveElement
-		:	constantValue
-		|	variableReference
-		|	LPAREN expression RPAREN
-		;
+formalParameters
+	:	LPAREN parameterSpec (SEMI parameterSpec)* RPAREN
+	;
 
-	booleanNegationExpression
-		:	("not")* primitiveElement
-		;
+parameterSpec
+	:	("var")? identList COLON typeName
+;
 
-	signExpression
-		:	(PLUS|MINUS)* booleanNegationExpression
-		;
+statement
+	:	exitStatement
+	|	returnStatement
+	|	ifStatement
+	|	loopStatement
+	|	ioStatement
+	|	(IDENT (LPAREN|SEMI))=> procedureCallStatement
+	|	assignmentStatement
+	|	(endStatement)=> endStatement
+	;
 
-	multiplyingExpression
-		:	signExpression ((TIMES|DIV|"mod") signExpression)*
-		;
+assignmentStatement
+	:	variableReference BECOMES expression SEMI
+	;
 
-	addingExpression
-		:	multiplyingExpression ((PLUS|MINUS) multiplyingExpression)*
-		;
+exitStatement
+	:	"exit" "when" expression
+	;
 
-	relationalExpression
-		:	addingExpression ((EQUALS|NOT\_EQUALS|GT|GTE|LT|LTE) addingExpression)*
-		;
+procedureCallStatement
+	:	IDENT (actualParameters)? SEMI
+	;
 
-	expression
-		:	relationalExpression (("and"|"or") relationalExpression)*
-		;
+actualParameters
+	:	LPAREN (expression (COMMA expression)*)? RPAREN
+	;
+
+returnStatement
+	:	"return" SEMI
+	;
+
+ifStatement
+	:	"if" ifPart "end" "if" SEMI
+	;
+
+ifPart
+	:	expression "then"
+		(statement)*
+		(	"elsif" ifPart
+		|	"else" (statement)*
+		)?
+	;
+
+loopStatement
+	:	("while" expression)? "loop"
+		(statement)*
+		"end" "loop" SEMI
+	;
+
+endStatement
+	:	"end" SEMI
+	;
+
+variableReference
+	:	IDENT
+		(	LBRACKET expression RBRACKET
+		|	DOT IDENT
+		)*
+	;
+
+ioStatement
+	:	"put" LPAREN expression RPAREN SEMI
+	|	"get" LPAREN variableReference RPAREN SEMI
+	|	"newLine" (LPAREN RPAREN)? SEMI
+	|	"skipLine" (LPAREN RPAREN)? SEMI
+	;
+
+primitiveElement
+	:	constantValue
+	|	variableReference
+	|	LPAREN expression RPAREN
+	;
+
+booleanNegationExpression
+	:	("not")* primitiveElement
+	;
+
+signExpression
+	:	(PLUS|MINUS)* booleanNegationExpression
+	;
+
+multiplyingExpression
+	:	signExpression ((TIMES|DIV|"mod") signExpression)*
+	;
+
+addingExpression
+	:	multiplyingExpression ((PLUS|MINUS) multiplyingExpression)*
+	;
+
+relationalExpression
+	:	addingExpression ((EQUALS|NOT\_EQUALS|GT|GTE|LT|LTE) addingExpression)*
+	;
+
+expression
+	:	relationalExpression (("and"|"or") relationalExpression)*
+	;
+```
 
 Now we need to discuss...
 
@@ -1744,54 +1887,56 @@ Let's consider what information we already have. We have already defined how we 
 
 We need the startup code (a "main" function), a shell class to hold the parser definition, and references to all the fun definitions that ANTLR needs to create an executable. Without saying much more (I may later), we have the following. Note that we'll be changing some of it later when we add trees, symbols and other compiler goodies...
 
-	header {
-		...definitions that need to go at top of all generated files...
-	}
+```antlr
+header {
+	...definitions that need to go at top of all generated files...
+}
 
-	{
-		...Stuff at the top of generated files based on this file...
-		...Note that stuff in these { } will appear after anything 
-		...in the header { } code...
-	}
+{
+	...Stuff at the top of generated files based on this file...
+	...Note that stuff in these { } will appear after anything 
+	...in the header { } code...
+}
 
-	class **_ParserNameGoesHere_** extends Parser;
-	options {
-		...parser options...
-	}
+class **_ParserNameGoesHere_** extends Parser;
+options {
+	...parser options...
+}
 
-	{
-		...your parser method/variable definitions...
+{
+	...your parser method/variable definitions...
 
-		// a sample main
+	// a sample main
 
-		public static void main(String[] args) {
-			// Use a try/catch block for parser exceptions
-			try {
-				InputStream input = new FileInputStream(args[0]);
-				XLLexer lexer = new XLLexer(s);
-				XLRecognizer parser = new XLRecognizer(lexer);
-				parser.program();
-			
-			} catch (Exception e) {
-				System.err.println("parser exception: "+e);
-				e.printStackTrace();   // so we can get stack trace		
-			}
+	public static void main(String[] args) {
+		// Use a try/catch block for parser exceptions
+		try {
+			InputStream input = new FileInputStream(args[0]);
+			XLLexer lexer = new XLLexer(s);
+			XLRecognizer parser = new XLRecognizer(lexer);
+			parser.program();
+		
+		} catch (Exception e) {
+			System.err.println("parser exception: "+e);
+			e.printStackTrace();   // so we can get stack trace		
 		}
 	}
+}
 
-	...parser rules go here...
+...parser rules go here...
 
-	class _**ScannerNameGoesHere**_ extends Lexer;
+class _**ScannerNameGoesHere**_ extends Lexer;
 
-	options {
-		...scanner options...
-	}
+options {
+	...scanner options...
+}
 
-	{
-		...your scanner method/variable definitions...
-	}
+{
+	...your scanner method/variable definitions...
+}
 
-	...scanner rules go here...
+...scanner rules go here...
+```
 
 Now we know everything that needs to go into our recognizer.
  
@@ -1818,9 +1963,11 @@ XLTokenTypes.java | _generated by ANTLR_ \-- contains an interface definition th
 
 To build this tutorial, you can use Apache Ant. You can download Ant from [http://ant.apache.org/](http://ant.apache.org/). Ant provides an optional task that runs ANTLR. To build a grammar with this task, you add
 
-	<antlr target="src/com/javadude/xl1/xl1.g">
-		<classpath path="lib/antlr.jar" />
-	</antlr>
+```xml
+<antlr target="src/com/javadude/xl1/xl1.g">
+	<classpath path="lib/antlr.jar" />
+</antlr>
+```
 
 The tutorial download includes an ANTLR.jar in its lib directory. You can choose a different ANTLR.jar by specifying it in the classpath tag.
 
@@ -1836,13 +1983,15 @@ Remember our discussion about adding `END` as a statement. Looks like it came ba
 
 The rules that are giving us trouble are rules like
 
-	subprogramBody
-		:	(basicDecl)*
-			(procedureDecl)*
-			"begin"
-			(statement)*
-			"end" IDENT
-		;
+```antlr
+subprogramBody
+	:	(basicDecl)*
+		(procedureDecl)*
+		"begin"
+		(statement)*
+		"end" IDENT
+	;
+```
 
 The problem is that the `( )*` closure needs to determine when to exit. ANTLR checks to see if the "next" thing in the closure is also the first thing _after_ the closure.  This makes the closure ambiguous.  Did you really mean to stay in the loop when it sees "end" as the next token, or jump out of the loop?
 
@@ -1850,10 +1999,12 @@ Remember that we disambiguated the "end" in the `statement` rule.   This was i
 
 If we just move the predicates up to the `(statement)*` closures, it may work, but now we have extra predicates all over the grammar. Our goal was to fix the lookahead problem in a single place. So let's create a single place. Instead of using `(statement)*` to represent a statement list, we'll create a rule called statementList:
 
-	statementList
-		:	statementList statement
-		|	// nothing
-		;     
+```antlr
+statementList
+	:	statementList statement
+	|	// nothing
+	;     
+```
 
 Some of you may be saying "but..." but I'll cut you off because I've spent too much time in yacc-land recently. Silly me coded the rule this way. Yup, left-recursion, an LL no-no, but I'm not too proud to admit I make these mistakes sometimes. ANTLR is very nice about it and reports
 
@@ -1862,10 +2013,12 @@ Some of you may be saying "but..." but I'll cut you off because I've spent too m
 
 So I shake my head in disbelief that I typed it (10 minutes before writing this) and change it to
 
-	statementList
-		:	statement statementList
-		|	// nothing
-		;     
+```antlr
+statementList
+	:	statement statementList
+	|	// nothing
+	;     
+```
 
 and compile again...
 
@@ -1875,11 +2028,13 @@ Better; we're still getting the message about the `END` statement. But now the c
 
 We move the `endStatement` out of the statement rule and into `statementList`:
 
-	statementList
-		:	statement  statementList
-		|	(endStatement)=> endStatement statementList
-		|	// nothing
-		;
+```antlr
+statementList
+	:	statement  statementList
+	|	(endStatement)=> endStatement statementList
+	|	// nothing
+	;
+```
 
 And now, the conflict disappears. We have applied the syntactic predicate to the point of the conflict.
 

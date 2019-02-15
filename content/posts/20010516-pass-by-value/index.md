@@ -55,59 +55,66 @@ _Can you write a traditional swap(a,b) method/function in the language?_
 
 A traditional swap method or function takes two arguments and swaps them such that variables passed into the function are changed outside the function. Its basic structure looks like
 
-    swap(Type arg1, Type arg2) {
-        Type temp = arg1;
-        arg1 = arg2;
-        arg2 = temp;
-    }
-
+```
+swap(Type arg1, Type arg2) {
+    Type temp = arg1;
+    arg1 = arg2;
+    arg2 = temp;
+}
+```
 If you can write such a method/function in your language such that calling
 
-    Type var1 = ...;
-    Type var2 = ...;
-    swap(var1,var2);
+```
+Type var1 = ...;
+Type var2 = ...;
+swap(var1,var2);
+```
 
 actually switches the values of the variables `var1` and `var2`, the language supports pass-by-reference semantics.
 
 For example, in Pascal, you can write
 
-    procedure swap(var arg1, arg2: SomeType);
-        var
-            temp : SomeType;
-        begin
-            temp := arg1;
-            arg1 := arg2;
-            arg2 := temp;
-        end;
+```pascal
+procedure swap(var arg1, arg2: SomeType);
+var
+    temp : SomeType;
+begin
+    temp := arg1;
+    arg1 := arg2;
+    arg2 := temp;
+end;
 
-        ...
+...
 
-        { in some other procedure/function/program }
+{ in some other procedure/function/program }
 
-        var
-            var1, var2 : SomeType;
+var
+    var1, var2 : SomeType;
 
-        begin
-            var1 := ...; { value "A" }
-            var2 := ...; { value "B" } 
-            swap(var1, var2);
-            { now var1 has value "B" and var2 has value "A" }
-        end;
+begin
+    var1 := ...; { value "A" }
+    var2 := ...; { value "B" } 
+    swap(var1, var2);
+    { now var1 has value "B" and var2 has value "A" }
+end;
+```
 
 or in C++ you could write
 
-    void swap(SomeType& arg1, Sometype& arg2) {
-        SomeType temp = arg1;
-        arg1 = arg2;
-        arg2 = temp;
-    }
+```c++
+void swap(SomeType& arg1, Sometype& arg2) {
+    SomeType temp = arg1;
+    arg1 = arg2;
+    arg2 = temp;
+}
 
-    ...
+...
 
-    SomeType var1 = ...; // value "A"
-    SomeType var2 = ...; // value "B"
-    swap(var1, var2); // swaps their values!
-    // now var1 has value "B" and var2 has value "A"
+SomeType var1 = ...; // value "A"
+SomeType var2 = ...; // value "B"
+swap(var1, var2); // swaps their values!
+// now var1 has value "B" and var2 has value "A"
+```
 
 (Please let me know if my Pascal or C++ has lapsed and I've messed up the syntax...)
 
@@ -129,28 +136,37 @@ This may seem like splitting hairs, but it is _far_ from it. There is a world of
 
 In Java, take the case of
 
-    public void foo(Dog d) {
-        d = new Dog("Fifi"); // creating the "Fifi" dog
-    }
+```java
+public void foo(Dog d) {
+    d = new Dog("Fifi"); // creating the "Fifi" dog
+}
 
-    Dog aDog = new Dog("Max"); // creating the "Max" dog
-    // at this point, aDog points to the "Max" dog
-    foo(aDog);
-    // aDog still points to the "Max" dog
+Dog aDog = new Dog("Max"); // creating the "Max" dog
+
+// at this point, aDog points to the "Max" dog
+
+foo(aDog); 
+
+// aDog still points to the "Max" dog
+```
 
 the variable passed in, `aDog`, **_is not_** modified! After calling `foo()`, `aDog` **_still_** points to the `Dog` with name "Max"!
 
 Many people mistakenly think/state that something like
 
-    public void foo(Dog d) { 
-        d.setName("Fifi");
-    }
+```java
+public void foo(Dog d) { 
+    d.setName("Fifi");
+}
+```
 
 shows that Java does in fact pass objects by reference.
 
 The mistake they make is in the definition of
 
-    Dog d;
+```java
+Dog d;
+```
 
 itself. When you write that definition, you are defining a _pointer_ to a `Dog` object, _not_ a `Dog` object itself.
 
@@ -184,7 +200,9 @@ In the end, Sun made a naming mistake that's caused confusion. Java has pointers
 
 Calling
 
-    foo(d);
+```java
+foo(d);
+```
 
 passes the **_value of `d`_** to `foo()`; it does _not_ pass the object that `d` points to!
 
@@ -194,25 +212,35 @@ The value of the pointer being passed is similar to a memory address. Under the 
 
 In Java,
 
-    Dog d;
+```java
+Dog d;
+```
 
 is **_exactly_** like C++'s
 
-    Dog *d;
+```java
+Dog *d;
+```
 
 And using
 
-    d.setName("Fifi");
+```java
+d.setName("Fifi");
+```
 
 is exactly like C++'s
 
-    d->setName("Fifi");
+```c++
+d->setName("Fifi");
+```
 
 To sum up: Java **_has_** pointers, and the **_value_** of the **_pointer_** is passed in. There's no way to actually pass an object itself as a parameter. You can only pass a pointer to an object.
 
 Keep in mind, when you call
 
-    foo(d);
+```java
+foo(d);
+```
 
 you're not passing an object; you're passing a _pointer_ to the object.
 
@@ -251,14 +279,18 @@ The Java Spec says that everything in java is pass-by-value. There is no such th
 
 The key to understanding this is that something like
 
-    Dog myDog;
+```java
+Dog myDog;
+```
 
 is not a Dog; it's actually a pointer to a Dog.
 
 What that means, is when you have
 
-    Dog myDog = new Dog("Rover");
-    foo(myDog);
+```java
+Dog myDog = new Dog("Rover");
+foo(myDog);
+```
 
 you're essentially passing the address of the created Dog object to the foo method. (I say essentially b/c java pointers aren't direct addresses, but it's easiest to think of them that way)
 
@@ -266,11 +298,13 @@ Suppose the Dog object resides at memory address 42. This means we pass 42 to th
 
 If the Method were defined as
 
-    public void foo(Dog someDog) {  // AAA
-        someDog.setName("Max");     // BBB
-        someDog = new Dog("Fifi");  // CCC
-        someDog.setName("Rowlf");   // DDD
-    }
+```java
+public void foo(Dog someDog) {  // AAA
+    someDog.setName("Max");     // BBB
+    someDog = new Dog("Fifi");  // CCC
+    someDog.setName("Rowlf");   // DDD
+}
+```
 
 Let's look at what's happening.
 

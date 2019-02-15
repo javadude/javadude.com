@@ -25,77 +25,95 @@ Single-Line (C++-Style) Comments
 
 The simplest comment in Java is the single line comment. It starts with two forward slashes and continues to the end of the line. For example:
     
-	// this is a single-line comment
-	x = 1; // a single-line comment after code
-    
+```java	
+// this is a single-line comment
+x = 1; // a single-line comment after code
+```
+
 Multi-Line (C-Style) Comments
 -----------------------------
 
 Java also provides a comment type that can span multiple lines. You start this type of comment with a forward slash followed by an asterisk, and end it with an asterisk followed by a forward slash. The start and end delimiters for this type of comment may be on the same line, or they can be on different lines. For example
- 
-	/* This is a c-style comment */
- 
-	/*  This is also a
-		c-style comment, spanning
-		multiple lines */
- 
+
+```java 
+/* This is a c-style comment */
+
+/*  This is also a
+	c-style comment, spanning
+	multiple lines */
+```
+
 Note that C-style comments **_cannot_** be nested. Something like
  
-	/* A comment looks like
-		/* This is a comment */
-		blah blah blah
-	*/
+ ```java
+/* A comment looks like
+	/* This is a comment */
+	blah blah blah
+*/
+```
 
 will generate a syntax error because the java compiler will only treat through the first `*/` as a comment. (The comment ends at the first `*/` the compiler sees.)
 
 You _can_ nest single-line comments within multi-line comments:
 
-	/* This is a single-line comment:
-		// a single-line comment
-	*/
+```java
+/* This is a single-line comment:
+	// a single-line comment
+*/
+```
 
 and multi-line comments in single-line comments:
 
-	// /* this is
-	//    a multi-line
-	//    comment */
+```java
+// /* this is
+//    a multi-line
+//    comment */
+```
 
 Documentation Comments
 ----------------------
     
 Documentation comments are special comments that look like multi-line comments but can be used to generate external documentation about your source code. These begin with a forward slash followed by **_two_** asterisks, and end with an asterisk followed by a forward slash. For example:
     
-	/** This is a documentation comment */
+```java	
+/** This is a documentation comment */
 
-	/** This is also a
-		documentation comment */
-    
+/** This is also a
+	documentation comment */
+```
+
 There are a few important things to note about documentation comments:
     
 *	The documentation generator, javadoc, will add all text inside a documentation comment to an HTML paragraph. This means that any text inside a documentation comment will be formatted into a paragraph; spacing and line breaks are ignored. If you want special formatting, you must include HTML tags inside your documentation comment.*   If a documentation comment begins with more than two asterisks, javadoc assumes this is just used to create a "box" around the comment in the source code and ignores the extra asterisks. For example:
-        
-		/**********************************       
-			This is the start of a method        
-		**********************************/
-        
+
+```java        
+/**********************************       
+	This is the start of a method        
+**********************************/
+```
+
 	will only keep the text "This is the start of a method".
         
 *	javadoc will ignore leading asterisks inside a documentation-comment block. For example:
-        
+
+```java        
 		/***************************************
 		 * This is a doc comment
 		 * on multiple lines that I want to stand
 		 * out in source code, looking "neat"
 		 ***************************************/
-        
+```
+
 	will only keep the text "This is a doc comment on multiple lines that I want to stand out in source code, looking "neat""
         
 *	It's common practice to use something like
-        
+
+```java        
 		/******************************************
 		...
 		******************************************/
-        
+```
+
 	to make a comment stand out. Be aware that this is treated as a documentation comment (even if that's not what you had intended), and could show up in the generated documentation.   
     
 
@@ -113,43 +131,55 @@ My simple advice on commenting is that whenever you want to write a normal comme
 
 Why? Because you can easily use multi-line comments to "comment out" a section of your code! ("Commenting out code" refers to changing the lexical state of a section of source code to being inside a comment, making the compiler ignore that code.) Take as an example:
 
-	x \= 1;   /* set x to 1 */
-	y \= 2;   /* set y to 2 */
-	f(x, y); /* call f with x and y */
+```java
+x = 1;   /* set x to 1 */
+y = 2;   /* set y to 2 */
+f(x, y); /* call f with x and y */
+```
 
 If you want to comment out these three lines, you would either need to put a single line comment in front of each line:
 
-	// x = 1;   /* set x to 1 */
-	// y = 2;   /* set y to 2 */
-	// f(x, y); /* call f with x and y */
+```java
+// x = 1;   /* set x to 1 */
+// y = 2;   /* set y to 2 */
+// f(x, y); /* call f with x and y */
+```
 
 or add in multi-line comments wherever there isn't already one present:
 
-	/* x = 1;  */ /* set x to 1 */
-	/* y = 2;  */ /* set y to 2 */
-	/* f(x, y);*/ /* call f with x and y */
+```java
+/* x = 1;  */ /* set x to 1 */
+/* y = 2;  */ /* set y to 2 */
+/* f(x, y);*/ /* call f with x and y */
+```
 
 or mutilate/remove the "end comment" delimiters of the existing comments:
 
-	/*
-		x = 1;   /* set x to 1 * /
-		y = 2;   /* set y to 2 * /
-		f(x, y); /* call f with x and y * /
-	*/
+```java
+/*
+	x = 1;   /* set x to 1 * /
+	y = 2;   /* set y to 2 * /
+	f(x, y); /* call f with x and y * /
+*/
+```
 
 None of these are terribly pleasant. It's much easier if the original code were:
 
-	x = 1;   // set x to 1
-	y = 2;   // set y to 2
-	f(x, y); // call f with x and y
+```java
+x = 1;   // set x to 1
+y = 2;   // set y to 2
+f(x, y); // call f with x and y
+```
 
 then you can easily comment it out by just placing a multi-line comment around it:
 
-	/*
-	x = 1;   // set x to 1
-	y = 2;   // set y to 2
-	f(x, y); // call f with x and y
-	*/
+```java
+/*
+x = 1;   // set x to 1
+y = 2;   // set y to 2
+f(x, y); // call f with x and y
+*/
+```
 
 _Always_ use single-line comments for your everyday commenting needs!
 

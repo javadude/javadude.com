@@ -70,25 +70,31 @@ _Note: A property can be either simple or indexed; it cannot be both._
 
 Simple properties act like individual bits of data, describing the state of a bean. You define simple properties using sets of methods that match the following patterns:
 
-	public TypeName getPropertyName()
-	public boolean isPropertyName()
-	public void setPropertyName(TypeName value)
+```java
+public TypeName getPropertyName()
+public boolean isPropertyName()
+public void setPropertyName(TypeName value)
+```
 
 Note: You can only define the `isPropertyName()` method for boolean properties.
 
 `TypeName` is the name of a class or primitive type, and `PropertyName` is the name of the property. The presence of a get or is method defines a readable property. A set method defines a writeable property. The property name is actually a lower-cased version of whatever follows the get or set in the method declaration. For example, suppose a bean defines the following method:
 
-	public Color getEyeColor()
+```java
+public Color getEyeColor()
+```
 
 This defines a readable property named eyeColor of type `java.awt.Color`.
 
 Note that there can be both a get and is method for a boolean property; the is method is allowed for readability. Normally, you define the get and set methods, but sometimes the get method doesn't read naturally. For example
 
-	if (list.isEmpty()) {...}
+```java
+if (list.isEmpty()) {...}
 
-	// is more readable than
+// is more readable than
 
-	if (list.getEmpty()) {...}
+if (list.getEmpty()) {...}
+```
 
 The beauty of this model is its simplicity. Many programmers already use get and set methods to access their data, so defining properties is no different from their current style.
 
@@ -102,10 +108,12 @@ Indexed properties are an extension of simple properties that allow multiple val
 
 You define indexed properties using four methods:
 
-	public TypeName[] getPropertyName()
-	public TypeName getPropertyName(int index)
-	public void setPropertyName(TypeName[] value)
-	public void setPropertyName(int index, TypeName value)
+```java
+public TypeName[] getPropertyName()
+public TypeName getPropertyName(int index)
+public void setPropertyName(TypeName[] value)
+public void setPropertyName(int index, TypeName value)
+```
 
 Recognizing these methods, a bean-builder tool can present a (possibly editable) list of values for setting the property.
 
@@ -123,19 +131,23 @@ Bound or constrained properties greatly enhance the flexibility of a bean. Bound
 
 A bound property fires a `PropertyChangeEvent` (defined in package `java.beans`) when its state changes. `PropertyChangeListener`s register themselves with the bean to receive notification of those changes. The `java.beans` package provides support for this processing through its `PropertyChangeSupport` class. For example, consider a simple property phoneNumber, defined as follows:
 
-	private String phoneNumber;
+```java
+private String phoneNumber;
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+public void setPhoneNumber(String phoneNumber) {
+	this.phoneNumber = phoneNumber;
+}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
+public String getPhoneNumber() {
+	return phoneNumber;
+}
+```
 
 _Note: Sometimes the statement_
 
-	this.phoneNumber = phoneNumber;
+```java
+this.phoneNumber = phoneNumber;
+```
 
 _can be quite confusing to read, especially when first learning the Java language. We use it here because it is and accepted common practice. The `this` qualification on the first `phoneNumber` means, "I'm talking about the **instance** variable `phoneNumber`." This is necessary to distinguish it from the current active use of `phoneNumber`, the **parameter** `phoneNumber`._
 
@@ -146,6 +158,7 @@ This simple property definition directly sets and gets its data. To bind this pr
 
 Because the code to perform these functions is identical for every bound property, we can delegate these functions to an instance of `PropertyChangeSupport`. A resulting Person bean containing the phoneNumber property could look as follows:
 
+```java
 package effectivevaj.bean.intro.boundproperty;
 
 import java.beans.PropertyChangeEvent;
@@ -153,51 +166,52 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
-	/**
-	 * A sample Person bean that defines a bound property
-	 */
+/**
+	* A sample Person bean that defines a bound property
+	*/
 
-	public class Person implements Serializable {
-		// Create a PropertyChangeSupport instance
-		//   to which we'll delegate our bound-property
-		//   functionality
+public class Person implements Serializable {
+	// Create a PropertyChangeSupport instance
+	//   to which we'll delegate our bound-property
+	//   functionality
 
-		private transient PropertyChangeSupport pcs =
-			new PropertyChangeSupport(this);
+	private transient PropertyChangeSupport pcs =
+		new PropertyChangeSupport(this);
 
-		/** Let classes listen for property changes */
-		public void addPropertyChangeListener(PropertyChangeListener l) {
-			pcs.addPropertyChangeListener(l);
-		}
-
-		/** Let classes stop listening to property changes */
-		public void removePropertyChangeListener(PropertyChangeListener l) {
-			pcs.removePropertyChangeListener(l);
-		}
-
-		// Define a read/write/bound property named phoneNumber
-		private String phoneNumber;
-
-		/** Define property phoneNumber as readable String */
-		public String getPhoneNumber() {
-			return phoneNumber;
-		}
-
-		/** Define property phoneNumber as writeable String
-		 *  phoneNumber is bound, firing PropertyChangeEvents
-		 *  whenever its value changes
-		 */
-		public void setPhoneNumber(String phoneNumber) {
-			// save the old value
-			String oldNumber = this.phoneNumber;
-
-			// set the new value
-			this.phoneNumber = phoneNumber;
-
-			// report the change
-			pcs.firePropertyChange("phoneNumber", oldNumber, phoneNumber);
-		}
+	/** Let classes listen for property changes */
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+		pcs.addPropertyChangeListener(l);
 	}
+
+	/** Let classes stop listening to property changes */
+	public void removePropertyChangeListener(PropertyChangeListener l) {
+		pcs.removePropertyChangeListener(l);
+	}
+
+	// Define a read/write/bound property named phoneNumber
+	private String phoneNumber;
+
+	/** Define property phoneNumber as readable String */
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	/** Define property phoneNumber as writeable String
+		*  phoneNumber is bound, firing PropertyChangeEvents
+		*  whenever its value changes
+		*/
+	public void setPhoneNumber(String phoneNumber) {
+		// save the old value
+		String oldNumber = this.phoneNumber;
+
+		// set the new value
+		this.phoneNumber = phoneNumber;
+
+		// report the change
+		pcs.firePropertyChange("phoneNumber", oldNumber, phoneNumber);
+	}
+}
+```
 
 The highlighted text in the previous example is the extra code needed to bind the `phoneNumber` property. Note that many tools, such as VisualAge for Java, can generate all of this code for you.
 
@@ -205,68 +219,70 @@ After binding `phoneNumber`, we can keep the telephone numbers of two people syn
 
 The following code acts as glue between two `Person` beans, `scott` and `nancy`. We create event listeners (using anonymous inner classes) to listen for changes to the `phoneNumber` property of each bean. Whenever we hear that the `phoneNumber` of `scott` changes, we set the `phoneNumber` of `nancy`. We provide the same type of handling for changes to the `phoneNumber` in `nancy` as well.
 
-	package effectivevaj.bean.intro.boundproperty;
+```java
+package effectivevaj.bean.intro.boundproperty;
 
-	import java.beans.PropertyChangeEvent;
-	import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+/**
+	* Test the Person bean's bound phone number property
+	*/
+
+public class PhoneSync {
 
 	/**
- 	 * Test the Person bean's bound phone number property
- 	 */
+		*  Test the bound phoneNumber of the Person bean
+		*  Create two people that share a phone number and
+		*    create property-change listeners that will keep
+		*    their phone numbers synchronized
+		*/
+	public static void main(String[] args) {
+		// create two people who share a phone number
 
-	public class PhoneSync {
+		final Person scott = new Person();
+		final Person nancy = new Person();
 
-		/**
-		 *  Test the bound phoneNumber of the Person bean
-		 *  Create two people that share a phone number and
-		 *    create property-change listeners that will keep
-		 *    their phone numbers synchronized
-		 */
-		public static void main(String[] args) {
-			// create two people who share a phone number
-
-			final Person scott = new Person();
-			final Person nancy = new Person();
-
-			// when scott's phone changes, change nancy's
-			scott.addPropertyChangeListener(
-				new PropertyChangeListener() {
-					public void propertyChange(PropertyChangeEvent e) {
-						if (e.getPropertyName().equals("phoneNumber")) {
-							nancy.setPhoneNumber(scott.getPhoneNumber());
-						}
+		// when scott's phone changes, change nancy's
+		scott.addPropertyChangeListener(
+			new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent e) {
+					if (e.getPropertyName().equals("phoneNumber")) {
+						nancy.setPhoneNumber(scott.getPhoneNumber());
 					}
 				}
-			);
+			}
+		);
 
-			// when nancy's phone changes, change scott's
-			nancy.addPropertyChangeListener(
-				new PropertyChangeListener() {
-					public void propertyChange(PropertyChangeEvent e) {
-						if (e.getPropertyName().equals("phoneNumber")) {
-							scott.setPhoneNumber(nancy.getPhoneNumber());
-						}
+		// when nancy's phone changes, change scott's
+		nancy.addPropertyChangeListener(
+			new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent e) {
+					if (e.getPropertyName().equals("phoneNumber")) {
+						scott.setPhoneNumber(nancy.getPhoneNumber());
 					}
 				}
-			);
+			}
+		);
 
-			// Run a little test...
+		// Run a little test...
 
-			System.out.println("Initial phone numbers");
-			System.out.println("Scott: "  + scott.getPhoneNumber());
-			System.out.println("Nancy: "  + scott.getPhoneNumber());
-			System.out.println();
-			System.out.println("Set Scott's number to 555-1212");
-			scott.setPhoneNumber("555-1212");
-			System.out.println("Scott: "  + scott.getPhoneNumber());
-			System.out.println("Nancy: "  + scott.getPhoneNumber());
-			System.out.println();
-			System.out.println("Set Nancy's number to 555-7777");
-			nancy.setPhoneNumber("555-7777");
-			System.out.println("Scott: "  + scott.getPhoneNumber());
-			System.out.println("Nancy: "  + scott.getPhoneNumber());
-		}
+		System.out.println("Initial phone numbers");
+		System.out.println("Scott: "  + scott.getPhoneNumber());
+		System.out.println("Nancy: "  + scott.getPhoneNumber());
+		System.out.println();
+		System.out.println("Set Scott's number to 555-1212");
+		scott.setPhoneNumber("555-1212");
+		System.out.println("Scott: "  + scott.getPhoneNumber());
+		System.out.println("Nancy: "  + scott.getPhoneNumber());
+		System.out.println();
+		System.out.println("Set Nancy's number to 555-7777");
+		nancy.setPhoneNumber("555-7777");
+		System.out.println("Scott: "  + scott.getPhoneNumber());
+		System.out.println("Nancy: "  + scott.getPhoneNumber());
 	}
+}
+```
 
 Creating `PropertyChangeListener`s for each `Person` bean automatically updates both `Person` beans when either telephone number changes. We will use this technique during visual composition to achieve several interesting effects, including keeping a model synchronized with a GUI. The results of running `PhoneSync` follow:
 
@@ -308,60 +324,62 @@ The `java.beans` package provides another concrete-implementation class, `Vetoab
 
 The following code defines a constrained property called `phoneNumber`. Similar to our earlier bound property example, we delegate the listener tracking and event firing to another object, one of class `VetoableChangeSupport`.
 
-	package effectivevaj.bean.intro.constrainedproperty;
+```java
+package effectivevaj.bean.intro.constrainedproperty;
 
-	import java.io.Serializable;
-	import java.beans.PropertyChangeEvent;
-	import java.beans.VetoableChangeListener;
-	import java.beans.VetoableChangeSupport;
-	import java.beans.PropertyVetoException;
+import java.io.Serializable;
+import java.beans.PropertyChangeEvent;
+import java.beans.VetoableChangeListener;
+import java.beans.VetoableChangeSupport;
+import java.beans.PropertyVetoException;
 
-	 // A sample Person bean that defines a constrained property
+	// A sample Person bean that defines a constrained property
 
-	public class Person implements Serializable {
+public class Person implements Serializable {
 
-		// Create a VetoableChangeSupport instance
-		//   to which we'll delegate our constrained-property
-		//   functionality. (Note - using lazy-instantiation this time, just 'cause I can...)
-		private transient VetoableChangeSupport vcs;
+	// Create a VetoableChangeSupport instance
+	//   to which we'll delegate our constrained-property
+	//   functionality. (Note - using lazy-instantiation this time, just 'cause I can...)
+	private transient VetoableChangeSupport vcs;
 
-		// Let classes listen for property changes
-		public void addVetoableChangeListener(VetoableChangeListener l) {
-			if (vcs == null)
-				vcs = new VetoableChangeSupport(this);
-			vcs.addVetoableChangeListener(l);
-		}
-
-		// Let classes stop listening to property changes
-		public void removeVetoableChangeListener(VetoableChangeListener l) {
-			if (vcs == null)
-				vcs = new VetoableChangeSupport(this);
-			vcs.removeVetoableChangeListener(l);
-		}
-
-		// Define a read/write/constrained property named
-		//  phoneNumber
-		private String phoneNumber; 
-
-		// Define property phoneNumber as readable String
-		public String getPhoneNumber() {
-			return phoneNumber;
-		}
-
-		// Define property phoneNumber as writeable String
-		// phoneNumber is constrained, firing 
-		// PropertyChangeEvents whenever its value is
-		// about to change
-		public void setPhoneNumber(String phoneNumber) throws PropertyVetoException {
-			if (vcs != null) {
-				// report the impending change
-				vcs.fireVetoableChange("phoneNumber", 
-				                       this.phoneNumber, phoneNumber);
-			}
-			// change to the new value
-			this.phoneNumber = phoneNumber;
-		}
+	// Let classes listen for property changes
+	public void addVetoableChangeListener(VetoableChangeListener l) {
+		if (vcs == null)
+			vcs = new VetoableChangeSupport(this);
+		vcs.addVetoableChangeListener(l);
 	}
+
+	// Let classes stop listening to property changes
+	public void removeVetoableChangeListener(VetoableChangeListener l) {
+		if (vcs == null)
+			vcs = new VetoableChangeSupport(this);
+		vcs.removeVetoableChangeListener(l);
+	}
+
+	// Define a read/write/constrained property named
+	//  phoneNumber
+	private String phoneNumber; 
+
+	// Define property phoneNumber as readable String
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	// Define property phoneNumber as writeable String
+	// phoneNumber is constrained, firing 
+	// PropertyChangeEvents whenever its value is
+	// about to change
+	public void setPhoneNumber(String phoneNumber) throws PropertyVetoException {
+		if (vcs != null) {
+			// report the impending change
+			vcs.fireVetoableChange("phoneNumber", 
+									this.phoneNumber, phoneNumber);
+		}
+		// change to the new value
+		this.phoneNumber = phoneNumber;
+	}
+}
+```
 
 The highlighted text is the set of changes necessary to support a constrained property. Again, many tools, such as VisualAge for Java, can generate all of this code for you.
 
@@ -371,6 +389,7 @@ As a simple example, we restrict a `Person`’s telephone number to exactly seve
 
 *   Constrain the `phoneNumber` property. (We have defined that previously.)*   Create the class `StringLengthCheck` to ensure that a String is within a minimum-maximum range, as follows:
     
+```java	
 		package effectivevaj.bean.intro.constrainedproperty;
     
 		import java.beans.PropertyVetoException;
@@ -404,9 +423,11 @@ As a simple example, we restrict a `Person`’s telephone number to exactly seve
 				}
 			}
 		}
-    
+```
+
 *   Create class `NumberStringCheck` to ensure that all characters are numeric, as follows:
-    
+
+```java    
 		package effectivevaj.bean.intro.constrainedproperty;
     
 		import java.beans.VetoableChangeListener;
@@ -431,9 +452,11 @@ As a simple example, we restrict a `Person`’s telephone number to exactly seve
 				}
 			}
 		}
-    
+```
+
 *   Add instances of `StringLengthCheck` and `NumberStringCheck` to the `Person` bean as `VetoableChangeListeners`, as follows:
-    
+
+```java    
 		package effectivevaj.bean.intro.constrainedproperty;
     
 		import java.beans.PropertyVetoException;
@@ -472,7 +495,8 @@ As a simple example, we restrict a `Person`’s telephone number to exactly seve
 				setPersonsPhoneNumber(nancy,"5551111111111");
 			}
 		}
-    
+```
+
 As you can see from the previous test, not only can we plug in several validations, but we can also use different sets of validations for each instance of a class. The previous example will print the following to `System.out`:
 
 Constrained test output
@@ -490,7 +514,9 @@ Tools like VisualAge for Java have two ways to determine if properties are bound
 
 If a tool sees that a bean defines method
 
-	public void addPropertyChangeListener(PropertyChangeListener l)
+```java
+public void addPropertyChangeListener(PropertyChangeListener l)
+```
 
 it assumes that contained properties may be bound. While that is a bit over-assuming, it really does not hurt use of the bean. If the bean has any properties that are not bound, it is the bean-developer's responsibility to provide a `BeanInfo` class that explicitly states which properties are not bound.
 
@@ -518,35 +544,36 @@ Event classes should be immutable! Immutable objects are ones that cannot be cha
 
 Note that the event object must extend class `java.util.EventObject`. `EventObject` provides the `getSource()` method so we can determine the event origin. By extending `EventObject`, we can handle these objects generically in other methods, and some tools, like VisualAge for Java, take advantage of this when creating generic methods to forward events.
 
-	package effectivevaj.bean.intro.eventsets;
+```java
+package effectivevaj.bean.intro.eventsets;
 
-	import java.util.Date;
-	import java.util.EventObject;
+import java.util.Date;
+import java.util.EventObject;
 
-	// An event that represents the Sun rising or setting
-	public class SunEvent extends EventObject {
-		private boolean risen;
-		private Date date;
-  
-		public SunEvent(Object source, boolean risen, Date date) {
-			super(source);
-			this.risen = risen;
-			this.date = date;
-		}
-  
-		// return a String representation of the date
-		public String getDate() {
-			// return only a String representation
-			//   so the user cannot modify the real date
-			return date.toString();
-		}
-  
-		// return whether the sun rose or set
-		public boolean isRisen() {
-			return risen;
-		}
+// An event that represents the Sun rising or setting
+public class SunEvent extends EventObject {
+	private boolean risen;
+	private Date date;
+
+	public SunEvent(Object source, boolean risen, Date date) {
+		super(source);
+		this.risen = risen;
+		this.date = date;
 	}
 
+	// return a String representation of the date
+	public String getDate() {
+		// return only a String representation
+		//   so the user cannot modify the real date
+		return date.toString();
+	}
+
+	// return whether the sun rose or set
+	public boolean isRisen() {
+		return risen;
+	}
+}
+```
 
 `EventObject` requires a `source` (a reference to the object that fired the event), which we set to our `WeatherStation` bean when firing the event. Whenever we fire events, we create an instance of the `EventObject` class and pass it to each registered listener.
 
@@ -560,17 +587,19 @@ Therefore, we define an interface that specifies our contract. Because each list
 
 Note that the following interface extends the `java.util.EventListener` interface. `EventListener` requires no methods. It is just a tag that indicates an interface is acting as an event listener. This assists determination of the events a bean can fire.
 
-	package effectivevaj.bean.intro.eventsets;
+```java
+package effectivevaj.bean.intro.eventsets;
 
-	import java.util.EventListener;
+import java.util.EventListener;
 
-	// A contract between a SunEvent source and
-	// listener classes
-	public interface SunListener extends EventListener {
-		// Called whenever the sun changes position
-		// in a SunEvent source object 
-		public void sunMoved(SunEvent e);
-	}
+// A contract between a SunEvent source and
+// listener classes
+public interface SunListener extends EventListener {
+	// Called whenever the sun changes position
+	// in a SunEvent source object 
+	public void sunMoved(SunEvent e);
+}
+```
 
 We require that any `SunEvent` listeners implement a single method, `sunMoved()`. Normally, event-listener methods should take a single parameter: the event object. However, if you have a strong need, the Beans specification allows (but strongly discourages) different parameters.
 
@@ -578,100 +607,102 @@ We require that any `SunEvent` listeners implement a single method, `sunMoved()`
 
 Now we define the source of our sun events, the `WeatherStation`. This class needs to track its listeners and fire the events. We implement this as follows, and provide a simple GUI to trigger the `SunEvent`s:
 
-	package effectivevaj.bean.intro.eventsets;
+```java
+package effectivevaj.bean.intro.eventsets;
 
-	import java.util.Vector;
-	import java.util.Date;
-	import java.util.Enumeration;
-	import java.awt.Button;
-	import java.awt.Frame;
-	import java.awt.GridLayout;
-	import java.awt.event.ActionListener;
-	import java.awt.event.ActionEvent;
-	import java.awt.event.WindowAdapter;
-	import java.awt.event.WindowEvent;
-	import java.io.Serializable;
+import java.util.Vector;
+import java.util.Date;
+import java.util.Enumeration;
+import java.awt.Button;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.Serializable;
 
-	// A sample event source - this class fires SunEvents
-	// to anyone watching. A simple GUI is provided
-	// with "rise" and "set" buttons that cause the
-	// SunEvents to be fired.
-	public class WeatherStation extends Frame implements Serializable {
-		private transient Vector listeners;
+// A sample event source - this class fires SunEvents
+// to anyone watching. A simple GUI is provided
+// with "rise" and "set" buttons that cause the
+// SunEvents to be fired.
+public class WeatherStation extends Frame implements Serializable {
+	private transient Vector listeners;
 
-		// Provide a simple GUI that triggers our SunEvents
-		public WeatherStation() {
-			super("Sun Watcher");
-			setLayout(new GridLayout(1,0));
-			Button riseButton = new Button("Rise");
-			Button setButton = new Button("Set");
-			add(riseButton);
-			add(setButton);
+	// Provide a simple GUI that triggers our SunEvents
+	public WeatherStation() {
+		super("Sun Watcher");
+		setLayout(new GridLayout(1,0));
+		Button riseButton = new Button("Rise");
+		Button setButton = new Button("Set");
+		add(riseButton);
+		add(setButton);
 
-			// make the "Rise" button fire "rise" SunEvents
-			riseButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					fireSunMoved(true);
-				}
-			});
-
-			// make the "Rise" button fire "set" SunEvents
-			setButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					fireSunMoved(false);
-				}
-			});
-
-			// Provide a means to close the application
-			addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {
-					System.exit(0);
-				}
-			});
-    
-			pack();
-		}
-
-		// Register a listener for SunEvents
-		synchronized public void addSunListener(SunListener l) {
-			if (listeners == null) {
-				listeners = new Vector();
+		// make the "Rise" button fire "rise" SunEvents
+		riseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fireSunMoved(true);
 			}
-			listeners.addElement(l);
-		}  
+		});
 
-		// Remove a listener for SunEvents
-		synchronized public void removeSunListener(SunListener l) {
-			if (listeners == null) {
-				listeners = new Vector();
+		// make the "Rise" button fire "set" SunEvents
+		setButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fireSunMoved(false);
 			}
-			listeners.removeElement(l);
+		});
+
+		// Provide a means to close the application
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+
+		pack();
+	}
+
+	// Register a listener for SunEvents
+	synchronized public void addSunListener(SunListener l) {
+		if (listeners == null) {
+			listeners = new Vector();
 		}
+		listeners.addElement(l);
+	}  
 
-		// Fire a SunEvent to all registered listeners
-		protected void fireSunMoved(boolean rose) {
-			// if we have no listeners, do nothing...
-			if (listeners != null && !listeners.isEmpty()) {
-				// create the event object to send
-				SunEvent event = new SunEvent(this, rose, new Date());
+	// Remove a listener for SunEvents
+	synchronized public void removeSunListener(SunListener l) {
+		if (listeners == null) {
+			listeners = new Vector();
+		}
+		listeners.removeElement(l);
+	}
 
-				// make a copy of the listener list in case
-				//   anyone adds/removes listeners
-				Vector targets;
-				synchronized (this) {
-					targets = (Vector) listeners.clone();
-				}
+	// Fire a SunEvent to all registered listeners
+	protected void fireSunMoved(boolean rose) {
+		// if we have no listeners, do nothing...
+		if (listeners != null && !listeners.isEmpty()) {
+			// create the event object to send
+			SunEvent event = new SunEvent(this, rose, new Date());
 
-				// walk through the listener list and
-				//   call the sunMoved method in each
-				Enumeration e = targets.elements();
-				while (e.hasMoreElements()) {
-					SunListener l = (SunListener) e.nextElement();
-					l.sunMoved(event);
-				}
+			// make a copy of the listener list in case
+			//   anyone adds/removes listeners
+			Vector targets;
+			synchronized (this) {
+				targets = (Vector) listeners.clone();
+			}
+
+			// walk through the listener list and
+			//   call the sunMoved method in each
+			Enumeration e = targets.elements();
+			while (e.hasMoreElements()) {
+				SunListener l = (SunListener) e.nextElement();
+				l.sunMoved(event);
 			}
 		}
 	}
+}
+```
 
 Our event source can now notify interested listeners. The `synchronized` keywords and cloning are necessary to avoid possible problems if the list of listeners changes while we are notifying listeners. Pressing the Rise and Set buttons fires an appropriate `SunEvent` to any registered listeners.
 
@@ -681,46 +712,50 @@ Typically, developers will create a `fire` method similar to the previous `fireS
 
 In our example, the weather channel informs any interested parties about the sun rising or setting. Continuing this example, Mrs. Jones assigns her class the task of graphing the behavior of the sun. They must watch a weather channel to find out at exactly what time the sun rose and set each day, logging this information in their notebook. We can model this example using a Student class as follows:
 
-	// A sample SunListener, logging when the sun rises and sets
-	public class Student implements SunListener {
-		private String name;
+```java
+// A sample SunListener, logging when the sun rises and sets
+public class Student implements SunListener {
+	private String name;
 
-		public Student(String name) {
-			this.name = name;
-		}
-
-		public void sunMoved(SunEvent e) {
-			log(name + "\tlogs : " + (e.isRisen() ? "rose" : "set") +
-					" at " + e.getDate()); 
-		}
-
-		protected void log(String text) {
-			System.out.println(text);
-		}
+	public Student(String name) {
+		this.name = name;
 	}
+
+	public void sunMoved(SunEvent e) {
+		log(name + "\tlogs : " + (e.isRisen() ? "rose" : "set") +
+				" at " + e.getDate()); 
+	}
+
+	protected void log(String text) {
+		System.out.println(text);
+	}
+}
+```
 
 Note that `Student` implements `SunListener`, defining the details of a `sunMoved()` method. Any number of `Student`s may watch the weather channel to hear the time of sunrise and sunset.
 
-	package effectivevaj.bean.intro.eventsets;
+```java
+package effectivevaj.bean.intro.eventsets;
 
-	// A simple test of the SunEvent source and listeners
-	public class WeatherTest {
-		// Run a test on the weather station, using Scott's
-		//  kids as sample students
-		public static void main(String[] args) {
-			// create a new sun event source
-			WeatherStation w = new WeatherStation();
+// A simple test of the SunEvent source and listeners
+public class WeatherTest {
+	// Run a test on the weather station, using Scott's
+	//  kids as sample students
+	public static void main(String[] args) {
+		// create a new sun event source
+		WeatherStation w = new WeatherStation();
 
-			// add some students to listen for sun rise/set
-			w.addSunListener(new Student("Nicole"));
-			w.addSunListener(new Student("Alex"));
-			w.addSunListener(new Student("Trevor"));
-			w.addSunListener(new Student("Claire"));
+		// add some students to listen for sun rise/set
+		w.addSunListener(new Student("Nicole"));
+		w.addSunListener(new Student("Alex"));
+		w.addSunListener(new Student("Trevor"));
+		w.addSunListener(new Student("Claire"));
 
-			// display the GUI for the weather channel
-			w.setVisible(true);
-		}
+		// display the GUI for the weather channel
+		w.setVisible(true);
 	}
+}
+```
 
 Running WeatherTest and pressing the Rise and Set buttons results in something like the following:
 
@@ -745,8 +780,10 @@ Events are useful when writing code by hand, but they require a lot of code. For
 
 Recall that methods define properties using certain naming conventions; we define events in a similar manner. Bean-builder tools look for methods with the following naming pattern:
 
-	public void addSomeName(SomeName l)
-	public void removeSomeName(SomeName l)
+```java
+public void addSomeName(SomeName l)
+public void removeSomeName(SomeName l)
+```
 
 When a tool sees a method that matches this naming pattern, it checks to see if `SomeName` is an interface that implements `EventListener`. (Remember that tag we added to the `SunListener` interface?) A method matching this pattern defines an event set.
 

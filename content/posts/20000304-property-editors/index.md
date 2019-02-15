@@ -43,29 +43,31 @@ Before getting into the actual property editors, let's define a convenience "ada
 
 Adapters make life a bit easier for us because we don't have to define all the methods ourselves; we just need to override the ones that we really care about.
 
-	// A simple adapter class for interface java.beans.PropertyEditor
-	package com.magelang.adapter;
+```java
+// A simple adapter class for interface java.beans.PropertyEditor
+package com.magelang.adapter;
 
-	import java.beans.PropertyEditor;
-	import java.beans.PropertyChangeListener;
-	import java.awt.Rectangle;
-	import java.awt.Graphics;
-	import java.awt.Component;
+import java.beans.PropertyEditor;
+import java.beans.PropertyChangeListener;
+import java.awt.Rectangle;
+import java.awt.Graphics;
+import java.awt.Component;
 
-	public class PropertyEditorAdapter implements PropertyEditor {
-		public void addPropertyChangeListener(PropertyChangeListener listener) {}
-		public void removePropertyChangeListener(PropertyChangeListener listener) {}
-		public void setAsText(String text) throws IllegalArgumentException {}
-		public void setValue(Object value)     {}
-		public void paintValue(Graphics gfx, Rectangle box)  {}
-		public String    getAsText()                   {return null;}
-		public Component getCustomEditor()             {return null;}
-		public String    getJavaInitializationString() {return null;}
-		public String[]  getTags()                     {return null;}
-		public Object    getValue()                    {return null;}
-		public boolean   supportsCustomEditor()        {return false;}
-		public boolean   isPaintable()                 {return false;}
-	}
+public class PropertyEditorAdapter implements PropertyEditor {
+	public void addPropertyChangeListener(PropertyChangeListener listener) {}
+	public void removePropertyChangeListener(PropertyChangeListener listener) {}
+	public void setAsText(String text) throws IllegalArgumentException {}
+	public void setValue(Object value)     {}
+	public void paintValue(Graphics gfx, Rectangle box)  {}
+	public String    getAsText()                   {return null;}
+	public Component getCustomEditor()             {return null;}
+	public String    getJavaInitializationString() {return null;}
+	public String[]  getTags()                     {return null;}
+	public Object    getValue()                    {return null;}
+	public boolean   supportsCustomEditor()        {return false;}
+	public boolean   isPaintable()                 {return false;}
+}
+```
 
 Note that the JDK provides a class `java.beans.PropertyEditorSupport` that is very similar to this adapter (it adds better default support for property change notification and `getAsText`/`setAsText`.  I present this simpler adapter so we can avoid talking about property change events until later.  When you're really creating a property editor, you may want to use `java.beans.PropertyEditorSupport`.
 
@@ -103,76 +105,77 @@ One thing to note here: the bean builder is handling the interaction with the us
 
 Our implementation of this simple property editor looks as follows.  Note that we subclass PropertyEditorAdapter so we only need to define the five methods mentioned above.
 
-	package coloredit;
+```java
+package coloredit;
 
-	import java.awt.Color;
-	import com.magelang.adapter.PropertyEditorAdapter;
+import java.awt.Color;
+import com.magelang.adapter.PropertyEditorAdapter;
 
-	// An overly simple Color editor.  The user types in the textual
-	// name of a color and this class verifies that it is a basic color
-	// name.  If it isn't, the color is set back to white.
+// An overly simple Color editor.  The user types in the textual
+// name of a color and this class verifies that it is a basic color
+// name.  If it isn't, the color is set back to white.
 
-	//Demonstrates use of the setAsText() and getAsText() methods.
-	public class ColorEditor1 extends PropertyEditorAdapter {
-		// Used to validate the color name
-		//  (this property is protected to make the second 
-		//   editor a bit easier...)
-		protected static String colorNames[] = {
-			"white", "lightGray", "gray", "darkGray", "black", 
-			"red", "pink", "orange", "yellow", "green", 
-			"magenta", "cyan", "blue"
-		};
+//Demonstrates use of the setAsText() and getAsText() methods.
+public class ColorEditor1 extends PropertyEditorAdapter {
+	// Used to validate the color name
+	//  (this property is protected to make the second 
+	//   editor a bit easier...)
+	protected static String colorNames[] = {
+		"white", "lightGray", "gray", "darkGray", "black", 
+		"red", "pink", "orange", "yellow", "green", 
+		"magenta", "cyan", "blue"
+	};
 
-		// Used to map a color name to a Color object
-		private static Color  colors[] = {
-			Color.white, Color.lightGray, Color.gray, Color.darkGray, 
-			Color.black, Color.red, Color.pink, Color.orange, 
-			Color.yellow, Color.green, Color.magenta, 
-			Color.cyan, Color.blue
-		};
+	// Used to map a color name to a Color object
+	private static Color  colors[] = {
+		Color.white, Color.lightGray, Color.gray, Color.darkGray, 
+		Color.black, Color.red, Color.pink, Color.orange, 
+		Color.yellow, Color.green, Color.magenta, 
+		Color.cyan, Color.blue
+	};
 
-		// The currently-selected color (start with white)
-		private int selected = 0;
-		
-		//Tells the bean builder the name of the current color 
-		public String getAsText() {
-			return colorNames[selected];
-		}
+	// The currently-selected color (start with white)
+	private int selected = 0;
+	
+	//Tells the bean builder the name of the current color 
+	public String getAsText() {
+		return colorNames[selected];
+	}
 
-		// Allows the bean builder to tell the property editor the value
-		// that the user has entered
-		public void setAsText(String text) throws IllegalArgumentException {
-			for(selected = 0;
-				selected < colorNames.length &&
-				!colorNames[selected].equals(text);
-				selected++);
-			if (selected == colorNames.length)
-				selected = 0;
-		}
-
-		// Tells the bean builder the value for the property
-		public Object getValue() {
-			return colors[selected];
-		}
-
-		// Allows the bean builder to pass the current property
-		// value to the property editor
-		public void setValue(Object value) {
+	// Allows the bean builder to tell the property editor the value
+	// that the user has entered
+	public void setAsText(String text) throws IllegalArgumentException {
+		for(selected = 0;
+			selected < colorNames.length &&
+			!colorNames[selected].equals(text);
+			selected++);
+		if (selected == colorNames.length)
 			selected = 0;
-			if (value != null)
-				for(int i=0; i<colors.length; i++)
-					if (value.equals(colors[i])) {
-						selected = i;
-						break;
-					}   
-		}
+	}
 
-		// Get the initialization code for the property
-		public String getJavaInitializationString() {
-			return "java.awt.Color." + colorNames[selected];
-		}
-	}  
+	// Tells the bean builder the value for the property
+	public Object getValue() {
+		return colors[selected];
+	}
 
+	// Allows the bean builder to pass the current property
+	// value to the property editor
+	public void setValue(Object value) {
+		selected = 0;
+		if (value != null)
+			for(int i=0; i<colors.length; i++)
+				if (value.equals(colors[i])) {
+					selected = i;
+					break;
+				}   
+	}
+
+	// Get the initialization code for the property
+	public String getJavaInitializationString() {
+		return "java.awt.Color." + colorNames[selected];
+	}
+}  
+```
 
 This property editor converts the passed-in Color value to a String representing the color name, validates that name whenever it is set, and converts it back to a Color object.
 
@@ -188,65 +191,69 @@ This article will concentrate on the first use.  A later article will discuss s
 
 To associate a property editor with a bean property, you need to define a BeanInfo class for the bean.  Of course this means that we need a bean, so let's define a simple Panel subclass that has a "color" property whose implementation is to set/get the Panel's background color. (We will leave the background property intact so operation of this property editor can be compared to normal Color editor operation in the bean builder you are using.)
 
-	package coloredit;
+```java
+package coloredit;
 
-	import java.awt.Color;
-	import java.awt.Panel;
+import java.awt.Color;
+import java.awt.Panel;
 
-	// A Simple Panel extension that we'll use to test our
-	// property editor 
-	public class ColorBean extends Panel {
-		// note that there is no real "color" field;
-		// a property can be strictly algorithmic...
-		public Color getColor() {return getBackground();} 
-		public void setColor(Color color) {setBackground(color);}
-	}  
+// A Simple Panel extension that we'll use to test our
+// property editor 
+public class ColorBean extends Panel {
+	// note that there is no real "color" field;
+	// a property can be strictly algorithmic...
+	public Color getColor() {return getBackground();} 
+	public void setColor(Color color) {setBackground(color);}
+}  
+```
 
 The BeanInfo class for this is big and hairy, and discussion of BeanInfo is out of the scope of this article.  (I'd advise you to get a tool, such as VisualAge for Java, that generates the BeanInfo class for you...) The following is the relevant part of the ColorBeanBeanInfo class that sets up the property editor.  The full BeanInfo class (as generated by VisualAge for Java) is available in the source distribution.
 
-	package coloredit;
+```java
+package coloredit;
 
-	// Relevant parts of the ColorBeanBeanInfo class 
-	// Note that exception handling has been removed 
-	// and the relevant parts
-	// have been simplified...
+// Relevant parts of the ColorBeanBeanInfo class 
+// Note that exception handling has been removed 
+// and the relevant parts
+// have been simplified...
 
-	import java.beans.PropertyDescriptor;
-	import java.beans.SimpleBeanInfo;
-	import java.lang.reflect.Method;
-	import java.awt.Color;
-	import coloredit.ColorEditor1;
+import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
+import java.lang.reflect.Method;
+import java.awt.Color;
+import coloredit.ColorEditor1;
 
-	public class ColorBeanBeanInfo extends SimpleBeanInfo {
-		public PropertyDescriptor colorPropertyDescriptor() {
-			// get the "get" method
-			Class aGetMethodParameterTypes[] = {};
-			Method aGetMethod =
-				getBeanClass().getMethod("getColor", 
-					aGetMethodParameterTypes);
+public class ColorBeanBeanInfo extends SimpleBeanInfo {
+	public PropertyDescriptor colorPropertyDescriptor() {
+		// get the "get" method
+		Class aGetMethodParameterTypes[] = {};
+		Method aGetMethod =
+			getBeanClass().getMethod("getColor", 
+				aGetMethodParameterTypes);
 
-			// get the "set" method
-			Class aSetMethodParameterTypes = {Color.class};
-			Method aSetMethod =
-				getBeanClass().getMethod("setColor", 
-					aSetMethodParameterTypes);
+		// get the "set" method
+		Class aSetMethodParameterTypes = {Color.class};
+		Method aSetMethod =
+			getBeanClass().getMethod("setColor", 
+				aSetMethodParameterTypes);
 
-			// define the property descriptor
-			PropertyDescriptor aDescriptor =
-				new PropertyDescriptor("color", aGetMethod, aSetMethod);
-			// Set a property editor
-			aDescriptor.setPropertyEditorClass(ColorEditor1.class);
-			return aDescriptor;
-		}
+		// define the property descriptor
+		PropertyDescriptor aDescriptor =
+			new PropertyDescriptor("color", aGetMethod, aSetMethod);
+		// Set a property editor
+		aDescriptor.setPropertyEditorClass(ColorEditor1.class);
+		return aDescriptor;
+	}
 
-		public PropertyDescriptor[] getPropertyDescriptors() {
-			PropertyDescriptor aDescriptorList[] = 
-				{colorPropertyDescriptor()};
-			return aDescriptorList;
-		}
+	public PropertyDescriptor[] getPropertyDescriptors() {
+		PropertyDescriptor aDescriptorList[] = 
+			{colorPropertyDescriptor()};
+		return aDescriptorList;
+	}
 
-		// and more BeanInfo stuff...
-	}  
+	// and more BeanInfo stuff...
+}  
+```
 
 When you use the ColorBean when visually designing a new bean, you can bring up the property sheet for the new instance of the ColorBean.  Initially, the value for "color" will be "white".  If you change it to one of the valid color names, the change will stick.  If you mistype, the color value becomes "white" again.
 
@@ -255,13 +262,15 @@ Making the Property Editor a Bit Nicer...
 
 Because we have a (small) finite set of values, a nicer user interface would be to give the user a list of choices.  This is easily accomplished by adding a getTags() method to our color editor.  If getTags() returns a null (which is the default that we defined in PropertyEditorAdapter) the bean builder will just present a TextField to get the value.  If getTags() returns an array of Strings, the bean builder will present a Choice component with those String values.  So we can extend our ColorEditor as follows:
 
-	package coloredit;
+```java
+package coloredit;
 
-	public class ColorEditor2 extends ColorEditor1 {
-		public String[] getTags() {
-			return colorNames;
-		}
-	}  
+public class ColorEditor2 extends ColorEditor1 {
+	public String[] getTags() {
+		return colorNames;
+	}
+}  
+```
 
 This is possible because we defined colorNames as a protected field (even before we thought of this extension ;)
 
@@ -283,117 +292,119 @@ Let's look at the last item first: we need to tell the bean builder when the pro
 
 Let's take our PropertyEditorAdapter and extend it to add the property change notification support we need.  The JDK provides a support class, java.beans.PropertyChangeSupport, that will help us.  All we need is:
 
+```java
+package com.magelang.adapter;
 
-	package com.magelang.adapter;
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeListener;
 
-	import java.beans.PropertyChangeSupport;
-	import java.beans.PropertyChangeListener;
-	
-	// A default implementation of PropertyEditor Adapter 
-	// that provides support for property listeners. 
-	// This will be used for any property editors that 
-	// perform their own interaction with the user to 
-	// change the property value.
-	public class PropertyEditorChangeAdapter extends PropertyEditorAdapter {
-		private PropertyChangeSupport propertyChangeSupport =
-			new PropertyChangeSupport(this);
-		public void addPropertyChangeListener(PropertyChangeListener listener) {
-			propertyChangeSupport.addPropertyChangeListener(listener);
-		}
-		public void removePropertyChangeListener(PropertyChangeListener listener) {
-			propertyChangeSupport.removePropertyChangeListener(listener);
-		}
-		protected void firePropertyChange(Object oldValue, Object newValue) {
-			propertyChangeSupport.firePropertyChange(null, oldValue, newValue);
-		}
-	}  
+// A default implementation of PropertyEditor Adapter 
+// that provides support for property listeners. 
+// This will be used for any property editors that 
+// perform their own interaction with the user to 
+// change the property value.
+public class PropertyEditorChangeAdapter extends PropertyEditorAdapter {
+	private PropertyChangeSupport propertyChangeSupport =
+		new PropertyChangeSupport(this);
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+	protected void firePropertyChange(Object oldValue, Object newValue) {
+		propertyChangeSupport.firePropertyChange(null, oldValue, newValue);
+	}
+}  
+```
 
 We define addPropertyChangeListener() and removePropertyChangeListener() to delegate their tasks to an instance of PropertyChangeSupport. We define an extra "helper" method, firePropertyChange(), to make life a bit easier for our derived property editors.
 
 Now we'll take our original ColorEdit1 and change its superclass to PropertyEditorChangeAdapter.  We'll also change its name to ColorEdit3 to keep things clear.  After a few more changes, our new property editor looks like (changes to ColorEditor1 are in bold):
 
-	package coloredit;
+```java
+package coloredit;
 
-	import java.beans.PropertyChangeListener;
-	import java.awt.Choice;
-	import java.awt.Component;
-	import java.awt.Color;
-	import java.awt.event.ItemListener;
-	import java.awt.event.ItemEvent;
-	import com.magelang.adapter.PropertyEditorChangeAdapter;
+import java.beans.PropertyChangeListener;
+import java.awt.Choice;
+import java.awt.Component;
+import java.awt.Color;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import com.magelang.adapter.PropertyEditorChangeAdapter;
 
-	// This color editor will display a custom property editor and
-	// allow the user to select a color name from a list.
-	public class ColorEditor3 extends PropertyEditorChangeAdapter implements ItemListener {
-		private static String colorNames[] = {
-			"white", "lightGray", "gray", "darkGray", 
-			"black", "red", "pink", "orange", "yellow",
-			"green", "magenta", "cyan", "blue"
-		};
+// This color editor will display a custom property editor and
+// allow the user to select a color name from a list.
+public class ColorEditor3 extends PropertyEditorChangeAdapter implements ItemListener {
+	private static String colorNames[] = {
+		"white", "lightGray", "gray", "darkGray", 
+		"black", "red", "pink", "orange", "yellow",
+		"green", "magenta", "cyan", "blue"
+	};
 
-		private static Color  colors[] = {
-			Color.white, Color.lightGray, Color.gray,
-			Color.darkGray, Color.black, Color.red, 
-			Color.pink, Color.orange, Color.yellow, 
-			Color.green, Color.magenta, Color.cyan, Color.blue
-		};
+	private static Color  colors[] = {
+		Color.white, Color.lightGray, Color.gray,
+		Color.darkGray, Color.black, Color.red, 
+		Color.pink, Color.orange, Color.yellow, 
+		Color.green, Color.magenta, Color.cyan, Color.blue
+	};
 
-		private int selected=0;
-		private Choice myGUI;
-		
-		public String getAsText() {
-			return colorNames[selected];
-		}
-    
-		public Component getCustomEditor() {
-			if (myGUI == null) {
-				myGUI = new Choice();
-				for(int i = 0; i < colorNames.length; i++)
-					myGUI.addItem(colorNames[i]);
-				myGUI.addItemListener(this);
-			}   
-			return myGUI;
-		}
+	private int selected=0;
+	private Choice myGUI;
+	
+	public String getAsText() {
+		return colorNames[selected];
+	}
 
-		public String getJavaInitializationString() {
-			return "java.awt.Color."+colorNames[selected];
-		}
-    
-		public Object getValue() {
-			return colors[selected];
-		}
-    
-		public void itemStateChanged(ItemEvent e) {
-			setAsText((String)e.getItem());
-		} 
-    
-		public void setAsText(String text) throws IllegalArgumentException {
-			Object oldValue = getValue();
-			for(selected = 0;
-				selected < colorNames.length &&
-				!colorNames[selected].equals(text);
-				selected++);
-			if (selected == colorNames.length)
-				selected = 0;
-			Object newValue = getValue();
-			firePropertyChange(oldValue, newValue);
-		}
-    
-		public void setValue(Object value) {
+	public Component getCustomEditor() {
+		if (myGUI == null) {
+			myGUI = new Choice();
+			for(int i = 0; i < colorNames.length; i++)
+				myGUI.addItem(colorNames[i]);
+			myGUI.addItemListener(this);
+		}   
+		return myGUI;
+	}
+
+	public String getJavaInitializationString() {
+		return "java.awt.Color."+colorNames[selected];
+	}
+
+	public Object getValue() {
+		return colors[selected];
+	}
+
+	public void itemStateChanged(ItemEvent e) {
+		setAsText((String)e.getItem());
+	} 
+
+	public void setAsText(String text) throws IllegalArgumentException {
+		Object oldValue = getValue();
+		for(selected = 0;
+			selected < colorNames.length &&
+			!colorNames[selected].equals(text);
+			selected++);
+		if (selected == colorNames.length)
 			selected = 0;
-			if (value != null)
-				for(int i=0; i < colors.length; i++)
-					if (value.equals(colors[i])) {
-						selected = i;
-						break;
-					}   
-		}
-    
-		public boolean supportsCustomEditor() {
-			return true;
-		}
-	}  
+		Object newValue = getValue();
+		firePropertyChange(oldValue, newValue);
+	}
 
+	public void setValue(Object value) {
+		selected = 0;
+		if (value != null)
+			for(int i=0; i < colors.length; i++)
+				if (value.equals(colors[i])) {
+					selected = i;
+					break;
+				}   
+	}
+
+	public boolean supportsCustomEditor() {
+		return true;
+	}
+}  
+```
 
 So what is it doing now?
 
@@ -412,89 +423,91 @@ The interface still leaves something to be desired.  What does "cyan" look like
 
 The interface between the property editor and the bean builder remains _exactly the same_.  All we are doing is changing our GUI a bit.  Differences between this editor and ColorEditor3 are in bold.
 
-	package coloredit;
+```java
+package coloredit;
 
-	import java.beans.PropertyChangeListener;
-	import java.awt.GridLayout;
-	import java.awt.Panel;
-	import java.awt.Button;
-	import java.awt.Component;
-	import java.awt.Color;
-	import java.awt.event.ActionListener;
-	import java.awt.event.ActionEvent;
-	import com.magelang.adapter.PropertyEditorChangeAdapter;
+import java.beans.PropertyChangeListener;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.Button;
+import java.awt.Component;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import com.magelang.adapter.PropertyEditorChangeAdapter;
 
-	// This color editor will display a custom property editor
-	// and allow the user to select a color button.
-	public class ColorEditor4 extends PropertyEditorChangeAdapter implements ActionListener {
-		private static String colorNames[] = {
-			"white", "lightGray", "gray", "darkGray", 
-			"black", "red", "pink", "orange", "yellow",
-			"green", "magenta", "cyan", "blue"
-		};
-		private   static Color  colors[] = {
-			Color.white, Color.lightGray, Color.gray,
-			Color.darkGray, Color.black, Color.red, 
-			Color.pink, Color.orange, Color.yellow, 
-			Color.green, Color.magenta, Color.cyan, Color.blue
-		};
-		private int selected=0;
-		private Panel myGUI;
-		public void actionPerformed(ActionEvent e) {
-			setAsText(((Button)e.getSource()).getLabel());
-		} 
-    
-		public String getAsText() {
-			return colorNames[selected];
-		}
-    
-		public Component getCustomEditor() {
-			if (myGUI == null) {
-				myGUI = new Panel(new GridLayout(0,2));
-				for(int i = 0; i < colorNames.length; i++) {
-					Button b = new Button(colorNames[i]);
-					b.setBackground(colors[i]);
-					b.addActionListener(this);
-					myGUI.add(b);
-				} 
-			}   
-			return myGUI;
-		}
-    
-		public String getJavaInitializationString() {
-			return "java.awt.Color."+colorNames[selected]; 
-		}
-    
-		public Object getValue() {
-			return colors[selected];
-		}
-    
-		public void setAsText(String text) throws IllegalArgumentException {
-			Object oldValue = getValue();
-			for(selected = 0;
-				selected < colorNames.length &&
-				!colorNames[selected].equals(text);
-				selected++);
-			if (selected == colorNames.length)
-				selected = 0;
-			Object newValue = getValue();
-			firePropertyChange(oldValue, newValue);
-		}
-    
-		public void setValue(Object value) {
+// This color editor will display a custom property editor
+// and allow the user to select a color button.
+public class ColorEditor4 extends PropertyEditorChangeAdapter implements ActionListener {
+	private static String colorNames[] = {
+		"white", "lightGray", "gray", "darkGray", 
+		"black", "red", "pink", "orange", "yellow",
+		"green", "magenta", "cyan", "blue"
+	};
+	private   static Color  colors[] = {
+		Color.white, Color.lightGray, Color.gray,
+		Color.darkGray, Color.black, Color.red, 
+		Color.pink, Color.orange, Color.yellow, 
+		Color.green, Color.magenta, Color.cyan, Color.blue
+	};
+	private int selected=0;
+	private Panel myGUI;
+	public void actionPerformed(ActionEvent e) {
+		setAsText(((Button)e.getSource()).getLabel());
+	} 
+
+	public String getAsText() {
+		return colorNames[selected];
+	}
+
+	public Component getCustomEditor() {
+		if (myGUI == null) {
+			myGUI = new Panel(new GridLayout(0,2));
+			for(int i = 0; i < colorNames.length; i++) {
+				Button b = new Button(colorNames[i]);
+				b.setBackground(colors[i]);
+				b.addActionListener(this);
+				myGUI.add(b);
+			} 
+		}   
+		return myGUI;
+	}
+
+	public String getJavaInitializationString() {
+		return "java.awt.Color."+colorNames[selected]; 
+	}
+
+	public Object getValue() {
+		return colors[selected];
+	}
+
+	public void setAsText(String text) throws IllegalArgumentException {
+		Object oldValue = getValue();
+		for(selected = 0;
+			selected < colorNames.length &&
+			!colorNames[selected].equals(text);
+			selected++);
+		if (selected == colorNames.length)
 			selected = 0;
-			if (value != null)
-				for(int i=0; i < colors.length; i++)
-					if (value.equals(colors[i])) {
-						selected = i;
-						break;
-					}   
-		}
-    
-		public boolean supportsCustomEditor() {
-			return true;
-		}
-	}  
+		Object newValue = getValue();
+		firePropertyChange(oldValue, newValue);
+	}
+
+	public void setValue(Object value) {
+		selected = 0;
+		if (value != null)
+			for(int i=0; i < colors.length; i++)
+				if (value.equals(colors[i])) {
+					selected = i;
+					break;
+				}   
+	}
+
+	public boolean supportsCustomEditor() {
+		return true;
+	}
+}  
+```
 
 All we have changed is the appearance of the GUI (and how we respond to events.)   If you are careful with how you interact with the bean builder, you can change the appearance of the GUI with very little effort.  In this case, our GUI is now a Panel with a 2-column grid of Buttons. Each Button has the color name and (unless the AWT background color bug is present) the color that will be selected.   When pressed, the color value is set.
 
@@ -506,16 +519,21 @@ But what about that textual color name in the property sheet?  Shouldn't that a
 To make this possible, we need to drop the getAsText() method and implement the isPaintable() and paintValue() methods.  Instead of passing a text value for the property back to the bean builder, we're telling it that we can paint a value for the property, and providing a method to do that painting.  Our changes to the class are very simple:
 
 *   remove the getAsText() method*   add two imports:Figure 9: Imports to add
-    
+
+```java
 		import java.awt.Graphics;
 		import java.awt.Rectangle; 
+```
 
 *   add an isPaintable() method (recall that the default defined in PropertyEditorAdapter returned false):
-    
+
+```java    
 		public boolean isPaintable() {return true;}
-    
+```
+
 *   add a paintValue() method:Figure 11: paintValue() method
-    
+
+```java
 		public void paintValue(Graphics gfx, Rectangle box) {
 			gfx.setColor(colors[selected]);
 			// we use three 3-d rects to over-emphasize the 3-d effect
@@ -524,6 +542,7 @@ To make this possible, we need to drop the getAsText() method and implement the 
 			gfx.fill3DRect(box.x+3,box.y+3, box.width-7, boxheight-7, true);
 			gfx.fill3DRect(box.x+4,box.y+4, box.width-9, box.height-9, true);
 		} 
+```
 
 paintValue() is passed a graphics context into which its painting will be done, and a bounding Rectangle that tells us where we are allowed to draw within that graphics context.  _Make sure you respect that bounding box, or the property sheet graphics could end up looking pretty nasty!_  Our implementation for ColorEditor5 draws a raised box in the selected color.
 

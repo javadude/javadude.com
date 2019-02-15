@@ -24,13 +24,15 @@ There should _**never**_ exist any language feature such that _**adding**_ a new
 
 For example:
 
-	import a.b.*; // your package
-	import x.y.*; // 3rd-party code
+```java
+import a.b.*; // your package
+import x.y.*; // 3rd-party code
 
-	class Foo {
-		Bar bar;
-		...
-	}
+class Foo {
+	Bar bar;
+	...
+}
+```
 
 Suppose that to start with, only `a.b.Bar` exists. You compile and check-in your code and all's fine.
 
@@ -44,12 +46,16 @@ But you _did_ check in compiling code! Turns out, the 3rd party lib you were usi
 
 This is language design at its worst, and Sun made this blow up in everyone's face between JDK 1.1 and 1.2. In 1.1, there existed `java.awt.List`. Tons of folks wrote code that included
 
-	import java.util.*;
-	import java.awt.*;
+```java
+import java.util.*;
+import java.awt.*;
+```
 
 I can't begin to count the number of code examples that contained those two lines). If you used List in your class, like
 
-	List choices = new List();
+```java
+List choices = new List();
+```
 
 Your code compiled fine in 1.1, but a runtime lib upgrade to Java 1.2  breaks your code!
 

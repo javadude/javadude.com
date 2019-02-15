@@ -13,6 +13,9 @@ Paginate                   = 10
 theme                      = "allinone"
 title                      = "JavaDude.com"
 
+pygmentsUseClasses = true
+pygmentsCodeFences=true
+
 [permalinks]
   blog                     = "blog/:year-:month/:slug/"
 
@@ -76,7 +79,8 @@ title                      = "JavaDude.com"
   slidesDirPathURL         = "img/header-slides"    # path to image in static dir (for static pages)
 
   # highlighting 
-  highlightjs              = true
+  highlightjs              = false
+
 
   # latex
   katex                    = true

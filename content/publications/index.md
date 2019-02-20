@@ -14,7 +14,7 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 
 # Book
 
-<img src="evaj.jpg" alt="Effective VisualAge for Java Book Cover" width="300"/>
+<img src="evaj.jpg" alt="Effective VisualAge for Java Book Cover" width="150"/>
 
 (File this in the "never again" category... Well... Probably never again.)
 
@@ -24,12 +24,36 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 
 # Print Article
 
-<img src="vamag.jpg" alt="VisualAge Magazine Cover" width="300"/>
+<img src="vamag.jpg" alt="VisualAge Magazine Cover" width="150"/>
 
 * 	Stanchfield, Scott A. "A Tune-Up for VisualAge for Java." _The VisualAge Magazine_, Jan. 1998, pp. 6-9
 
 # Online Articles
 
+*   From Java to Kotlin - Episode 1 (2019)  
+    [http://javadude.com/posts/20190203-kotlin01](http://javadude.com/posts/20190203-kotlin01)
+    
+*   Eclipse Tips (2000)  
+    (was hosted at javadude.com - obsolete - removed)
+    
+*   MVC in VisualAge for Java (2000)  
+    (was hosted at javadude.com - obsolete - removed)
+    
+*   Advanced MVC in VisualAge for Java (2000)  
+    (was hosted at javadude.com - obsolete - removed)
+    
+*   AWT Fundamentals (2000)  
+    (was hosted at java.sun.com; no longer available)
+    
+*   Parsers, Part IV: A Java Cross Reference Tool (1999)  
+    [http://svn.apache.org/repos/asf/maven/sandbox/trunk/jxr/maven-jxr/maven-jxr-java/src/site/resources/SeriesPt4.pdf](http://svn.apache.org/repos/asf/maven/sandbox/trunk/jxr/maven-jxr/maven-jxr-java/src/site/resources/SeriesPt4.pdf)
+    
+*   Effective Layout Management (1999)  
+    [http://javadude.com/articles/layouts](http://javadude.com/articles/layouts)
+    
+*   ANTLR Documentation (contributor) (1998)  
+    [http://www.antlr2.org](http://www.antlr2.org)
+    
 *   Layering Applications (1996)  
     [http://javadude.com/articles/layering.html](http://javadude.com/articles/layering.html)
     
@@ -61,29 +85,7 @@ A list of my published works, a book, articles, presentations, courses, open-sou
     [http://javadude.com/articles/propedit/index.html](http://javadude.com/articles/propedit/index.html)
     
 *   VisualAge for Java Tips and Tricks (1996)  
-    (was hosted at javadude.com - obsolete - removed)
-    
-*   Eclipse Tips (2000)  
-    (was hosted at javadude.com - obsolete - removed)
-    
-*   ANTLR Documentation (contributor) (1998)  
-    [http://www.antlr2.org](http://www.antlr2.org)
-    
-*   MVC in VisualAge for Java (2000)  
-    (was hosted at javadude.com - obsolete - removed)
-    
-*   Advanced MVC in VisualAge for Java (2000)  
-    (was hosted at javadude.com - obsolete - removed)
-    
-*   AWT Fundamentals (2000)  
-    (was hosted at java.sun.com; no longer available)
-    
-*   Parsers, Part IV: A Java Cross Reference Tool (1999)  
-    [http://svn.apache.org/repos/asf/maven/sandbox/trunk/jxr/maven-jxr/maven-jxr-java/src/site/resources/SeriesPt4.pdf](http://svn.apache.org/repos/asf/maven/sandbox/trunk/jxr/maven-jxr/maven-jxr-java/src/site/resources/SeriesPt4.pdf)
-    
-*   Effective Layout Management (1999)  
-    [http://javadude.com/articles/layouts](http://javadude.com/articles/layouts)
-    
+    (was hosted at javadude.com - obsolete - removed)    
 
 # Conference Presentations
 

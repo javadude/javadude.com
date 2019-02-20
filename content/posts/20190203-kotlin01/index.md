@@ -41,27 +41,29 @@ Main Functions
 Kotlin has "main" functions just like Java. You'll most likely use Kotlin in environments like servers or Android applications that don't need a main, but they're useful for examples.
 
 If you don't need any command-line arguments:
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 fun main() {
 	println("Hello, World!")
 }
-{{< /highlight  >}}
+```
 
 If you want command-line arguments, you can use an explicit Array (more on that and `joinToString()` later). I'm passing `A B C` to Kotlin Playground for this example.
 
-{{< highlight kotlin "linenos=table" >}}
-fun main(args : Array&lt;String>) {
+```kotlin
+fun main(args : Array<String>) {
 	println("Hello, World!")
 	println(args.joinToString())
 }
-{{< /highlight  >}}
+```
+
 or you can use a varying-length argument list (more on that and `joinToString()` later). I'm passing `A B C` to Kotlin Playground for this example.
-{{< highlight kotlin "linenos=table" >}}
+
+```kotlin
 fun main(vararg args : String) {
 	println("Hello, World!")
 	println(args.joinToString())
 }
-{{< /highlight  >}}
+```
 
 
 Yay! No Semicolons!
@@ -75,9 +77,9 @@ Variables and Values
 --------------------------------
 In Kotlin, we explicitly state whether a local or member of a class can be modified. We do this by specifying `var` or `val` to define a variable or value.
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 fun main() {
-	var x : String = "Hello"
+	var x : String = "Hello" // 2 - "initializer is redundant" warning!
 	val y : String = "Message"
 
 	x = "aaa" // just fine; can change the variable
@@ -86,11 +88,11 @@ fun main() {
 	println(x)
 	println(y)
 }
-{{< /highlight  >}}
+```
 
 If you run the above example, you'll get an "initializer is redundant" warning for line 2. Kotlin does a lot of data flow analysis, and here it's telling us that it sees the only path using `x` assigns it twice before using it, so the initializer isn't needed. We could write
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 fun main() {
 	var x : String
 	val y : String = "Message"
@@ -100,18 +102,18 @@ fun main() {
 	println(x)
 	println(y)
 }
-{{< /highlight  >}}
+```
 
 Type Inferencing
 --------------------------------
 But things get even better. Kotlin loves to _infer_ types so you don't have to write as much code. For example:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 fun main() {
 	val x = "aaa"
 	println(x)
 }
-{{< /highlight  >}}
+```
 
 The expression `"aaa"` is of type `String`, so kotlin knows that the value `x` can be a `String` and infers the type.
 
@@ -136,16 +138,16 @@ Class and Interface Inheritance
 --------------------------------
 Classes/Interfaces (and their members) in Kotlin are nowhere near as verbose as in Java. 
 
-{{< highlight kotlin "linenos=table" >}}
-interface Foo
-open class A
-open class B : A(), Foo
-class C : B()
+```kotlin
+interface Foo           // 1
+open class A            // 2
+open class B : A(), Foo // 3
+class C : B()           // 4
 
 fun main() {
-	val c = C()
+    val c = C()         // 7
 }
-{{< /highlight  >}}
+```
 
 Let's break this down, line by line
    
@@ -172,11 +174,13 @@ I've been waiting for these for a long time... There's a concept used in Java ca
 ### Properties in Java
 A JavaBean property is defined by one or two methods in a Java class:
 
-{{< highlight java "linenos=table" >}}
+```java
 // JAVA CODE
 public String getFirstName() { ... }
 public void setFirstName(String firstName) { ... }
-{{< /highlight  >}}
+```
+
+Property types
 
    - If _only_ a `get` method exists, we're defining a read-only property. For example, if we only had `getFirstName()` we're defining a read-only property called `firstName` (note the case.)
    - If _only_ a `set` method exists, we're defining a write-only property. For example, if we only had `setFirstName()` we're defining a write-only property called `firstName`
@@ -190,19 +194,19 @@ But this is horribly verbose, and nearly all `get`/`set` methods look identical 
 
 Kotlin fixes this by introducing properties as first-class language constructs.
 
-{{< highlight kotlin "linenos=table" >}}
-class A {
-	var firstName : String = "no first name"
-	var lastName = "no last name"
+```kotlin
+class A {                                       // 1
+	var firstName : String = "no first name"    // 2
+	var lastName = "no last name"               // 3
 }
 
 fun main() {
-	val a = A()
-	println(a.firstName)	
-	a.firstName = "Scott"
-	println(a.firstName)	
+	val a = A()                                 // 7
+	println(a.firstName)	                    // 8 
+	a.firstName = "Scott"                       // 9
+	println(a.firstName)	                    // 10
 }
-{{< /highlight  >}}
+```
 
 Adding `var` and `val` definitions inside a class or interface defines a property. `var` properties are read/write (you can modify them), and `val` properties are read-only (you cannot modify them).
 
@@ -221,21 +225,21 @@ Line | What's Happening
 ### Using Kotlin Properties From Java Code
 Kotlin has excellent interoperability with Java. If we defined a Kotlin class
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class A {
 	var firstName : String = "no first name"
 	var lastName = "no last name"
 }
-{{< /highlight  >}}
+```
 
 we could access it from Java as
 
-{{< highlight java "linenos=table" >}}
+```java
 // JAVA CODE
 A a = new A();
 a.setFirstName("Scott"));
 System.out.println(a.getFirstName());
-{{< /highlight  >}}
+```
 
 Behind the scenes, Kotlin creates a class file to run in the Java Virtual Machine, and this class file contains `get` and `set` methods for each read/write property, or just `get` methods for read-only properties.
 
@@ -244,7 +248,7 @@ To explain "Backing fields" in Kotlin, let's look at a typical property implemen
 
 Remember that JavaBean properties are defined _solely on the presence of `get` and `set` methods_. The implementation of those methods does not matter. However, we typically need to store a value when `set` is called and return it when `get` is called. For example:
 
-{{< highlight java "linenos=table" >}}
+```java
 // JAVA CODE
 class Foo {
 	private String name;
@@ -255,17 +259,17 @@ class Foo {
 		this.name = name;
 	}
 }
-{{< /highlight  >}}
+```
 
 Note the field `name` in this example. It's a field in the class that's hidden from anything outside of class Foo. The property defined by `getName` and `setName` uses the `name` field to store the property value.
 
 Kotlin properties can automatically create a behind-the-scenes field just like this. For example, when you write
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class Foo {
 	var name : String = "no name"
 }
-{{< /highlight  >}}
+```
 
 the Kotlin compiler generates a `get` and `set` function for us (note that Kotlin uses the name "function" for what we would call a "method" in Java), and a "backing field" to hold the value of the `name` property.
 
@@ -273,55 +277,55 @@ But that doesn't _always_ happen...
 
 In Java, we might define a `get` method that computes a value (often called a "derived property") or returns a literal value. For example
 
-{{< highlight java "linenos=table" >}}
+```java
 // JAVA CODE
 class Foo {
 	public String getName() {
 		return "Scott";
 	}
 }
-{{< /highlight  >}}
+```
 
 In this case, we don't need a field to store the value.
 
 If we do something like the following in Kotlin
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class Foo {
 	val name : String = "no name"
 	   // NOTE: a "val" property, so only defines a getter!
 }
-{{< /highlight  >}}
+```
 
 It _initializes_ the backing field to "no name" and returns it whenever the property is accessed.
 
 If we want the equivalent of that literal-value `get` method in Java, we need to explicitly define what the `get` function in Kotlin would look like. We do this as follows:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class Foo {
 	val name : String
 		get() {
 			return "no name"
 		}
 }
-{{< /highlight  >}}
+```
 
 In this case, because we explicitly define the get() function, and do not mention the backing field, no backing field is defined.
 
 So how do we explicitly mention the backing field? We use the `field` keyword. For example:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class Foo {
 	val name : String = "no name"
 		get() {
 			return field
 		}
 }
-{{< /highlight  >}}
+```
 
 This example is pretty silly; we're explicitly defining the default behavior of a read-only property. It's more interesting if we want to modify the behavior. For example, we could print or log a message whenever the field is requested
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class Foo {
 	val name : String = "no name"
 		get() {
@@ -329,11 +333,11 @@ class Foo {
 			return field
 		}
 }
-{{< /highlight  >}}
+```
 
 Or more usefully, do something when a value is set. For example, suppose we wanted to ensure a Doctor was always called "Dr.":
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class Doctor {
     var name : String = "Dr. Nobody"
         set(value) {
@@ -350,7 +354,7 @@ fun main() {
     doc.name = "Scott"
     println(doc.name)
 }
-{{< /highlight  >}}
+```
 
 (NOTE: There are some much more "Kotlin-y" ways to write the body of that `set` function, but I wanted to keep it closer to Java until we get to those concepts and idioms)
 
@@ -374,19 +378,14 @@ Kotlin wants to be terse, which is good, because I don't like to type. (He says 
 
 Let's take a look at how we can pass in a name to a `Person` instance when creating it.
 
-{{< highlight kotlin "linenos=table" >}}
-class Person(name : String) {
-    var name : String = "No Name"
-    init {
-        this.name = name
+```kotlin
+class Person(name : String) {       // 1
+    var name : String = "No Name"   // 2
+    init {                          // 3
+        this.name = name            // 4
     }
 }
-
-fun main() {
-    val person = Person("Scott")
-    println(person.name)
-}
-{{< /highlight  >}}
+```
 
 Let's look at this example line-by-line
 
@@ -403,10 +402,10 @@ Kotlin separates the concept of primary and secondary constructors. The _Primary
 
 You can define alternative constructors. For example, if we wanted to be able to skip passing in a value for the name we could define the following
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class Person(name : String) {
     var name : String = "No Name"
-    constructor() : this("No Name")
+    constructor() : this("No Name") // 3 - SECONDARY CONSTRUCTOR
     init {
         this.name = name
     }
@@ -418,17 +417,17 @@ fun main() {
     val person2 = Person()
     println(person2.name)
 }
-{{< /highlight  >}}
+```
 
 On line 3 we're defining a _secondary constructor_ that calls the primary constructor passing in "No Name". You can have any number of secondary constructors.
 
 If you have defined a _primary constructor_, **all** _secondary constructors_ must directly or indirectly call it by using the `constructor(...) : this(...)` syntax. For example:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 class Person(name : String) {
     var name : String = "No Name"
-    constructor(n : Int) : this("No Name " + n)
-    constructor() : this(42)
+    constructor(n : Int) : this("No Name " + n) // 3
+    constructor() : this(42)                    // 4
     init {
         this.name = name
     }
@@ -442,7 +441,7 @@ fun main() {
     val person3 = Person(10)
     println(person3.name)
 }
-{{< /highlight  >}}
+```
 
 This time, line 3 defines a secondary that takes an `Int` (similar to Java's primitive `int` behind the scenes, but treated like an object in code) and appends it after "No Name" before passing it to the primary constructor.
 
@@ -453,7 +452,7 @@ The `init` block then runs as the body of the primary constructor to set the `na
 ### Calling Superclass Constructors
 If you only need to call the primary constructor from a subclass, things are pretty simple:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Person(name : String) {
     var name : String = "No Name"
     init {
@@ -461,17 +460,17 @@ open class Person(name : String) {
     }
 }
 
-class Student(name : String) : Person(name)
+class Student(name : String) : Person(name) // 8
 
 fun main() {
     val student = Student("Scott")
     println(student.name)
 }
-{{< /highlight  >}}
+```
 
 Note that `Person` is defined as `open` so we can create subclasses, and has a primary constructor. We call that primary constructor on line 8, right after the superclass name, passing in the value passed to the primary constructor of Student. Student can do more than that, of course. For example:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Person(name : String) {
     var name : String = "No Name"
     init {
@@ -491,11 +490,11 @@ fun main() {
     println(student.name)
     println(student.gpa)
 }
-{{< /highlight  >}}
+```
 
 Things get a little trickier if you want to call secondary constructors in a superclass. In that case, _you cannot define a primary constructor in the subclass_. If you define a primary constructor, _all_ secondary constructors must call it, which doesn't give us the choice of which super constructor to call... Here's an example:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Person(name : String) {
     constructor() : this("No Name")
     var name : String = "No Name"
@@ -520,7 +519,7 @@ fun main() {
     println(student2.name)
     println(student2.gpa)
 }
-{{< /highlight  >}}
+```
 
 So we can pick and choose which superclass constructors are called, but this makes it impossible to pass the gpa to a student constructor and assign it! Time to start looking at better ways to write the code we've been seeing...
 
@@ -533,7 +532,7 @@ First, default values for parameters...
 
 Most of the time, we define alternate constructors just to provide default values or different subsets of parameters. Let's start by defining a primary constructor for Person that takes the `name` and gives it a default value.
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Person(name : String = "No Name") {
     var name : String = "No Name"
     init {
@@ -547,11 +546,11 @@ fun main() {
     println(person1.name)
     println(person2.name)
 }
-{{< /highlight  >}}
+```
 
 Now we can create a `Person` with or without a name using the same constructor. Let's add the `Student` subclass:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Person(name : String = "No Name") {
     var name : String = "No Name"
     init {
@@ -579,14 +578,14 @@ fun main() {
     println(student2.name)
     println(student2.gpa)
 }
-{{< /highlight  >}}
+```
 
 Now we're able to require the GPA in the `Student` constructor! Note that parameters with default values must appear _after_ any parameters that _do not_ have default values... Unless...
 
 ### Naming Parameters in a Call
 Kotlin allows you to explicitly name your parameters when calling a function or constructor. For example:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Person(name : String = "No Name") {
     var name : String = "No Name"
     init {
@@ -614,11 +613,11 @@ fun main() {
     println(student2.name)
     println(student2.gpa)
 }
-{{< /highlight  >}}
+```
 
 This also allows us to specify parameters out of order, or even define default-valued parameters before non-default-valued parameters:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Person(name : String = "No Name") {
     var name : String = "No Name"
     init {
@@ -627,7 +626,7 @@ open class Person(name : String = "No Name") {
 }
 
 // NOTE PARAMETER ORDER CHANGE!!!
-class Student(name : String = "No Name", gpa : Float) : Person(name) { 
+class Student(name : String = "No Name", gpa : Float) : Person(name) { // 9
     var gpa : Float = 0F
     init {
         this.gpa = gpa
@@ -640,9 +639,9 @@ fun main() {
     println(person1.name)
     println(person2.name)
 
-    val student = Student("Scott", 3.99F) // ordered
-    val student2 = Student(gpa=3.5F) // named
-    val student3 = Student(gpa=3.99F, name="Scott") // different order!
+    val student = Student("Scott", 3.99F)           // 22 - ordered
+    val student2 = Student(gpa=3.5F)                // 23 - named
+    val student3 = Student(gpa=3.99F, name="Scott") // 24 - different order!
     println(student.name)
     println(student.gpa)
     println(student2.name)
@@ -650,7 +649,7 @@ fun main() {
     println(student3.name)
     println(student3.gpa)
 }
-{{< /highlight  >}}
+```
 
 Let's look at a few lines in particular
 
@@ -666,16 +665,16 @@ Note that I do not recommend putting parameters without default values after par
 ### Initializers Can Access Primary Constructor Parameters
 A really nice optimization is that property initializers have access to primary constructor parameters. This eliminates the need for many `init` blocks, as they often just initialize properties.
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Person(name : String = "No Name") {
-    var name : String = name // direct access to primary constructor parameter
+    var name : String = name // 2 - direct access to primary constructor parameter
 }
 
 // NOTE PARAMETER ORDER CHANGE!!!
 class Student(name : String = "No Name", gpa : Float) : Person(name) { 
-    var gpa : Float = gpa // direct access to primary constructor parameter
+var gpa : Float = gpa // 7 - direct access to primary constructor parameter
 }
-{{< /highlight  >}}
+```
 
 Wow! Code reduction! Love it!
 
@@ -684,11 +683,11 @@ Looking at lines 2 and 7, we reference the primary constructor parameters in the
 ### Define Properties in the Primary Constructor
 Here's one of my favorite things about Kotlin. If your constructor is passing in values that are directly used to initialize properties, you can define the properties _directly_ in the constructor. It's easiest to understand this in an example...
 
-{{< highlight kotlin "linenos=table" >}}
-open class Person(var name : String = "No Name")
+```kotlin
+open class Person(var name : String = "No Name")    // 1
 
-class Student(name : String = "No Name", var gpa : Float) : Person(name)
-{{< /highlight  >}}
+class Student(name : String = "No Name", var gpa : Float) : Person(name) // 3
+```
 
 Check out the terseness, but still _very_ readable. (I'd say even more readable now, as you no longer have the duplication and required explicit association of the constructor parameters and properties.)
 
@@ -713,18 +712,18 @@ Suppose we have several properties, some of which must be specified together or 
 
 For example, let's define a `Section` class that defines text in a document that may have a header and footer:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Section(
 	val text : String, 
 	val header : String = "", 
 	val footer : String = "")
-{{< /highlight  >}}
+```
 
 I'd like to impose a restriction such that if we specify a header or footer, the other must also be specified.
 
 We could add a check in the intializer...
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Section(
 	val text : String, 
 	val header : String = "", 
@@ -740,13 +739,13 @@ open class Section(
 fun main() {
 	val section = Section("Some text", "Section 1")
 }
-{{< /highlight  >}}
+```
 
 If you run this, you'll get the IllegalArgumentException.
 
 But... I really prefer to catch things at compile-time when possible. So I'd really like to have constructors that either require _neither_ header nor footer, _or both_ header and footer. So we add a secondary constructor and tweak the primary:
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Section(
 	val text : String, 
 	val header : String, 
@@ -760,7 +759,7 @@ fun main() {
 	val section2 = Section("Some text", "Section 1", "End of Section 1")
 	val section3 = Section("Some text", "Section 1") // will not compile
 }
-{{< /highlight  >}}
+```
 
 Our primary constructor now requires both header and footer, and the secondary only requires the text, passing the default values to the primary. Perfect!
 
@@ -768,7 +767,7 @@ But what if we have parameters that create more complex groupings?
 
 Let's create a very-poorly-designed class to represent a location (very-poorly-designed because we should use inheritance [and later, Kotlin's sealed classes!]). Start with
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Location(
 	val lat : Double,
 	val lon : Double,
@@ -776,13 +775,13 @@ open class Location(
 	val city : String,
 	val state : String,
 	val zip : String)
-{{< /highlight  >}}
+```
 
 Here we want to have _either_ lat/lon, _or_ street/city/state/zip. (Yes... this is crazy gross, but I'm tired and this demonstrates the concept and my brain won't think of another example right now so there).
 
 So we try
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Location(
 	val lat : Double,
 	val lon : Double,
@@ -810,11 +809,11 @@ fun main() {
 	// uh oh...
 	val location3 = Location(39.149810, -76.911257, "123 Sesame St", "New York", "NY", "10001")
 }
-{{< /highlight  >}}
+```
 
 The primary constructor is `public` by default. In this case, we really don't want that. So let's make it private.
 
-{{< highlight kotlin "linenos=table" >}}
+```kotlin
 open class Location private constructor(
 	val lat : Double,
 	val lon : Double,
@@ -842,7 +841,7 @@ fun main() {
 	// uh oh...
 	val location3 = Location(39.149810, -76.911257, "123 Sesame St", "New York", "NY", "10001")
 }
-{{< /highlight  >}}
+```
 
 If you run this you'll get an error compiling `location3`, as the constructor that takes all of those arguments is `private`.
 

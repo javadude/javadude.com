@@ -1,7 +1,0 @@
-[submodule "themes/allinone"]
-	path = themes/allinone
-	url = https://github.com/orianna-zzo/AllinOne
-[submodule "public"]
-	path = public
-	url = https://github.com/javadude/javadude.github.io.git
-	branch = master

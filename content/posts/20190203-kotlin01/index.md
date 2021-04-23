@@ -365,7 +365,7 @@ NOTE: There is a _lot_ of code in this section that can be significantly reduced
 
 Now that we've defined the basics of properties (there will be much more cool stuff to come later...), we can talk about how Constructors work.
 
-Kotlin wants to be terse, which is good, because I don't like to type. (He says after typing in everything you've just read...) One of it's best tricks is to combine the definition of a constructor directly in the definition of the class. 
+Kotlin wants to be terse, which is good, because I don't like to type. (He says after typing in everything you've just read...) One of its best tricks is to combine the definition of a constructor directly in the definition of the class. 
 
 Let's take a look at how we can pass in a name to a `Person` instance when creating it.
 

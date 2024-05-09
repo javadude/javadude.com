@@ -26,6 +26,9 @@ The following are brown-bag lunch talks I gave on Design Patterns at the Johns H
 
 # Videos
 
+## Youtube playlist with all videos: [https://www.youtube.com/playlist?list=PLW-6wqFEcgTpdJ1c7x0Sw8tqRTrM4arYS](Design Patterns Playlist)
+
+
 ## Video License
 
 [![Creative Commons License](http://i.creativecommons.org/l/by-nc-nd/3.0/us/88x31.png)](http://creativecommons.org/licenses/by-nc-nd/3.0/us/)  

@@ -12,84 +12,72 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 <!--more-->
 
 
+# Official Android Documentation
+
+* [Gradle build overview](https://developer.android.com/build/gradle-build-overview) (2024)
+
+* [Android build structure](https://developer.android.com/build/android-build-structure) (2024)
+
+* [Tool and library interdependencies](https://developer.android.com/build/tool-and-library-dependencies) (2024)
+
+* [Gradle dependency resolution](https://developer.android.com/build/gradle-dependency-resolution) (2024)
+
+* [Upgrade build dependencies](https://developer.android.com/build/dependency-verification) (2024)
+
+* [Java versions in Android builds](https://developer.android.com/build/jdks) (2023)
+
 # Book
 
-<img src="evaj.jpg" alt="Effective VisualAge for Java Book Cover" width="150"/>
-
-(File this in the "never again" category... Well... Probably never again.)
-
-*   Stanchfield, S. and Mauny, I. (2001). _Effective VisualAge for Java, version 3_. 1st ed. New York: John Wiley.
-    https://www.amazon.com/Effective-VisualAge-Java-Version-Coverage/dp/0471317306
-
+*   Stanchfield, S. and Mauny, I. (2001). [_Effective VisualAge for Java, version 3_](https://www.amazon.com/Effective-VisualAge-Java-Version-Coverage/dp/0471317306). 1st ed. New York: John Wiley.
+    
 
 # Print Article
-
-<img src="vamag.jpg" alt="VisualAge Magazine Cover" width="150"/>
 
 * 	Stanchfield, Scott A. "A Tune-Up for VisualAge for Java." _The VisualAge Magazine_, Jan. 1998, pp. 6-9
 
 # Online Articles
 
-*   From Java to Kotlin - Episode 1 (2019)  
-    [http://javadude.com/posts/20190203-kotlin01](http://javadude.com/posts/20190203-kotlin01)
+*   [From Java to Kotlin - Episode 1](post/20190203-kotlin01) (2019)  
     
-*   Eclipse Tips (2000)  
-    (was hosted at javadude.com - obsolete - removed)
+*   Eclipse Tips (2000 - obsolete - removed)
     
-*   MVC in VisualAge for Java (2000)  
-    (was hosted at javadude.com - obsolete - removed)
+*   MVC in VisualAge for Java (2000 - obsolete - removed)
     
-*   Advanced MVC in VisualAge for Java (2000)  
-    (was hosted at javadude.com - obsolete - removed)
+*   Advanced MVC in VisualAge for Java (2000 - obsolete - removed)
     
-*   AWT Fundamentals (2000)  
-    (was hosted at java.sun.com; no longer available)
+*   AWT Fundamentals (2000 - was hosted at java.sun.com; no longer available)
     
-*   Parsers, Part IV: A Java Cross Reference Tool (1999)  
-    [http://svn.apache.org/repos/asf/maven/sandbox/trunk/jxr/maven-jxr/maven-jxr-java/src/site/resources/SeriesPt4.pdf](http://svn.apache.org/repos/asf/maven/sandbox/trunk/jxr/maven-jxr/maven-jxr-java/src/site/resources/SeriesPt4.pdf)
+*   [Parsers, Part IV: A Java Cross Reference Tool](SeriesPt4.pdf) (1999)  
     
-*   Effective Layout Management (1999)  
-    [http://javadude.com/articles/layouts](http://javadude.com/articles/layouts)
+*   [Effective Layout Management](post/20000304-layouts/) (1999)
     
-*   ANTLR Documentation (contributor) (1998)  
-    [http://www.antlr2.org](http://www.antlr2.org)
+*   [ANTLR Documentation](http://www.antlr2.org) (contributor) (1998)
     
-*   Layering Applications (1996)  
-    [http://javadude.com/articles/layering.html](http://javadude.com/articles/layering.html)
+*   [Layering Applications](post/20010516-layering-applications/) (1996)
     
-*   Import on Demand is Evil! (1996)  
-    [http://javadude.com/articles/importondemandisevil.html](http://javadude.com/articles/importondemandisevil.html)
+*   [Import on Demand is Evil!](post/20040522-import-on-demand-is-evil/) (1996)  
     
-*   Java is Pass-by-Value, Dammit! (1996)  
-    [http://javadude.com/articles/passbyvalue.htm](http://javadude.com/articles/passbyvalue.htm)
+*   [Java is Pass-by-Value, Dammit!](post/20010516-pass-by-value) (1996)
     
-*   Using JavaBean Accessors (1996)  
-    [http://javadude.com/articles/accessors.html](http://javadude.com/articles/accessors.html)
+*   [Using JavaBean Accessors](post/20000304-accessors) (1996)
     
-*   Java Using the Right Comment (1996)  
-    [http://javadude.com/articles/comments.html](http://javadude.com/articles/comments.html)
+*   [Java - Using the Right Comment](post/20000304-comments) (1996)  
     
-*   Converting a Grammar from LALR to LL (1996)  
-    [http://javadude.com/articles/lalrtoll.html](http://javadude.com/articles/lalrtoll.html)
+*   [Converting a Grammar from LALR to LL](post/20000304-lalr-to-ll) (1996)  
     
-*   Why VisualAge for Java (1996)  
-    (was hosted at javadude.com - obsolete - removed)
+*   [ANTLR Tutorial](post/20000304-antlrtut) (1996)  
     
-*   ANTLR Tutorial (1996)  
-    [http://javadude.com/articles/antlrtut/index.html](http://javadude.com/articles/antlrtut/index.html)
+*   [JavaBean Property Editors](post/20000304-property-editors) (1996)  
     
-*   PCCTS Tutorial (1996)  
-    (was hosted at javadude.com - obsolete - removed)
+*   Why VisualAge for Java (1996 - obsolete - removed)
     
-*   JavaBean Property Editors (1996)  
-    [http://javadude.com/articles/propedit/index.html](http://javadude.com/articles/propedit/index.html)
+*   PCCTS Tutorial (1996 - obsolete - removed)
     
-*   VisualAge for Java Tips and Tricks (1996)  
-    (was hosted at javadude.com - obsolete - removed)    
+*   VisualAge for Java Tips and Tricks (1996 - obsolete - removed)    
 
 # Conference Presentations
 
-*   No Fluff Just Stuff ([http://www.nofluffjuststuff.com](http://www.nofluffjuststuff.com))
+*   [No Fluff Just Stuff](http://www.nofluffjuststuff.com)
     
     *   Introduction to Eclipse (NFJS 2004)
     *   Eclipse Tips and Tricks (NFJS 2004)
@@ -97,7 +85,7 @@ A list of my published works, a book, articles, presentations, courses, open-sou
     *   Effective Interfaces (NFJS 2003)
     *   Patterns for Exception Handling (NFJS 2003)
         
-*   JavaOne ([http://javadude.com/articles/javaone](http://javadude.com/articles/javaone))
+*   [JavaOne](http://javadude.com/articles/javaone)
     
     *   Creating Custom JSP Tags (2002)
     *   Effective Layout Management (2001)
@@ -108,16 +96,17 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 
 # Courseware
 
-*   The Johns Hopkins University ([http://www.jhu.edu](http://www.jhu.edu))
+*   [The Johns Hopkins University](http://ep.jhu.edu)
     
-    *   Android Mobile Development (2012-present)
-    *   Domain-Specific Languages (2018-present)
+    *   [Android Mobile Development](https://androidbyexample.com) (2012-present)
+    *   [Kotlin](https://www.youtube.com/watch?v=vHTzVHHivks&list=PLW-6wqFEcgTpmjW7OVgDjOUBbnvym7jiP) (2020-present)
+    *   [Domain-Specific Languages](https://www.youtube.com/watch?v=vPEbGj8uIu4&list=PLW-6wqFEcgTqHMXV_8jI43QLkCv8VgqLk) (2018)
     *   Design Patterns (2002-2014)
     *   Web Development (2002)
     *   Distributed Development on the WWW (2002)
     *   XML Technologies (2002)
         
-*   Montgomery College, MD ([http://www.montgomerycollege.edu](http://www.montgomerycollege.edu))
+*   [Montgomery College, MD](http://www.montgomerycollege.edu)
     
     *   Java for Non-Programmers (2001-2002)
         
@@ -133,7 +122,7 @@ A list of my published works, a book, articles, presentations, courses, open-sou
     *   Servlets and Java Server Pages (2000)
     *   Enterprise JavaBeans (2000)
         
-*   MageLang Institute/jGuru.com ([http://jguru.com](http://jguru.com))
+*   MageLang Institute/jGuru.com
     
     *   AWT (1998-2000)
     *   Swing (1998-2000)
@@ -144,21 +133,21 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 
 # Java Users Group Presentations
 
-*   Johns Hopkins University
+*   Johns Hopkins University Applied Physics Lab
     *   Android Mobile Development Bootcamp (2018)
-    *   Kotlin Programming (2018 - 8-weeks)
-    *   Tech Talk: DSLs and Code Generation (2017)
-    *   Design Patterns Brown Bag Series (2015 - 7 weeks)
-    *   Android Intents and Fragments (2014)
+    *   [Kotlin Programming](https://www.youtube.com/watch?v=lD1ZMm75T9k&list=PLW-6wqFEcgTrsHm6-KYAHSUIsciISbGEt) (2018 - 8-weeks)
+    *   [Tech Talk: DSLs and Code Generation](post/20170628-dsls-and-codegen/) (2017)
+    *   [Design Patterns Brown Bag Series](post/20151119-patterns/) (2015 - 7 weeks)
+    *   [Android Intents and Fragments](post/20141006-intents-and-fragments/) (2014)
 
 *   Java Users Groups (APL / Columbia MD / Montgomery County MD)
-    *   Java 8 - Lambdas and Streams (2014)
-    *   Code Generation With xText and xTend (2013)
-    *   Template Method and Strategy (2011)
-    *   Java Dynamic Proxies (2010)
-    *   Effective Eclipse (2010)
-    *   Java Enumerations (2009)
-    *   Java Annotations: Meta-data and Code Generation (2009)
+    *   [Java 8 - Lambdas and Streams](post/20140923-lambdas-and-streams/) (2014)
+    *   [Code Generation With xText and xTend](post/20130730-xtext/) (2013)
+    *   [Template Method and Strategy](post/20111013-template-method-and-strategy/) (2011)
+    *   [Java Dynamic Proxies](post/20101202-dynamic-proxies/) (2010)
+    *   [Effective Eclipse](post/20100519-effective-eclipse/) (2010)
+    *   [Java Enumerations](post/20121219-enumerations/) (2009)
+    *   [Java Annotations: Meta-data and Code Generation](post/20100120-annotations/) (2009)
     *   Eclipse Plug-ins 101 (2009)
 
 *   Northern Virginia Java Users Group
@@ -168,66 +157,36 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 
 # Open Source Software
 
-*   Android State-Machine-Based Fragment Framework  
-    (Pending release)
+*   [Bean Annotations](https://github.com/javadude/javadude/tree/master/com.javadude.annotation) (2008)
     
-*   Android Easy Permissions Framework  
-    (Pending release)
-    
-*   Android Room Two-Way Databinding    
-    (Pending release)
-    
-*   MapBox Offline Vector MBTiles Support  
-    (Pending release)
-
-*   Bean Annotations (2008)  
-    (Was on googlecode.com - currently not hosted)    
-    
-*   Eclipse Derived Warning Cleaner (2008)  
-    (Was on googlecode.com - currently not hosted)    
+*   [Eclipse Derived Warning Cleaner](https://github.com/javadude/javadude/tree/master/com.javadude.derived.warning.cleaner) (2008)    
         
-*   Eclipse Dynamic Working Sets (2008)  
-    (Was on googlecode.com - currently not hosted)    
+*   [Eclipse Dynamic Working Sets](https://github.com/javadude/javadude/tree/master/com.javadude.workingsets) (2008)  
     
-*   Eclipse Visible Method Reporter (2008)  
-    (Was on googlecode.com - currently not hosted)  
+*   [Eclipse Visible Method Reporter](https://github.com/javadude/javadude/tree/master/com.javadude.report.visible.methods) (2008)  
         
-*   Eclipse Dependency Visualizer (2006)  
-    (Was on googlecode.com - currently not hosted)    
+*   [Eclipse Dependency Visualizer](https://github.com/javadude/javadude/tree/master/com.javadude.dependencies2) (2006)  
     
-*   ANTXR (XML Parser Generator) (2004)  
-    (Was on googlecode.com - currently not hosted)    
+*   [ANTXR](https://github.com/javadude/javadude/tree/master/com.javadude.antxr) (XML Parser Generator) (2004)  
     
 *   ANTLR Eclipse Plugin (2000)  
-    (No longer supported)
-    
-*   Eclipse Jindent Integration (1998)  
-    (No longer supported)
-    
-*   ANTLR 2.x (contributor) (1998-2000)  
-    [http://antlr2.org](http://antlr2.org)
+        
+*   [ANTLR 2.x](http://antlr2.org) (contributor) (1998-2000)  
 
-*   ParseView ANTLR Debugger (1998)  
-    [http://javadude.com/tools/parseview](http://javadude.com/tools/parseview)
+*   [ParseView ANTLR Debugger](http://javadude.com/tools/parseview) (1998)  
     
-*   SplitterLayout (1998)  
-    [http://javadude.com/tools/tabsplitter/splitterlayout.html](http://javadude.com/posts/19980228-splitterlayout)
+*   [SplitterLayout](http://javadude.com/posts/19980228-splitterlayout) (1998)  
     
-*   Swing BorderEditor (1998)  
-    [http://javadude.com/tools/borderedit](http://javadude.com/tools/borderedit)
+*   [Swing BorderEditor](http://javadude.com/tools/borderedit) (1998)  
     
-*   Swing BoxBeans (1998)  
-    [http://javadude.com/tools/boxbeans](http://javadude.com/tools/boxbeans)
+*   [Swing BoxBeans](http://javadude.com/tools/boxbeans) (1998)  
+        
+*   [TabSplitter Bean](http://javadude.com/tools/tabsplitter) (1998)  
+    
+*   [VisualAge AutoGut](http://javadude.com/tools/autogut) (1998)  
+    
+*   [VisualAge Importifier](http://javadude.com/tools/importifier) (1998)  
+
+*   Eclipse Jindent Integration (1998)  
     
 *   SWT Layouts (1998)  
-    (No longer supported)
-    
-*   TabSplitter Bean (1998)  
-    [http://javadude.com/tools/tabsplitter](http://javadude.com/tools/tabsplitter)
-    
-*   VisualAge AutoGut (1998)  
-    [http://javadude.com/tools/autogut](http://javadude.com/tools/autogut)
-    
-*   VisualAge Importifier (1998)  
-    [http://javadude.com/tools/importifier](http://javadude.com/tools/importifier)
-    

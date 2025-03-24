@@ -1,0 +1,62 @@
+[[main]]
+  name = "Home"
+  url = ""
+  weight = -110
+
+[[main]]
+  name = "Classes"
+  url = "categories/class"
+  weight = -109
+
+[[main]]
+  name = "Articles"
+  url = "categories/articles"
+  weight = -108
+
+[[main]]
+  name = "Videos"
+  url = "categories/videos"
+  weight = -107
+
+[[main]]
+  name = "Tools"
+  url = "categories/tools"
+  weight = -106
+
+[[main]]
+  name = "Publications"
+  url = "publications/"
+  weight = -105
+
+[[main]]
+  name = "About"
+  url = "about/"
+  weight = -104
+
+# social menu links
+
+[[social]]
+  name = "github"
+  type = "social"
+  weight = 1
+  url = "https://github.com/javadude"
+[[social]]
+  name = "gitlab"
+  weight = 2
+  url = "https://gitlab.com/javamage"
+[[social]]
+  name = "youtube"
+  weight = 3
+  url = "https://www.youtube.com/scottstanchfield"
+[[social]]
+  name = "stackoverflow"
+  weight = 4
+  url = "https://stackoverflow.com/users/12541/scott-stanchfield"
+[[social]]
+  name = "facebook"
+  weight = 5
+  url = "https://www.facebook.com/scott.stanchfield"
+[[social]]
+  name = "rss"
+  weight = 6
+  url = "index.xml"

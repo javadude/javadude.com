@@ -15,6 +15,8 @@ tags:
 - java
 - design
 
+thumbnail: duke.png
+
 ---
 
 Let's get familiar with Java Layout Managers!
@@ -122,9 +124,9 @@ If your component is not a JFC Project Swing component, you will need to subclas
 
 ```java
 public class MyButton extends Button {
-	public Dimension getPreferredSize() {
-		return new Dimension(100,10);
-	}	
+    public Dimension getPreferredSize() {
+        return new Dimension(100,10);
+    }    
 }
 ```  
  
@@ -185,13 +187,13 @@ To demonstrate, create a simple `Panel` subclass that provides a raised, 3D bord
 
 ```java
 public class BorderPanel extends Panel {
-	private static final Insets insets = new Insets(10,10,10,10);
-	public Insets getInsets() {return insets;}
-	public void paint(Graphics g) {
-		Dimension size = getSize();
-		g.setColor(getBackground());
-		g.draw3DRect(5,5,size.width-11, size.height-11, true);
-	}
+    private static final Insets insets = new Insets(10,10,10,10);
+    public Insets getInsets() {return insets;}
+    public void paint(Graphics g) {
+        Dimension size = getSize();
+        g.setColor(getBackground());
+        g.draw3DRect(5,5,size.width-11, size.height-11, true);
+    }
 }
 ```
 
@@ -265,16 +267,16 @@ Examine a simple `FlowLayout` in action. Suppose you had the following class def
 
 ```java
 public class FlowTest {
-	public static void main(String[] args) {
-		Frame f = new Frame("FlowTest");
-		f.setLayout(new FlowLayout());
-		f.add(new Button("A"));
-		f.add(new Button("B"));
-		f.add(new Button("C"));
-		f.add(new Button("D"));
-		f.add(new Button("E"));
-		f.setVisible(true);
-	}
+    public static void main(String[] args) {
+        Frame f = new Frame("FlowTest");
+        f.setLayout(new FlowLayout());
+        f.add(new Button("A"));
+        f.add(new Button("B"));
+        f.add(new Button("C"));
+        f.add(new Button("D"));
+        f.add(new Button("E"));
+        f.setVisible(true);
+    }
 }
 ```
 
@@ -548,7 +550,7 @@ The preferred width of the layout needs to take into account the widest of these
 
 ```java
 pw = max(north.pw, south.pw,
-		(west.pw + center.pw + east.pw + hgaps))
+        (west.pw + center.pw + east.pw + hgaps))
 ```
 
 The_hgaps_amount to include depends on which components are present in the center row.
@@ -557,7 +559,7 @@ The preferred height (_ph_ in the following equation) depends on the sizes of th
 
 ```java
 ph = vgaps + north.ph + south.ph +
-		max(west.ph, center.ph, east.ph)
+        max(west.ph, center.ph, east.ph)
 ```
 
 The _vgaps_ amount depends on which rows are present in the `BorderLayout`.
@@ -577,7 +579,7 @@ Frame f = new Frame("BorderTest");
 Panel p = new Panel(new BorderLayout());
 f.setLayout(new BorderLayout());
 p.add(new Label("Hello", Label.CENTER), 
-			BorderLayout.NORTH);
+            BorderLayout.NORTH);
 p.add(new TextArea(), BorderLayout.CENTER);
 p.add(new TextField(), BorderLayout.SOUTH);
 f.add(p, BorderLayout.NORTH);
@@ -613,16 +615,16 @@ The code that produced the above GUI looks like:
 Frame f = new Frame("Grid Test");
 f.setLayout(new GridLayout(3,4));
 for (int x = 1; x < 13; x++)
-	f.add(new Button("""+x));
+    f.add(new Button("""+x));
 ```
 
 When specifying a`GridLayout`, there are two main parameters:_rows_and_columns_. You can specify both of these parameters, _but only one will ever be used._ Take a look at the following code snippet from`GridLayout.java`:
 
 ```java
 if (nrows > 0) {
-	ncols = (ncomponents + nrows - 1) / nrows;
+    ncols = (ncomponents + nrows - 1) / nrows;
 else
-	nrows = (ncomponents + ncols - 1) / ncols;
+    nrows = (ncomponents + ncols - 1) / ncols;
 ```
 
 Notice that if_rows_is non-zero, it_calculates_the number of columns; if_rows_is zero, it calculates the number of rows based on the specified number of columns.
@@ -1077,3 +1079,5 @@ One thing to notice here is the parameters passed to the most deeply nested`Grid
 ![nameform5.gif (2814 bytes)](images/nameform5.gif)
 
 Notice the second set of labels and text fields is evenly spaced into two chunks. What you wanted was to have all the text fields and all the labels take up the same amount of vertical space (which means that there will be a blank spot at the bottom of the rightmost set of labels and text fields).
+
+Duke, the Java mascot, provided by Sun Microsystems under the New BSD license.

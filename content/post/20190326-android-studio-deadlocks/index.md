@@ -12,10 +12,13 @@ tags:
 - android
 - android studio
 
+featureImage: deadlock.png
+thumbnail: deadlock.png
+
 
 ---
 
-Android Studio makes it crazy easy to locate deadlocks!
+Android Studio makes it crazy easy to locate deadlocks! I'll explain how in this video.
 
 <!--more-->
 

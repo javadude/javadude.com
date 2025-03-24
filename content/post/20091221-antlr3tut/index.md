@@ -18,6 +18,7 @@ tags:
 - language
 - dsl
 
+thumbnail: antlr.svg
 
 ---
 

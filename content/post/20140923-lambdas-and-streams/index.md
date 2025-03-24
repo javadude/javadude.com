@@ -15,8 +15,10 @@ tags:
 - java
 - language
 
+thumbnail: duke.png
+
 ---
-A JUG talk from September 2014 I presented on new features in Java 8: Lambdas and Streams.
+A Java Users Group talk from September 2014 I presented on new features in Java 8: Lambdas and Streams.
 
 <!--more-->
 
@@ -41,3 +43,5 @@ Feel free to watch the videos and point friends to them, but you cannot use them
 All sample code is licensed under the Eclipse Public License, version 1.0.
 
 See [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html) for details.
+
+Duke, the Java mascot, provided by Sun Microsystems under the New BSD license.

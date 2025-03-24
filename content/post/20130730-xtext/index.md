@@ -19,8 +19,12 @@ tags:
 - dsl
 - xtext
 
+thumbnail: xtext.png
+
 ---
-A JUG talk from July 2013 I presented on new features in JCode Generation with xText and xTend.
+A Java Users Group talk from July 2013 I presented on new features in JCode Generation with xText and xTend.
+
+We'll use xText to create a custom language by specifying a grammar, read the content into a model, and generate code using xTend!
 
 <!--more-->
 

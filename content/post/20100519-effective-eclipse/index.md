@@ -14,9 +14,11 @@ description: Tips and Tricks on becoming an Eclipse power user
 tags:
 - eclipse
 
+thumbnail: eclipse.png
+
 ---
 
-A JUG talk from May 2010 I presented on Eclipse tips and tricks.
+A Java Users Group talk from May 2010 I presented on Eclipse tips and tricks.
 
 <!--more-->
 
@@ -32,3 +34,4 @@ Effective Eclipse by Scott Stanchfield is licensed under a [Creative Commons Att
   
 Feel free to watch the videos and point friends to them, but you cannot use them as part of any commercial product nor can you create derivative works. Follow the link above to see the complete license text.
 
+The Eclipse logo is the intellectual property of the Eclipse Foundation and cannot be altered without Eclipse’s permission. They are provided for use under the [Eclipse Foundation Trademark Usage Policy](https://www.eclipse.org/legal/logo-guidelines/).

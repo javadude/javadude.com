@@ -16,6 +16,7 @@ tags:
 - beans
 - design
 
+thumbnail: duke.png
 ---
 
 Property editors are a way to make your bean more user-friendly.  Bean builder tools can determine quite a lot about your bean just by looking at it and its corresponding BeanInfo class, but they usually have only very simple methods of editing the properties in the bean.
@@ -566,4 +567,4 @@ All of the source code for this article is downloadable.  There are two formats
 *   [propedit.zip](propedit.zip) - a Windows-format zip file (note that files are formatted using \\r\\n for line separators)
 *   [propedit.tar.gz](propedit.tar.gz) - a unix-format tar/gzip file (files use \\n for line separators)
 
- 
+Duke, the Java mascot, provided by Sun Microsystems under the New BSD license.

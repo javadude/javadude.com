@@ -12,6 +12,8 @@ tags:
 
 codeLineNumbers: true
 
+thumbnail: kotlin-logo.png
+
 ---
 
 Let's learn Kotlin from a Java point of view. We'll start by looking at some basics of Variables, Values, Classes, Properties and Constructors.

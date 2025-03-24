@@ -15,6 +15,8 @@ tags:
 - java
 - patterns
 
+thumbnail: patterns.jpg
+
 ---
 I presented a talk on the Template Method and Strategy Patterns to the Columbia, Maryland Java Users Group on 10/13/2011.
 

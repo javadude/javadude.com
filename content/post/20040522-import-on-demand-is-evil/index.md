@@ -14,10 +14,11 @@ tags:
 - java
 - language
 
+thumbnail: duke.png
 
 ---
 
-There should _**never**_ exist any language feature such that _**adding**_ a new type to a referenced package can break your existing code. Import-on-demand is one such feature... And it's evil...
+There should _**never**_ exist any language feature such that _**adding**_ a new type to a referenced package can break your existing code. Import-on-demand (aka "start imports") is one such feature... And it's evil...
 
 <!--more-->
 
@@ -71,3 +72,5 @@ With today's tools (like [Eclipse](http://www.eclipse.org) and [IDEA](http://www
 "Import on demand saves time" is not a valid argument. And if you're one of those "You're not a real programmer if you use an IDE" types, I truly pity your stubbornness and dedication to making life so much harder on yourself...
 
 BTW: As for performance, there's a minor gain in speed _**at compile time**_ using explicit imports (the compiler doesn't have to check all "\*" imports to check which applies, but it's nearly unnoticeable). However, there is absolutely no difference at runtime. In case you don't know, all class name references are fully-resolved at compile time and hard-coded into the .class file. Of course this doesn't apply to reflection.
+
+Duke, the Java mascot, provided by Sun Microsystems under the New BSD license.

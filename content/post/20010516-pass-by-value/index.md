@@ -1,6 +1,7 @@
 ---
 title: Java is Pass-by-Value, Dammit!
-url: /articles/passbyvalue.htm
+aliases:
+- /articles/passbyvalue.htm
 
 categories:
 - Articles
@@ -13,9 +14,13 @@ tags:
 - java
 - language
 
+thumbnail: duke.png
+
 ---
 
-I'm really tired of hearing folks incorrectly state "primitives are passed by value, objects are passed by reference".
+I'm really tired of hearing folks incorrectly state "primitives are passed by value, objects are passed by reference". 
+
+So I'm gonna rant, and you're gonna listen...
 
 <!--more-->
 
@@ -342,3 +347,5 @@ In C++, Ada, Pascal and other languages that support pass-by-reference, you can 
 If Java had pass-by-reference semantics, the foo method we defined above would have changed where `myDog` was pointing when it assigned someDog on line CCC.
 
 Think of reference parameters as being aliases for the variable passed in. When that alias is assigned, so is the variable that was passed in.
+
+Duke, the Java mascot, provided by Sun Microsystems under the New BSD license.

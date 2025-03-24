@@ -15,6 +15,8 @@ tags:
 - java
 - language
 
+thumbnail: duke.png
+
 ---
 I presented a talk on Dynamic Proxies to the Columbia, Maryland Java Users Group on 12/02/2010.
 
@@ -45,3 +47,5 @@ Here is the [sample code](cmjug-dynamic-proxies.zip) I wrote during the lecture.
 All sample code is licensed under the Eclipse Public License, version 1.0.
 
 See [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html) for details.
+
+Duke, the Java mascot, provided by Sun Microsystems under the New BSD license.

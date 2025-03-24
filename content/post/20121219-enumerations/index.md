@@ -15,10 +15,10 @@ tags:
 - java
 - language
 
----
-A JUG talk I presented on enumerations in Java.
+thumbnail: duke.png
 
-<!--more-->
+---
+A Java Users Group talk I presented on enumerations in Java.
 
 I cover:
 
@@ -28,6 +28,8 @@ I cover:
 *   Using enums for the Gang-of-Four State Pattern
 *   Using enums to emulate function pointers in Java
 *   EnumSet and EnumMap
+
+<!--more-->
 
 # Video
 
@@ -50,3 +52,5 @@ Feel free to watch the videos and point friends to them, but you cannot use them
 All sample code is licensed under the Eclipse Public License, version 1.0.
 
 See [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html) for details.
+
+Duke, the Java mascot, provided by Sun Microsystems under the New BSD license.

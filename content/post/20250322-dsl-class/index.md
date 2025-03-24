@@ -1,5 +1,5 @@
 ---
-title: My Domain-Specific Languages (DSL) class content
+title: My Domain-Specific Languages (DSL) class content for Johns Hopkins University
 
 categories:
 - Class
@@ -10,6 +10,15 @@ tags:
 - kotlin
 - class
 
+featureImage: dsl.png
+thumbnail: dsl.png
+
 ---
 
-I taught a singe-term Domain-Specific Languages class for Johns Hopkins University in 2018. The recordings from the sessions are at https://www.youtube.com/watch?v=vPEbGj8uIu4&list=PLW-6wqFEcgTqHMXV_8jI43QLkCv8VgqLk
+I taught a single-term Domain-Specific Languages class for Johns Hopkins University in 2018.
+
+Read on for the video playlist link!
+
+<!--more-->
+
+The recordings from the sessions are at [Domain Specific Languages](https://www.youtube.com/watch?v=vPEbGj8uIu4&list=PLW-6wqFEcgTqHMXV_8jI43QLkCv8VgqLk).

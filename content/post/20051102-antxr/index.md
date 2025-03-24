@@ -14,6 +14,8 @@ description: Easy XML Parsing, based on the ANTLR parser generator
 tags:
 - java
 
+thumbnail: antlr.svg
+
 ---
 
 ANTXR: Easy XML Parsing, based on the ANTLR parser generator

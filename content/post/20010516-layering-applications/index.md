@@ -14,6 +14,8 @@ tags:
 - java
 - design
 
+thumbnail: layers.gif
+
 ---
 
 Maintainable applications can be quite tricky to develop. One of the keys to creating such a beast, is to properly layer your application.

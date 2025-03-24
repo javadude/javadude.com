@@ -1,5 +1,5 @@
 ---
-title: DSLs and Code Generation
+title: Domain-Specific Languages (DSLs) and Code Generation
 aliases:
 - /articles/dsls-and-codegen/index.html
 - /articles/dsls-and-codegen
@@ -18,8 +18,11 @@ tags:
 - parsing
 - dsl
 
+featureImage: dsl.png
+thumbnail: dsl.png
+
 ---
-A JHU Tech Talk from June 28, 2017.
+A Tech Talk I gave for Johns Hopkins University June 28, 2017.
 
 What is a Domain-Specific Language? How can we use one for code-generation?
 

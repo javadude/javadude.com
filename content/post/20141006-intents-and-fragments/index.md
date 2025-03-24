@@ -15,6 +15,9 @@ tags:
 - android
 - java
 
+thumbnail: android.png
+featureImage: android.png
+
 ---
 A tech talk I gave for Johns Hopkins University on Oct 6, 2014 on Android Intents and Fragments.
 
@@ -42,3 +45,5 @@ Feel free to watch the videos and point friends to them, but you cannot use them
 All sample code is licensed under the Eclipse Public License, version 1.0.
 
 See [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html) for details.
+
+Android icon created by [Freepik - Flaticon](https://www.flaticon.com/free-icons/android)

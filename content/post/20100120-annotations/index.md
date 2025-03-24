@@ -15,9 +15,18 @@ tags:
 - java
 - language
 
+thumbnail: duke.png
+
 ---
 
 I presented a talk on Java Annotations to the Columbia, Maryland Java Users Group on 1/19/2010.
+
+This is a *very* deep dive into
+
+* Annotation Concepts
+* Creating annotation processors
+* Using annotations at compile time and runtime
+* Generating code from annotations
 
 <!--more-->
 
@@ -85,3 +94,5 @@ Here is the [sample code](cmjug-annotations.zip) I wrote during the lecture. Not
 All sample code is licensed under the Eclipse Public License, version 1.0.
 
 See [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html) for details.
+
+Duke, the Java mascot, provided by Sun Microsystems under the New BSD license.

@@ -9,6 +9,8 @@ description: My Publications.
 
 A list of my published works, a book, articles, presentations, courses, open-source software.
 
+Links are provided for active content.
+
 <!--more-->
 
 
@@ -33,7 +35,7 @@ A list of my published works, a book, articles, presentations, courses, open-sou
 
 # Print Article
 
-* 	Stanchfield, Scott A. "A Tune-Up for VisualAge for Java." _The VisualAge Magazine_, Jan. 1998, pp. 6-9
+* Stanchfield, Scott A. "A Tune-Up for VisualAge for Java." _The VisualAge Magazine_, Jan. 1998, pp. 6-9
 
 # Online Articles
 

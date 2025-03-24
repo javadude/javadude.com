@@ -15,6 +15,7 @@ tags:
 - java
 - patterns
 
+thumbnail: patterns.jpg
 
 ---
 

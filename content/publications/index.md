@@ -24,7 +24,7 @@ Links are provided for active content.
 
 * [Gradle dependency resolution](https://developer.android.com/build/gradle-dependency-resolution) (2024)
 
-* [Upgrade build dependencies](https://developer.android.com/build/dependency-verification) (2024)
+* [Upgrade build dependencies](https://developer.android.com/build/version-upgrade-strategies) (2024)
 
 * [Java versions in Android builds](https://developer.android.com/build/jdks) (2023)
 

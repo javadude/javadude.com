@@ -28,8 +28,6 @@ Read on for the links! Good stuff!
 
 |     |     |     |
 |-----|-----|-----|
-|[Gradle build overview](https://developer.android.com/build/gradle-build-overview)| General overview on how Gradle builds work for Android|2024|
-|[Android build structure](https://developer.android.com/build/android-build-structure)|Directory structure and file details for a typical Andrioid project|2024|
 |[Gradle build overview](https://developer.android.com/build/gradle-build-overview)|General overview on how Gradle builds work for Android|2024|
 |[Android build structure](https://developer.android.com/build/android-build-structure)|Directory structure and file details for a typical Andrioid project|2024|
 |[Tool and library interdependencies](https://developer.android.com/build/tool-and-library-dependencies)|How library and tool dependencies interact when building an Android application|2024|
